@@ -2,28 +2,28 @@
  * GET home page.
  */
 
-exports.routeGetIndex = function (request, response) {
+exports.getIndex = function (request, response) {
   response.render('index', {
     title: 'Express',
     content: 'That is a GET request'
   });
 };
 
-exports.routePostIndex = function (request, response) {
+exports.postIndex = function (request, response) {
   response.render('index', {
     title: 'Express',
     content: 'That is a POST request'
   });
 }
 
-exports.routePutIndex = function (request, response) {
+exports.putIndex = function (request, response) {
   response.render('index', {
     title: 'Express',
     content: 'That is a PUT request'
   });
 }
 
-exports.routeDeleteIndex = function (request, response) {
+exports.deleteIndex = function (request, response) {
   response.render('index', {
     title: 'Express',
     content: 'That is a DELETE request'
