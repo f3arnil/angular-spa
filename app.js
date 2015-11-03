@@ -10,12 +10,12 @@ var port = 3000;
 //mongoose.connect('mongodb://admin:admin@ds047504.mongolab.com:47504/sandbox');
 
 // Load modules
-var indexModule = require('./rest_modules/index/')(app);
-var adminModule = require('./rest_modules/admin/')(app);
+var indexModule = require('./rest-modules/index/')(app);
+var adminModule = require('./rest-modules/admin/')(app);
 
 // Configuration
 app.configure(function () {
-  app.set('views', __dirname + '/views_global');
+  app.set('views', __dirname + '/views-global');
   app.set('view engine', 'jade');
   app.set('view options', {
     layout: false

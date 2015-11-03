@@ -11,6 +11,9 @@
     "mongoose": "4.2.x"
   },
   "devDependencies": {
+    "mocha": "1.7.x",
+    "should": "1.2.x",
+    "supertest": "0.4.x",
     "webpack": "^1.12.2"
   },
   "engines": {
