@@ -11,7 +11,7 @@ var express = require('express')
 var app = express();
 var mongoose = require('mongoose');
 var port = 3000;
-console.log(ENVIRONMENT);
+
 // Init mongoose
 //mongoose.connect('mongodb://admin:admin@ds047504.mongolab.com:47504/sandbox');
 
