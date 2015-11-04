@@ -1,11 +1,17 @@
 /**
  * Module dependencies.
  */
+
+const ENV_DEV = 'Development';
+const ENV_PROD = 'Production';
+var applicationArguments = require('./common/application-arguments')();
+const ENVIRONMENT = applicationArguments.environment || ENV_DEV;
+
 var express = require('express')
 var app = express();
 var mongoose = require('mongoose');
 var port = 3000;
-
+console.log(ENVIRONMENT);
 // Init mongoose
 //mongoose.connect('mongodb://admin:admin@ds047504.mongolab.com:47504/sandbox');
 
