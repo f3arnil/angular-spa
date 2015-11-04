@@ -1,13 +1,23 @@
 /**
  * Module dependencies.
  */
+
+var env_dev = 'Development';
+var env_prod = 'Production';
+
+var node_env = process.env.NODE_ENV || env_dev;
+
 var express = require('express')
 var app = express();
 var mongoose = require('mongoose');
 var port = 3000;
 
 // Init mongoose
-//mongoose.connect('mongodb://admin:admin@ds047504.mongolab.com:47504/sandbox');
+mongoose.connect('mongodb://admin:admin@ds047504.mongolab.com:47504/sandbox');
+
+// Load entities
+var Book = require('./rest-modules/book/')(app, mongoose);
+var User = require('./rest-modules/user/')(app, mongoose);
 
 // Load modules
 var indexModule = require('./rest-modules/index/')(app);
