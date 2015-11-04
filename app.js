@@ -13,7 +13,11 @@ var mongoose = require('mongoose');
 var port = 3000;
 
 // Init mongoose
-//mongoose.connect('mongodb://admin:admin@ds047504.mongolab.com:47504/sandbox');
+mongoose.connect('mongodb://admin:admin@ds047504.mongolab.com:47504/sandbox');
+
+// Load entities
+var Book = require('./rest-modules/book/')(app, mongoose);
+var User = require('./rest-modules/user/')(app, mongoose);
 
 // Load modules
 var indexModule = require('./rest-modules/index/')(app);
