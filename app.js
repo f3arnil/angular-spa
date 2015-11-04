@@ -2,10 +2,10 @@
  * Module dependencies.
  */
 
-const ENV_DEV = 'Development';
-const ENV_PROD = 'Production';
-var applicationArguments = require('./common/application-arguments')();
-const ENVIRONMENT = applicationArguments.environment || ENV_DEV;
+const env_dev = 'Development';
+const env_prod = 'Production';
+
+const node_env = process.env.NODE_ENV || env_dev;
 
 var express = require('express')
 var app = express();
