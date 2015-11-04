@@ -12,7 +12,7 @@ select opt in "${options[@]}" "Захватить мир"; do
     1)  echo "Starting $ENV_DEV configuration";
         node app.js NODE_ENV=$ENV_DEV;;
     2)  echo "Starting $ENV_PROD configuration";
-        node app.js NODE_ENV=production;;
+        node app.js NODE_ENV=$ENV_PROD;;
 
     $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
     *) echo "Invalid option. Try another one.";continue;;
