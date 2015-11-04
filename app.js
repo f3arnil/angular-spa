@@ -2,10 +2,10 @@
  * Module dependencies.
  */
 
-const env_dev = 'Development';
-const env_prod = 'Production';
+var env_dev = 'Development';
+var env_prod = 'Production';
 
-const node_env = process.env.NODE_ENV || env_dev;
+var node_env = process.env.NODE_ENV || env_dev;
 
 var express = require('express')
 var app = express();
