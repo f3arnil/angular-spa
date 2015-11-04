@@ -18,10 +18,8 @@ mongoose.connect('mongodb://admin:admin@ds047504.mongolab.com:47504/sandbox');
 // Load entities
 var Book = require('./rest-modules/book/')(app, mongoose);
 var User = require('./rest-modules/user/')(app, mongoose);
-
-// Load modules
-var indexModule = require('./rest-modules/index/')(app);
-var adminModule = require('./rest-modules/admin/')(app);
+var Index = require('./rest-modules/index/')(app);
+var Admin = require('./rest-modules/admin/')(app);
 
 // Configuration
 app.configure(function () {
