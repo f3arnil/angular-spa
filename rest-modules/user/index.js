@@ -2,7 +2,7 @@
  * Implements routes:
  * GET /user/getapi - get API info
  * GET /users - get list of users
- * GET /user/get/:id - get user by ID
+ * GET /user/:id - get user by ID
  * POST /user/create - create an user
  * POST /user/update/:id - update existing user
  * GET /user/delete/:id - delete user
@@ -29,17 +29,17 @@ module.exports = function (app, mongoose) {
       },
       read: {
         type: 'GET',
-        url: '/user/get/:id',
+        url: '/user/:id',
         fields: []
       },
       update: {
         type: 'POST',
-        url: '/user/update/:id',
+        url: '/user/:id/update',
         fields: defaultUserFields
       },
       delete: {
         type: 'DELETE',
-        url: '/user/delete/:id',
+        url: '/user/:id/delete',
         fields: []
       },
       getAll: {
@@ -51,7 +51,7 @@ module.exports = function (app, mongoose) {
   })
 
   // Returns user by unique identifier
-  app.get('/user/get/:id', function (request, response) {
+  app.get('/user/:id', function (request, response) {
     var id = request.params.id;
     var operationName = 'get user';
 
@@ -159,7 +159,7 @@ module.exports = function (app, mongoose) {
   });
 
   // Updated existing user
-  app.post('/user/update/:id', function (request, response) {
+  app.post('/user/:id/update', function (request, response) {
     var operationName = 'update user';
     var id = request.params.id;
 
@@ -215,7 +215,7 @@ module.exports = function (app, mongoose) {
   });
 
   // Deleting existing user
-  app.delete('/user/delete/:id', function (request, response) {
+  app.delete('/user/:id/delete', function (request, response) {
     var operationName = 'delete user';
     var id = request.params.id;
 
