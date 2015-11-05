@@ -4,8 +4,8 @@
  * GET /users - get list of users
  * GET /user/:id - get user by ID
  * POST /user/create - create an user
- * POST /user/update/:id - update existing user
- * GET /user/delete/:id - delete user
+ * POST /user/:id/update - update existing user
+ * GET /user/:id/delete - delete user
  *
  * @param app
  * @param mongoose
