@@ -6,6 +6,7 @@ var env_dev = 'Development';
 var env_prod = 'Production';
 
 var node_env = process.env.NODE_ENV || env_dev;
+var node_user_id = process.env.NODE_USER_ID || null;
 
 var express = require('express')
 var app = express();
