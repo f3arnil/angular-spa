@@ -144,7 +144,7 @@ module.exports = function (app, mongoose) {
           operation: operationName,
           status: 'ok',
           error: null,
-          data: {}
+          data: user
         });
       }
 

@@ -15,7 +15,7 @@ module.exports = function (app, mongoose) {
     },
     permissions: {
       type: Array,
-      default: [ 'read book', 'search book' ]
+      default: [ 'VIEW_ARTICLE', 'USE_SEARCH' ]
     },
     created: {
       type: Date,
