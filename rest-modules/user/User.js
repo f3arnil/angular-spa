@@ -3,12 +3,15 @@ module.exports = function (app, mongoose) {
   var User = new mongoose.Schema({
     name: {
       type: String,
+      mandatory: true
     },
     password: {
       type: String,
+      mandatory: true
     },
     email: {
-      type: String
+      type: String,
+      mandatory: true
     },
     permissions: {
       type: Array,
