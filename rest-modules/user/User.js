@@ -13,10 +13,6 @@ module.exports = function (app, mongoose) {
       type: String,
       mandatory: true
     },
-    permissions: {
-      type: Array,
-      default: [ 'VIEW_ARTICLE', 'USE_SEARCH' ]
-    },
     created: {
       type: Date,
       default: Date.now
