@@ -1,21 +1,47 @@
 #!/bin/bash
 ENV_DEV="Development"
 ENV_PROD="Production"
+USER_ANONYMOUS_ID="563b3f1ce8d64c3f52ad008d"
+USER_NORMAL_ID="563b3f77e8d64c3f52ad008e"
+USER_ADMIN_ID="563b4018e8d64c3f52ad008f"
 
-env_prompt="Select running configuration: "
-options=($ENV_DEV $ENV_PROD)
 
-PS3="$env_prompt"
+ENV_PROMPT="Select running configuration: "
+USER_PROMPT="Select source user: "
 
-select opt in "${options[@]}" "Захватить мир"; do
+ENV_OPTIONS=($ENV_DEV $ENV_PROD)
+USER_OPTIONS=("Anonymous" "Regular" "Admin")
+
+PS3="$ENV_PROMPT"
+
+select opt in "${ENV_OPTIONS[@]}" "Escape"; do
   case "$REPLY" in
     1)  echo "Starting $ENV_DEV configuration";
-        NODE_ENV=$ENV_DEV node app.js;;
+        TARGET_ENV=$ENV_DEV; break;;
     2)  echo "Starting $ENV_PROD configuration";
-        NODE_ENV=$ENV_PROD node app.js;;
+        TARGET_ENV=$ENV_PROD; break;;
 
-    $(( ${#options[@]}+1 )) ) echo "Goodbye!"; break;;
+    $(( ${#ENV_OPTIONS[@]}+1 )) ) echo "Goodbye!"; break;;
     *) echo "Invalid option. Try another one.";continue;;
 
-    esac
+  esac
 done
+
+PS3="$USER_PROMPT"
+
+select opt in "${USER_OPTIONS[@]}" "Escape"; do
+  case "$REPLY" in
+    1)  echo "Using anonymous profile";
+        TARGET_USER=$USER_ANONYMOUS_ID; break;;
+    2)  echo "Using regular user profile";
+        TARGET_USER=$USER_NORMAL_ID; break;;
+    3)  echo "Using admin user profile";
+        TARGET_USER=$USER_ADMIN_ID; break;;
+
+    $(( ${#USER_OPTIONS[@]}+1 )) ) echo "Goodbye!"; break;;
+    *) echo "Invalid option. Try another one.";continue;;
+
+  esac
+done
+
+NODE_ENV=$ENV_PROD;NODE_USER_ID=$TARGET_USER node app.js;
