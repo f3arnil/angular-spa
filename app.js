@@ -15,12 +15,6 @@ var port = 3000;
 // Init mongoose
 mongoose.connect('mongodb://admin:admin@ds047504.mongolab.com:47504/sandbox');
 
-// Load entities
-var Book = require('./rest-modules/book/')(app, mongoose);
-var User = require('./rest-modules/user/')(app, mongoose);
-var Index = require('./rest-modules/index/')(app);
-var Admin = require('./rest-modules/admin/')(app);
-
 // Configuration
 app.configure(function () {
   app.set('views', __dirname + '/views-global');
@@ -45,3 +39,9 @@ app.configure('production', function () {
 app.listen(port, function () {
   console.log("Express server listening on port %d in %s mode", port, app.settings.env);
 });
+
+// Load entities
+var Book = require('./rest-modules/book/')(app, mongoose);
+var User = require('./rest-modules/user/')(app, mongoose);
+var Index = require('./rest-modules/index/')(app);
+var Admin = require('./rest-modules/admin/')(app);
