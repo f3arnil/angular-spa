@@ -1,6 +1,5 @@
 /**
  * Implements routes:
- * GET /user/getapi - get API info
  * GET /users - get list of users
  * GET /user/:id - get user by ID
  * POST /user/create - create an user
@@ -15,40 +14,6 @@
 module.exports = function (app, mongoose) {
 
   var model = require('./User.js')(app, mongoose);
-
-  // Returns a list of api functions
-  app.get('/user/getapi', function (request, response) {
-    var operationName = 'get user api';
-    var defaultUserFields = Object.keys(model.schema.tree);
-
-    return response.send({
-      create: {
-        type: 'PUT',
-        url: '/user/create',
-        fields: defaultUserFields
-      },
-      read: {
-        type: 'GET',
-        url: '/user/:id',
-        fields: []
-      },
-      update: {
-        type: 'POST',
-        url: '/user/:id/update',
-        fields: defaultUserFields
-      },
-      delete: {
-        type: 'DELETE',
-        url: '/user/:id/delete',
-        fields: []
-      },
-      getAll: {
-        type: 'GET',
-        url: '/users',
-        fields: []
-      }
-    });
-  })
 
   // Returns user by unique identifier
   app.get('/user/:id', function (request, response) {

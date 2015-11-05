@@ -44,5 +44,6 @@ app.listen(port, function () {
 // Load entities
 var Book = require('./rest-modules/book/')(app, mongoose);
 var User = require('./rest-modules/user/')(app, mongoose);
+var Role = require('./rest-modules/role/')(app, mongoose);
 var Index = require('./rest-modules/index/')(app);
 var Admin = require('./rest-modules/admin/')(app);
