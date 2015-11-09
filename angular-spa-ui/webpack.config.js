@@ -41,7 +41,7 @@ var config = {
     devtool: (ENV_DEV ? 'source-map' : null)
 };
 
-if (ENV_DEV) {
+if (!ENV_DEV) {
     config.plugins.push(new webpack.optimize.UglifyJsPlugin({
         compress: {
             warnings: false
