@@ -1,7 +1,20 @@
-<ul class="nav navbar-nav">
-        <li><a ui-sref="/" ui-sref-active='active'>Модуль: 'Search'</a></li>
-        <li><a ui-sref="search" ui-sref-active='active'>Модуль: 'Search' - search results</a></li>
-        <li><a ui-sref="search.advanced" ui-sref-active='active'>Модуль: 'Search' - submodule 'Advanced search'</a></li>
-        <li><a ui-sref="search.cart" ui-sref-active='active'>Модуль: 'Cart'</a></li>
-        <li><a ui-sref="search.tags" ui-sref-active='active'>Модуль: 'Tags'</a></li>
-</ul>
+block content
+body(ng-app='searchApp')
+ul(class="nav navbar-nav")
+	li(ui-sref="search") 
+		a Модуль: 'Search'
+	li(ui-sref="search2") 
+		a Модуль: 'Search' - search results
+	li(ui-sref="search.advanced") 
+		a Модуль: 'Search' - submodule 'Advanced search'
+	li(ui-sref="search.cart") 
+		a Модуль: 'Cart'
+	li(ui-sref="search.tags") 
+		a Модуль: 'Tags'
+
+<div ui-view></div>
+block scripts
+script(src=locals.way+'../common/angular.min.js')
+script(src=locals.way+'../common/angular-ui-router.js')
+script(src=locals.way+'search-module/index.js')
+script(src=locals.way+'search-app.js')

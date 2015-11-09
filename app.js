@@ -8,7 +8,8 @@ var env_prod = 'Production';
 var node_env = process.env.NODE_ENV || env_dev;
 var node_user_id = process.env.NODE_USER_ID || null;
 
-var express = require('express')
+var express = require('express');
+var path = require('path');
 var app = express();
 var mongoose = require('mongoose');
 var port = 3000;
@@ -18,15 +19,19 @@ mongoose.connect('mongodb://admin:admin@ds047504.mongolab.com:47504/sandbox');
 
 // Configuration
 app.configure(function () {
-  app.set('views', __dirname + '/views-global');
+  app.locals.basedir = __dirname;
+
+  app.set('views', __dirname + '/angular-spa-ui');
   app.set('view engine', 'jade');
   app.set('view options', {
-    layout: false
+    layout: true
   });
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + '/angular-spa-ui'));
+
+  app.locals.basedir = path.join(app.get('views'));
 });
 
 app.configure('development', function () {
