@@ -3,10 +3,17 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "webpack": "^1.12.2",
-    "webpack-dev-server": "^1.12.1",
     "angular": "^1.4.7",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "angular-ui-router": "^0.2.15",
+    "css-loader": "^0.22.0",
+    "extract-text-webpack-plugin": "^0.9.1",
+    "node-sass": "^3.4.1",
+    "sass-loader": "^3.1.1",
+    "webpack": "^1.12.3"
   },
-  "devDependencies": {}
+  "scripts": {
+    "dev": "set NODE_ENV=development&& webpack",
+    "prod": "webpack"
+  }
 }

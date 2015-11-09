@@ -1,5 +1,8 @@
 "use strict";
 
+require('../../sass/styles.sass');
+console.log('search-app');
+
 var searchAppRouter = angular.module('searchAppRouter', ['ui.router']);
 searchAppRouter.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
@@ -25,3 +28,4 @@ searchAppRouter.config(function($stateProvider, $urlRouterProvider) {
         controller: 'tagsMain'
     })
 });
+
