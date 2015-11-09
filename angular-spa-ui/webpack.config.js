@@ -16,8 +16,7 @@ var config = {
         loaders: [
             {
                 test: /\.sass$/,
-                //loader: ExtractTextPlugin.extract("css!sass")
-                loader: "css!sass"
+                loader: ExtractTextPlugin.extract("css!sass")
             }
         ]
     },
@@ -30,7 +29,7 @@ var config = {
             angular: 'angular',
             _: 'underscore'
         }),
-        new ExtractTextPlugin('./build/styles/styles.css', {
+        new ExtractTextPlugin('../styles/styles.css', {
             allChunks: true
         })
     ],
