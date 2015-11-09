@@ -21,7 +21,7 @@ mongoose.connect('mongodb://admin:admin@ds047504.mongolab.com:47504/sandbox');
 app.configure(function () {
   app.locals.basedir = __dirname;
 
-  app.set('views', __dirname + '/views-global');
+  app.set('views', __dirname + '/angular-spa-ui');
   app.set('view engine', 'jade');
   app.set('view options', {
     layout: true
@@ -29,7 +29,7 @@ app.configure(function () {
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + '/angular-spa-ui'));
 
   app.locals.basedir = path.join(app.get('views'));
 });
