@@ -44,4 +44,10 @@ select opt in "${USER_OPTIONS[@]}" "Escape"; do
   esac
 done
 
-NODE_ENV=$ENV_PROD;NODE_USER_ID=$TARGET_USER node app.js;
+export NODE_ENV=$TARGET_ENV
+export NODE_USER_ID=$TARGET_USER
+
+cd "angular-spa-ui"
+webpack
+cd ".."
+node app.js;
