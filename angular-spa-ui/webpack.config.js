@@ -4,6 +4,7 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var ENV_DEV = process.env.NODE_ENV === 'development';
 
 var config = {
+    context: __dirname,
     entry: {
         admin: './js/admin-app/admin-app.js',
         search: './js/search-app/search-app.js'
