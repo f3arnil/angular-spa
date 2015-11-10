@@ -208,8 +208,68 @@ module.exports = function (app, mongoose) {
     });
   });
 
+  // That is a JUNK function for training JS Promices
+  app.get('/user-token/:id', function (request, response) {
+    var id = request.params.id;
+    var operationName = '[JUNK] get user token';
+
+    var user = model.findById(id, function (error, data) {
+      if (!error) {
+        return response.send({
+          operation: operationName,
+          status: 'ok',
+          error: null,
+          data: {
+            baseId: id,
+            token: generateJunkMask(id)
+          }
+        });
+      }
+
+      return response.send({
+        operation: operationName,
+        status: 'error',
+        error: error,
+        data: {}
+      });
+    });
+  });
+
+  // That is a JUNK function for training JS Promices
+  app.get('/user-validate/:id/:token', function (request, response) {
+    var operationName = '[JUNK] validate user';
+    var id = request.params.id;
+    var token = request.params.token
+
+    var user = model.findById(id, function (error, data) {
+      if (!error && token == generateJunkMask(id)) {
+        return response.send({
+          operation: operationName,
+          status: 'ok',
+          error: null,
+          data: {
+            result: true
+          }
+        });
+      }
+
+      return response.send({
+        operation: operationName,
+        status: 'error',
+        error: error,
+        data: {}
+      });
+    });
+  });
+
   function getModel() {
     return model;
+  }
+
+  function generateJunkMask(data) {
+    if (data.length >= 6) {
+      return data[4] + data[2] + data[1] + data[0] + data[3] + data[5]
+    }
   }
 
   return {
