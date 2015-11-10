@@ -32,6 +32,11 @@ app.configure(function () {
   app.use(express.static(__dirname + '/angular-spa-ui'));
 
   app.locals.basedir = path.join(app.get('views'));
+
+  app.envSettings = {
+    environmentType: node_env,
+    user: node_user_id
+  };
 });
 
 app.configure('development', function () {

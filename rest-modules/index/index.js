@@ -1,6 +1,9 @@
 module.exports = function(app) {
-  // Defining routes
-  var routes = require('./routes.js');
-
-  app.get('/', routes.getWebsiteHome);
+  app.get('/', function (request, response) {
+    response.render('js/search-app/index.jade', {
+      way: 'js/search-app/',
+      backEndData: 'That is a message from Backend',
+      userId: app.envSettings.user
+    });
+  });
 }
