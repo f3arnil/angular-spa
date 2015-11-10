@@ -1,11 +1,4 @@
 /**
- * Implements routes:
- * GET /users - get list of users
- * GET /user/:id - get user by ID
- * POST /user/create - create an user
- * POST /user/:id/update - update existing user
- * GET /user/:id/delete - delete user
- *
  * @param app
  * @param mongoose
  * @returns {{getModel: getModel}}
@@ -123,8 +116,8 @@ module.exports = function (app, mongoose) {
     });
   });
 
-  // Updated existing user
-  app.post('/user/:id/update', function (request, response) {
+  // Updating existing user
+  app.put('/user/:id/update', function (request, response) {
     var operationName = 'update user';
     var id = request.params.id;
 
