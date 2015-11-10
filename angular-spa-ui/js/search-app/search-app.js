@@ -24,7 +24,6 @@ searchApp.config(function($stateProvider, $urlRouterProvider) {
 
 */
 
-
 module.exports = function () {
-    var search = require(__dirname + '/search-module');
-}
+  var search = require(__dirname + '/search-module');
+};
