@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-var ENV_DEV = process.env.NODE_ENV === 'development';
+var ENV_DEV = process.env.NODE_ENV === 'Development';
 
 var config = {
     context: __dirname,
