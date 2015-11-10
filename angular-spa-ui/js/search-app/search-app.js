@@ -25,6 +25,5 @@ searchApp.config(function($stateProvider, $urlRouterProvider) {
 */
 
 module.exports = function () {
-  console.log('asd');
   var search = require(__dirname + '/search-module');
 };
