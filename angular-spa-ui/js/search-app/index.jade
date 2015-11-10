@@ -11,10 +11,8 @@ ul(class="nav navbar-nav")
 		a Модуль: 'Cart'
 	li(ui-sref="search.tags") 
 		a Модуль: 'Tags'
-
+ 
 <div ui-view></div>
 block scripts
-script(src=locals.way+'../common/angular.min.js')
-script(src=locals.way+'../common/angular-ui-router.js')
-script(src=locals.way+'search-module/index.js')
-script(src=locals.way+'search-app.js')
+script(src=locals.way+'../../build/scripts/common.js')
+script(src=locals.way+'../../build/scripts/search.bundle.js')
