@@ -46,7 +46,7 @@ searchApp.config(function($stateProvider, $urlRouterProvider) {
         url: '#search',
         templateUrl:'/js/search-app/search-module/search.jade',
         controller: 'searchMainPage'
-    })   
+    })
     .state('search.cart', {
         url: '.cart',
         templateUrl:'cart-module/cart.jade',
