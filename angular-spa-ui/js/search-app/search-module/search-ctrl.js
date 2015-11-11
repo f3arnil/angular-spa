@@ -1,8 +1,9 @@
 "use strict";
 
- module.exports = function () {
+module.exports = function ($scope) {
 	//routes?
-	this.greeting = 'Hello! this is search controller!';
+    console.log( $scope );
+    $scope.greeting = 'Hello! this is search controller!';
 	//alert(this.greeting);
 
 /*
