@@ -3,7 +3,7 @@
 function start() {
     console.log('Search-app');
     var searchApp = angular.module('searchApp', [require("angular-ui-router")]);
-    angular.bootstrap(document.getElementById("container"), ["searchApp"]);
+    angular.bootstrap(document.getElementById("app"), ["searchApp"]);
     searchApp.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/#');
     $stateProvider
@@ -19,7 +19,6 @@ function start() {
 };
 
 module.exports = start();
-
 
 /*
 searchApp.config(function($stateProvider, $urlRouterProvider) {
