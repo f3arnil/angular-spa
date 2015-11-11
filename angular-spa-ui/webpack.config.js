@@ -10,7 +10,7 @@ var config = {
         admin: './js/admin-app/admin-app.js',
         search: './js/search-app/search-app.js',
         common: './js/ui-core/index.js',
-        vendors: [ 'angular', 'underscore' ]
+        vendors: [ 'angular', 'angular-ui-router', 'underscore' ]
     },
     output: {
         path: __dirname + '/build/scripts/',
