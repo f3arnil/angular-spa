@@ -1,1 +1,1 @@
-var angular = window.angular || require('angular');
+// Featured!
