@@ -4,13 +4,19 @@ var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 
 var ENV_DEV = process.env.NODE_ENV === 'Development';
 
-var config = {
+module.exports = {
     context: __dirname,
     entry: {
+        common: [
+            './js/ui-core/common.js'
+        ],
+        vendor: [
+            'angular',
+            'angular-ui-router',
+            'underscore'
+        ],
         admin: './js/admin-app/admin-app.js',
         search: './js/search-app/search-app.js',
-        common: './js/ui-core/index.js',
-        vendors: [ 'angular', 'underscore' ]
     },
     output: {
         path: __dirname + '/build/scripts/',
@@ -26,12 +32,9 @@ var config = {
     },
     plugins: [
         new webpack.ProvidePlugin({
-            "_": "underscore"
+            _: 'underscore'
         }),
-        new CommonsChunkPlugin({
-            name: 'vendors',
-            filename: 'vendors.js'
-        }),
+        new CommonsChunkPlugin('vendor', 'vendor.js'),
         new ExtractTextPlugin('../styles/styles.css', {
             allChunks: true
         })
@@ -44,11 +47,9 @@ var config = {
 };
 
 if (!ENV_DEV) {
-    config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    module.exports.plugins.push(new webpack.optimize.UglifyJsPlugin({
         compress: {
             warnings: false
         }
     }));
 }
-
-module.exports = config;
