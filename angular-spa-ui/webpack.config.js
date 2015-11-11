@@ -1,5 +1,6 @@
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 
 var ENV_DEV = process.env.NODE_ENV === 'Development';
 
@@ -7,7 +8,9 @@ var config = {
     context: __dirname,
     entry: {
         admin: './js/admin-app/admin-app.js',
-        search: './js/search-app/search-app.js'
+        search: './js/search-app/search-app.js',
+        common: './js/ui-core/index.js',
+        vendors: [ 'angular', 'underscore' ]
     },
     output: {
         path: __dirname + '/build/scripts/',
@@ -22,13 +25,12 @@ var config = {
         ]
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin({
-            name: 'common',
-            filename: 'common.js'
-        }),
         new webpack.ProvidePlugin({
-            angular: 'angular',
-            _: 'underscore'
+            "_": "underscore"
+        }),
+        new CommonsChunkPlugin({
+            name: 'vendors',
+            filename: 'vendors.js'
         }),
         new ExtractTextPlugin('../styles/styles.css', {
             allChunks: true
