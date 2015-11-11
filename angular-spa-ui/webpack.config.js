@@ -7,9 +7,9 @@ var ENV_DEV = process.env.NODE_ENV === 'Development';
 module.exports = {
     context: __dirname,
     entry: {
-        common: [
+        /*common: [ // Temporary removed
             './js/ui-core/common.js'
-        ],
+        ],*/
         vendor: [
             'angular',
             'angular-ui-router',
@@ -32,7 +32,9 @@ module.exports = {
     },
     plugins: [
         new webpack.ProvidePlugin({
-            _: 'underscore'
+            _: 'underscore'//,
+            //angular: 'angular',
+           // 'window.angular': 'angular'
         }),
         new CommonsChunkPlugin('vendor', 'vendor.js'),
         new ExtractTextPlugin('../styles/styles.css', {
