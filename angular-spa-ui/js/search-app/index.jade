@@ -1,5 +1,5 @@
 block content
-body(ng-app='searchApp')
+body
 ul(class="nav navbar-nav")
 	li(ui-sref="search") 
 		a Модуль: 'Search'
@@ -14,5 +14,8 @@ ul(class="nav navbar-nav")
  
 <div ui-view></div>
 block scripts
-script(src=locals.way+'../../build/scripts/common.js')
+script.
+	var GLOBAL_USER_ID = '#{userId}';
+script(src=locals.way+'../../build/scripts/vendors.js')
+script(src=locals.way+'../../build/scripts/common.bundle.js')
 script(src=locals.way+'../../build/scripts/search.bundle.js')
