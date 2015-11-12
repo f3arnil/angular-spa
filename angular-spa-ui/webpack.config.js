@@ -52,6 +52,8 @@ if (!ENV_DEV) {
     module.exports.plugins.push(new webpack.optimize.UglifyJsPlugin({
         compress: {
             warnings: false
-        }
+        },
+        mangle: false,
+        exclude: /.\.min\.js$/i
     }));
 }
