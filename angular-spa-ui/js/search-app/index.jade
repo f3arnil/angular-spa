@@ -1,20 +1,24 @@
 block content
-body(id='app')
-    ul(class='nav navbar-nav')
-        li(ui-sref='search')
-            a Module: 'Search'
-        li(ui-sref='advanced')
-            a Submodule: 'Search -> advanced'
-        li(ui-sref='cart')
-            a Submodule: 'Cart'
-        li(ui-sref='tags')
-            a Submodule: 'Tags'
 
-<div ui-view></div>
+body(id="app")
+
+    include ../common/header/header.jade
+
+    ul(class="nav navbar-nav")
+        li
+            a(ui-sref="search") Module: 'Search'
+        li
+            a(ui-sref="cart") Module: 'Cart'
+        li
+            a(ui-sref="tags") Module: 'Tags'
+
+    div(ui-view)
+
+    include ../common/footer/footer.jade
 
 block scripts
 script.
     var GLOBAL_USER_ID = '#{userId}';
-script(src=locals.way+'../../build/scripts/vendor.js')
-script(src=locals.way+'../../build/scripts/common.bundle.js')
-script(src=locals.way+'../../build/scripts/search.bundle.js')
+
+script(src=locals.way + '../../build/scripts/vendor.js')
+script(src=locals.way + '../../build/scripts/search.bundle.js')

@@ -1,6 +1,5 @@
 "use strict";
 
-module.exports = function ($scope) {
-    console.log( $scope );
-    $scope.greeting = 'Hello! this is search controller!';
+module.exports = function () {
+    this.greeting = 'Hello! this is search controller!';
 }
