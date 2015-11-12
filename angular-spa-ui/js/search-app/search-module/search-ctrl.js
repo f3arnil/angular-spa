@@ -32,7 +32,6 @@ module.exports = function () {
 
 /*
 
-
  search.controller('SearchCtrl',
  [ '$scope', '$http' , '$location' , function( $scope , $http , $location ) {
 
