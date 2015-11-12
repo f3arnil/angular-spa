@@ -2,7 +2,7 @@ var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 var path = require('path');
-var AngularPlugin = require('angular-webpack-plugin');
+//var AngularPlugin = require('angular-webpack-plugin');
 
 var ENV_DEV = process.env.NODE_ENV === 'Development';
 
@@ -13,6 +13,7 @@ module.exports = {
     admin: path.resolve(__dirname, './js/admin-app/admin-app.js'),
     vendor: [
       'underscore',
+      'angular',
       'angular-ui-router'
     ]
   },
@@ -29,9 +30,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new AngularPlugin(),
+
     new webpack.ProvidePlugin({
       _: 'underscore',
+      angular: 'exports?window.angular!angular'
     }),
     new CommonsChunkPlugin('vendor', 'vendor.js'),
     new ExtractTextPlugin('../styles/styles.css', {
