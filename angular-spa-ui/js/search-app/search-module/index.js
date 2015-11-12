@@ -1,9 +1,15 @@
 "use strict";
 
-module.exports = function () {
-    var searchCtrl = require(__dirname + '/search-ctrl.js');
+require('angular-ui-router');
 
-    console.log('Search-module');
-    angular.module('searchApp', []).controller(searchCtrl);
+var search = angular.module('search', ['ui.router']);
 
-}
+search.config(function ($stateProvider) {
+    $stateProvider
+        .state('search', {
+          url: '/search',
+          template: 'Hello world from search module',
+        })
+  });
+
+module.exports = search;
