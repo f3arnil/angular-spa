@@ -1,16 +1,12 @@
 block content
 body(id="app")
     ul(class="nav navbar-nav")
-        li(ui-sref="search")
-            a Модуль: 'Search'
-        li(ui-sref="search2")
-            a Модуль: 'Search' - search results
-        li(ui-sref="search.advanced")
-            a Модуль: 'Search' - submodule 'Advanced search'
-        li(ui-sref="search.cart")
-            a Модуль: 'Cart'
-        li(ui-sref="search.tags")
-            a Модуль: 'Tags'
+        li
+            a(ui-sref="search") Модуль: 'Search'
+        li
+            a(ui-sref="cart") Модуль: 'Cart'
+        li
+            a(ui-sref="tags") Модуль: 'Tags'
 
 <div ui-view></div>
 block scripts
