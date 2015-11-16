@@ -34,7 +34,7 @@ module.exports = function (app, mongoose, api) {
 
     app.delete('/service/remove-article-tags/:articleId', removeArticleTagsRequest);
 
-    app.put('/service/tags/generate/:number', generateTagsRequest);
+    app.get('/service/tags/generate/:number', generateTagsRequest);
 
     // Routes implementation
     // ---------------------
@@ -101,10 +101,10 @@ module.exports = function (app, mongoose, api) {
             name: tagName
         };
 
-        tagFields.textColor = api.getRequestFieldBodyValue(request.body, 'textColor', '#000');
-        tagFields.backgroundColor = api.getRequestFieldBodyValue(request.body, 'backgroundColor', '#EEE');
-        tagFields.glyph = api.getRequestFieldBodyValue(request.body, 'glyph', 'none');
-        tagFields.published = api.getRequestFieldBodyValue(request.body, 'published', true);
+        tagFields.textColor = api.getRequestBodyFieldValue(request.body, 'textColor', '#000');
+        tagFields.backgroundColor = api.getRequestBodyFieldValue(request.body, 'backgroundColor', '#EEE');
+        tagFields.glyph = api.getRequestBodyFieldValue(request.body, 'glyph', 'none');
+        tagFields.published = api.getRequestBodyFieldValue(request.body, 'published', true);
 
         var tag = new model(tagFields);
 
@@ -126,13 +126,15 @@ module.exports = function (app, mongoose, api) {
                 return response.send(api.generateResponseObject(operationName, 'error', error));
             }
 
-            return data.remove(function (error) {
-                if (!error) {
-                    return response.send(api.generateResponseObject(operationName, 'error', error));
-                }
+            if (data != null) {
+                return data.remove(function (error) {
+                    if (!error) {
+                        return response.send(api.generateResponseObject(operationName, 'ok', null));
+                    }
+                });
+            }
 
-                return response.send(api.generateResponseObject(operationName, 'ok', null));
-            });
+            return response.send(api.generateResponseObject(operationName, 'error', error));
         });
     };
 
