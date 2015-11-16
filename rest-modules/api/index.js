@@ -17,6 +17,8 @@ var ApplicationAPI = function(application, mongoose) {
     }
 
     function initRestModules(list) {
+        var errorHandler = require('../errorHandler')(application);
+
         for (var i = 0; i < list.length; i++) {
             var restModuleName = list[i];
             var restModule = require('../' + restModuleName + '/')(application, mongoose, this);
