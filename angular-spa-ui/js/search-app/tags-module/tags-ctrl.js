@@ -5,16 +5,12 @@ function tagsCtrl($scope) {
     $scope.greeting = 'Hello! this is search controller!';
 
     $scope.tags = [
-            { text: 'Tag1' },
-            { text: 'Tag2' },
-            { text: 'Tag3' },
-            { text: 'Tag4' }
+        { 'name': 'Tag1', 'textColor': '', 'backgroundColor': '', 'glyph': '', 'published': '' },
+        { 'name': 'Tag2', 'textColor': '', 'backgroundColor': '', 'glyph': '', 'published': '' },
+        { 'name': 'Tag3', 'textColor': '', 'backgroundColor': '', 'glyph': '', 'published': '' },
+        { 'name': 'Tag4', 'textColor': '', 'backgroundColor': '', 'glyph': '', 'published': '' },
+        { 'name': 'Tag5', 'textColor': '', 'backgroundColor': '', 'glyph': '', 'published': '' }
     ];
-
-    function loadTags(query) {
-        console.log(query);
-        //return $http.get('/tags?query=' + query);
-    };
 
 }
 

@@ -1,3 +1,13 @@
 <h2>{{ greeting }}</h2>
 
-{{tags}}
+
+<ul class="tags" tags-list>
+    <li ng-repeat="tag in tags">{{tag.name}}</li>
+</ul>
+
+<script id="tagTemplate.html" type="text/ng-template">
+    <span tag-property="name">
+        <span class="tag">{{name}}<span>
+        <span class="tag" ng-click="remove(idx)"><span>
+    </span>
+</script>
