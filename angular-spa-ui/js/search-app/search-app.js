@@ -8,7 +8,7 @@ require('./tags-module');
 var searchApp = angular.module('searchApp', ['ui.router', 'search', 'cart', 'tags']);
 
 angular.element(document).ready(function () {
-    
+
     searchApp.
         config(function ($stateProvider, $urlRouterProvider) {
             $urlRouterProvider.otherwise('search.simple');
