@@ -63,5 +63,6 @@ API.initRestModules([
     'user',
     'role',
     'index',
-    'admin'
+    'admin',
+    'search'
 ]);
