@@ -11,7 +11,7 @@ angular.element(document).ready(function () {
     
     searchApp.
         config(function ($stateProvider, $urlRouterProvider) {
-            $urlRouterProvider.otherwise('search');
+            $urlRouterProvider.otherwise('search.simple');
             console.log('SearchApp module: init config');
         }).
         run(function () {
