@@ -10,12 +10,11 @@ search.config(function ($stateProvider) {
         .state('search', {
             abstract: true,
             url: '/search',
-            //template: 'Hello world from search module',
             template: '<ui-view/>'
         })
         .state('search.simple', {
             url: '.simple',
-            template: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+            template: 'Hello world simple search'
         })
   });
 

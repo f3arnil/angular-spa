@@ -6,17 +6,10 @@ var advancedSearch = angular.module('advancedSearch', ['ui.router']);
 
 advancedSearch
     .config(function ($stateProvider) {
-        //console.log($stateProvider);
         $stateProvider
             .state('search.advanced', {
                 url: '.advanced',
-                // parent: 'search',
-                // url: '^/search.advanced',
-                // name: 'main',
-                // views: {
-                //     template: 'Hello!'
-                // }
-                template: "fhkjsdhgfkjdsghfdsg"
+                template: "Hello world advanced search"
         });
     });
 
