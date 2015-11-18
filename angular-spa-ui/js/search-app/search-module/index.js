@@ -1,6 +1,6 @@
 "use strict";
 
-require('angular-ui-router');
+require('ui.router');
 
 var search = angular.module('search', ['ui.router']);
 

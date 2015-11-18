@@ -8,6 +8,8 @@ module.exports = function(app, mongoose, api) {
 
     app.get('/service/search', searchRequest);
 
+    app.post('/service/advanced-search', advancedSearchRequest);
+
     function searchAppIndexPageRequest (request, response) {
         response.render('js/search-app/index.jade', {
             way: 'js/search-app/',
@@ -87,5 +89,84 @@ module.exports = function(app, mongoose, api) {
                 return response.json(JSON.stringify(data));
             }
         );
+    }
+
+    /**
+     *
+     * @param request POST fields {
+     *      "context": {
+     *          "TABLE_NAME": {
+     *              "conditions": [
+     *                  {
+     *                      "field": "FIELD_NAME || ALL_FIELDS",
+     *                      "query": "QUERY",
+     *                      "match": "STARTS_FROM || CONTAINS || EXACT",
+     *                      "condition_op": "NONE || AND || OR"
+     *                  },
+     *                  {
+     *                      "field": "FIELD_NAME || ALL_FIELDS",
+     *                      "query": "QUERY",
+     *                      "match": "STARTS_FROM || CONTAINS || EXACT",
+     *                      "condition_op": "NONE || AND || OR"
+     *                  }
+     *              ]
+     *          }
+     *      }
+     * }
+     * @param response
+     */
+    function advancedSearchRequest(request, response) {
+        //return response.json(request.body);
+
+        return response.json(_AS_getContexts(request.body));
+    }
+
+    function _AS_getContexts(requestJSON) {
+        var contexts = [];
+;
+        if (requestJSON.hasOwnProperty('context')) {
+            for (contextName in requestJSON.context) {;
+                contexts.push(_AS_buildContext(contextName, requestJSON.context[contextName]));
+            }
+        }
+
+        return contexts;
+    }
+
+    function _AS_buildContext(contextName, contextData) {
+        var conditions = [];
+
+        if (contextData.hasOwnProperty('conditions')) {
+            for (var i = 0; i < contextData.conditions.length; i++) {
+                var condition = contextData.conditions[i];
+
+                conditions.push(condition);
+
+                // Do not process next conditions if it has no operator
+                if (condition.hasOwnProperty("condition_op") && condition.condition_op == 'NONE') {
+                    break;
+                }
+            }
+        }
+
+        return conditions;
+    }
+
+    function _AS_getQueryRegexp(matchingOperator, query) {
+
+        switch (matchingOperator) {
+            case 'STARTS_FROM': return new RegExp('^' + query, 'i')
+            case 'CONTAINS': return new RegExp(query, 'i');
+            case 'EXACT': return new RegExp('^' + query + '$', 'i');
+            default: return new RegExp(query, 'i');
+        }
+    }
+
+    function _AS_cleanString(value) {
+        if (value != undefined && value != null) {
+            return value.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+        }
+
+        return '';
     }
 }
