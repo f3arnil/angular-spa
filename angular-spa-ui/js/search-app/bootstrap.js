@@ -3,9 +3,9 @@
 module.exports = function(application, angular){
 
 
-var cartModule = require('./cart-module')(angular);
-var searchModule = require('./search-module')(angular);
-var tagsModule = require('./tags-module')(angular);
+    var cartModule = require('./cart-module')(angular);
+    var searchModule = require('./search-module')(angular);
+    var tagsModule = require('./tags-module')(angular);
     
     application.factory('Promises', function($q, $http){
 
