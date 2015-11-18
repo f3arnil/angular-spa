@@ -11,23 +11,29 @@ html
         .container-fluid
             include ../common/header/header.jade
 
-            main
-                .row
-                    ul(class="nav navbar-nav")
-                        li
-                            a(ui-sref="search") Module: 'Search'
-                        li
-                            a(ui-sref="cart") Module: 'Cart'
-                        li
-                            a(ui-sref="tags") Module: 'Tags'
+        main
+            .row
+                ul(class="nav navbar-nav")
+                    li
+                        a(ui-sref="search.simple") Модуль: 'Search'
+                    li
+                        a(ui-sref="search.advanced") Модуль: 'advancedSearch'
+                    li
+                        a(ui-sref="cart") Module: 'Cart'
+                    li
+                        a(ui-sref="tags") Module: 'Tags'
 
-                .row
-                    .col-md-12.ui-view
+            .row
+                .col-md-12.ui-view
 
             include ../common/footer/footer.jade
 
-        script.
-            var GLOBAL_USER_ID = '#{userId}';
 
-        script(src=locals.way + '../../build/scripts/vendor.js')
-        script(src=locals.way + '../../build/scripts/search.bundle.js')
+<div ui-view></div>
+
+block scripts
+script.
+    var GLOBAL_USER_ID = '#{userId}';
+
+script(src=locals.way + '../../build/scripts/vendor.js')
+script(src=locals.way + '../../build/scripts/search.bundle.js')
