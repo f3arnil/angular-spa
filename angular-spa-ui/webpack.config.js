@@ -14,8 +14,8 @@ module.exports = {
         vendor: [
             'underscore',
             'angular',
-            'angular-ui-router'
-            //'bootstrap-sass!./bootstrap-sass.config.js'
+            'angular-ui-router',
+            'bootstrap-sass!./bootstrap-sass.config.js'
         ]
     },
     output: {
