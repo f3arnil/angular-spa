@@ -1,8 +1,8 @@
 "use strict";
 
-require('angular-ui-router');
-
-var advancedSearch = angular.module('advancedSearch', ['ui.router']);
+module.exports = function(ngModule) {
+    
+var advancedSearch = ngModule.module('searchApp.searchModule.advancedSearch', ['ui.router']);
 
 advancedSearch
     .config(function ($stateProvider) {
@@ -12,5 +12,7 @@ advancedSearch
                 template: "Hello world advanced search"
         });
     });
+    
+return advancedSearch;
 
-module.exports = advancedSearch;
+}

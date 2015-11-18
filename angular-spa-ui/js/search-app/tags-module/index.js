@@ -1,16 +1,17 @@
 "use strict";
 
-require('angular-ui-router');
+module.exports = function(ngModule) {
 
-var tags = angular.module('tags', ['ui.router']);
+var tagsModule = ngModule.module('searchApp.tagsModule', ['ui.router']);
 
-tags.config(function ($stateProvider) {
+tagsModule.config(function ($stateProvider) {
     $stateProvider
         .state('tags', {
             url: '/tags',
             template: 'Hello world from tags module',
-            controller: 'tagsMainCtrl'
         })
   });
 
-module.exports = tags;
+return tagsModule;
+
+}

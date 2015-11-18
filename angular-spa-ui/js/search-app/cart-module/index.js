@@ -1,10 +1,10 @@
 "use strict";
 
-require('angular-ui-router');
+module.exports = function(ngModule) {
 
-var cart = angular.module('cart', ['ui.router']);
+var cartModule = ngModule.module('searchApp.cartModule', ['ui.router']);
 
-cart.config(function ($stateProvider) {
+cartModule.config(function ($stateProvider) {
     $stateProvider
         .state('cart', {
           url: '/cart',
@@ -12,4 +12,5 @@ cart.config(function ($stateProvider) {
         })
   });
 
-module.exports = cart;
+return cartModule;
+}

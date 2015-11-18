@@ -32,8 +32,8 @@ module.exports = {
     plugins: [
 
         new webpack.ProvidePlugin({
-            _: 'underscore',
-            angular: 'exports?window.angular!angular'
+            _: 'underscore'
+            //angular: 'exports?window.angular!angular'
         }),
         new CommonsChunkPlugin('vendor', 'vendor.js'),
         new ExtractTextPlugin('../styles/styles.css', {
