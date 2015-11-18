@@ -2,7 +2,6 @@
 
 module.exports = function(application, angular){
 
-
     var cartModule = require('./cart-module')(angular);
     var searchModule = require('./search-module')(angular);
     var tagsModule = require('./tags-module')(angular);
@@ -25,10 +24,10 @@ module.exports = function(application, angular){
         };
 
         function getALL(method) {
-            var promiseList = new Array();
+            var promiseList = new Array();  
             for ( var i=1; i<arguments.length; i++ ) {
                 promiseList.push(getAsyncData(method, arguments[i]))
-            };
+            }
 
             var deferred = $q.defer();
             $q.all(promiseList)
@@ -124,8 +123,7 @@ module.exports = function(application, angular){
                 //error function
             }
         );
-
-}]);
+    }]);
     
     return application;
     
