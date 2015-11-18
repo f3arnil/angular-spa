@@ -11,5 +11,20 @@
     },
     "angular": {
         "rootDirectory": "angular-spa-ui"
+    },
+    "search": {
+        "startFrom": 0,
+        "itemsOnPage": 10,
+        "searchIn": "publication",
+        "orderBy": "ASC",
+        "field": "title",
+        "validSearchEntities": {
+            "article": [
+                "title"
+            ],
+            "publication": [
+                "title"
+            ]
+        }
     }
 }
