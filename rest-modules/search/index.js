@@ -111,26 +111,40 @@ module.exports = function(app, mongoose, api) {
      *                  }
      *              ]
      *          }
+     *      },
+     *      "limits": {
+     *          "offset": 0,
+     *          "limit": 0,
+     *          "language": "ANY",
+     *          "country": "ANY",
+     *          "publication_type": "ANY",
+     *          "publisher": "ANY",
+     *          "publication_date": 0,
+     *          "start_date": 0,
+     *          "end_date": 0,
+     *          "volume": "ANY",
+     *          "issue": "ANY",
+     *          "start_page": "ANY"
      *      }
      * }
      * @param response
      */
     function advancedSearchRequest(request, response) {
-        //return response.json(request.body);
-
-        return response.json(_AS_getContexts(request.body));
+        _AS_getContexts(request.body, response);
     }
 
-    function _AS_getContexts(requestJSON) {
+    function _AS_getContexts(requestJSON, response) {
         var contexts = [];
-;
+
         if (requestJSON.hasOwnProperty('context')) {
-            for (contextName in requestJSON.context) {;
-                contexts.push(_AS_buildContext(contextName, requestJSON.context[contextName]));
+            for (contextName in requestJSON.context) {
+                var context = _AS_buildContext(contextName, requestJSON.context[contextName]);
+
+                contexts.push(context);
             }
         }
 
-        return contexts;
+        _AS_buildContextsRequest(contexts, response);
     }
 
     function _AS_buildContext(contextName, contextData) {
@@ -140,16 +154,103 @@ module.exports = function(app, mongoose, api) {
             for (var i = 0; i < contextData.conditions.length; i++) {
                 var condition = contextData.conditions[i];
 
-                conditions.push(condition);
+                if (i == 0) {
+                    condition.condition_op = 'NONE';
+                }
 
-                // Do not process next conditions if it has no operator
-                if (condition.hasOwnProperty("condition_op") && condition.condition_op == 'NONE') {
+                if (i > 0 && (i < contextData.conditions.length) && condition.condition_op == 'NONE') {
                     break;
                 }
+
+                conditions.push(_AS_buildConditionObject(
+                    _AS_filterFieldValue(condition, 'field').split(','),
+                    _AS_filterFieldValue(condition, 'query'),
+                    _AS_filterFieldValue(condition, 'match'),
+                    _AS_filterFieldValue(condition, 'condition_op')
+                ));
             }
         }
 
-        return conditions;
+        return _AS_buildConditionsRequest(conditions, contextName);
+    }
+
+    function _AS_buildConditionsRequest(conditions, contextName) {
+        var runnableCallback = function (callback) {
+
+            var model = api.getRESTModule(contextName);
+
+            if (model == null) {
+                return;
+            }
+
+            model = model.getModel();
+            var databaseQuery = model.find();
+
+            databaseQuery = _AS_buildQueryConditions(conditions, databaseQuery);
+
+            return databaseQuery.exec(function (error, data) {
+                if (error) {
+                    console.log('Oups... Something bad on executing context condition request!');
+                    console.log(error);
+                }
+                callback(error, data);
+            });
+        }
+
+        return runnableCallback;
+    }
+
+    function _AS_buildQueryConditions(conditions, databaseQuery) {
+        var conditionUnions = [];
+        var requestFields = {};
+
+        for (var conditionIndex = 0; conditionIndex < conditions.length; conditionIndex++) {
+            var condition = conditions[conditionIndex];
+
+            if (condition.conditionOperator == 'OR') {
+                conditionUnions.push(requestFields);
+                requestFields = {};
+            }
+
+            for (var fieldIndex = 0; fieldIndex < condition.fieldName.length; fieldIndex++) {
+                if (requestFields.hasOwnProperty(condition.fieldName[fieldIndex])) {
+                    continue;
+                }
+
+                requestFields[condition.fieldName[fieldIndex]] = _AS_getQueryRegexp(condition.matchingOperator, condition.requestQuery);
+            }
+        }
+
+        if (requestFields != null && requestFields.length != 0) {
+            conditionUnions.push(requestFields);
+        }
+
+        if (conditionUnions.length > 0) {
+            databaseQuery.or(conditionUnions);
+        }
+
+        return databaseQuery;
+    }
+
+    function _AS_buildContextsRequest(contexts, response) {
+
+        Async.parallel(contexts, function (error, data) {
+           if (error) {
+               console.log("ASync parallel request error:");
+               console.log(error);
+           }
+
+            return response.json(data);
+        });
+    }
+
+    function _AS_buildConditionObject(fieldName, requestQuery, matchingOperator, conditionOperator) {
+        return {
+            fieldName: fieldName,
+            requestQuery: requestQuery,
+            matchingOperator: matchingOperator,
+            conditionOperator: conditionOperator
+        };
     }
 
     function _AS_getQueryRegexp(matchingOperator, query) {
@@ -160,6 +261,14 @@ module.exports = function(app, mongoose, api) {
             case 'EXACT': return new RegExp('^' + query + '$', 'i');
             default: return new RegExp(query, 'i');
         }
+    }
+
+    function _AS_filterFieldValue(condition, fieldName) {
+        if (condition[fieldName] != undefined && condition[fieldName] != null) {
+            return _AS_cleanString(condition[fieldName]);
+        }
+
+        return '';
     }
 
     function _AS_cleanString(value) {
