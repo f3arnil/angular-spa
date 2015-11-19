@@ -115,16 +115,6 @@ module.exports = function(app, mongoose, api) {
      *      "limits": {
      *          "offset": 0,
      *          "limit": 0,
-     *          "language": "ANY",
-     *          "country": "ANY",
-     *          "publication_type": "ANY",
-     *          "publisher": "ANY",
-     *          "publication_date": 0,
-     *          "start_date": 0,
-     *          "end_date": 0,
-     *          "volume": "ANY",
-     *          "issue": "ANY",
-     *          "start_page": "ANY"
      *      }
      * }
      * @param response
@@ -135,10 +125,18 @@ module.exports = function(app, mongoose, api) {
 
     function _AS_getContexts(requestJSON, response) {
         var contexts = [];
+        var limits = null;
+
+        if (requestJSON.hasOwnProperty('limits')) {
+            limits = {
+                offset: requestJSON.limits.hasOwnProperty('offset') ? requestJSON.limits.offset : 0,
+                limit: requestJSON.limits.hasOwnProperty('limit') ? requestJSON.limits.limit : 0
+            };
+        }
 
         if (requestJSON.hasOwnProperty('context')) {
             for (contextName in requestJSON.context) {
-                var context = _AS_buildContext(contextName, requestJSON.context[contextName]);
+                var context = _AS_buildContext(contextName, requestJSON.context[contextName], limits);
 
                 contexts.push(context);
             }
@@ -147,7 +145,7 @@ module.exports = function(app, mongoose, api) {
         _AS_buildContextsRequest(contexts, response);
     }
 
-    function _AS_buildContext(contextName, contextData) {
+    function _AS_buildContext(contextName, contextData, limits) {
         var conditions = [];
 
         if (contextData.hasOwnProperty('conditions')) {
@@ -171,10 +169,10 @@ module.exports = function(app, mongoose, api) {
             }
         }
 
-        return _AS_buildConditionsRequest(conditions, contextName);
+        return _AS_buildConditionsRequest(conditions, contextName, limits);
     }
 
-    function _AS_buildConditionsRequest(conditions, contextName) {
+    function _AS_buildConditionsRequest(conditions, contextName, limits) {
         var runnableCallback = function (callback) {
 
             var model = api.getRESTModule(contextName);
@@ -187,6 +185,10 @@ module.exports = function(app, mongoose, api) {
             var databaseQuery = model.find();
 
             databaseQuery = _AS_buildQueryConditions(conditions, databaseQuery);
+
+            if (limits != undefined && limits != null) {
+                databaseQuery.skip(limits.offset).limit(limits.limit);
+            }
 
             return databaseQuery.exec(function (error, data) {
                 if (error) {
