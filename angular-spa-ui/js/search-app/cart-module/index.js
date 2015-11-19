@@ -2,9 +2,7 @@
 
 module.exports = function(ngModule) {
 
-    var cartModule = ngModule.module('searchApp.cartModule', ['ui.router']);
-
-    cartModule.config(function ($stateProvider) {
+    ngModule.config(function ($stateProvider) {
         $stateProvider
             .state('cart', {
               url: '/cart',
@@ -12,5 +10,4 @@ module.exports = function(ngModule) {
             })
       });
 
-    return cartModule;
 }

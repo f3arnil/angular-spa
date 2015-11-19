@@ -2,13 +2,13 @@
 
 var angular = require('angular');
 var uiRouter = require('angular-ui-router');
-var cartModule = require('./cart-module')(angular);
-var searchModule = require('./search-module')(angular);
-var tagsModule = require('./tags-module')(angular);
+var app = angular.module('searchApp', [uiRouter]);
 
-var application = angular.module('searchApp', [uiRouter, 'searchApp.searchModule', 'searchApp.cartModule', 'searchApp.tagsModule']);
+var cartModule = require('./cart-module')(app);
+var searchModule = require('./search-module')(app);
+var advencedSearchModule = require('./search-module/advanced-search')(app);
 
-application
+app
     .config(function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise('search.simple');
     })

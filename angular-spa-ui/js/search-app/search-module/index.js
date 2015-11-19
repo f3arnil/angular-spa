@@ -1,11 +1,8 @@
 "use strict";
 
 module.exports = function(ngModule) {
-    
-    var advancedSearchModule = require('./advanced-search')(ngModule);
-    var searchModule = ngModule.module('searchApp.searchModule', ['ui.router', 'searchApp.searchModule.advancedSearch']);
 
-    searchModule.config(function ($stateProvider, $urlRouterProvider) {
+    ngModule.config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('search', {
                 abstract: true,
@@ -18,5 +15,4 @@ module.exports = function(ngModule) {
             })
         });
 
-    return searchModule;
 }
