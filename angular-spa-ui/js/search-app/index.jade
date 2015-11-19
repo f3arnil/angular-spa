@@ -10,7 +10,7 @@ html
     body(id="app" ng-controller="mainCtrl")
         .container-fluid
             include ../common/header/header.jade
-
+        p(ng-model="inited") {{inited}}
         main
             .row
                 ul(class="nav navbar-nav")
@@ -27,7 +27,7 @@ html
                 .col-md-12.ui-view
 
             include ../common/footer/footer.jade
-
+            include  error.html
 
 <div ui-view></div>
 
