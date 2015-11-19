@@ -1,12 +1,8 @@
 "use strict";
 
-module.exports = function(application, angular){
+module.exports = function(ngModule){
 
-    var cartModule = require('./cart-module')(angular);
-    var searchModule = require('./search-module')(angular);
-    var tagsModule = require('./tags-module')(angular);
-    
-    application.factory('Promises', function($q, $http){
+    ngModule.factory('Promises', function($q, $http){
 
         function getAsyncData(method, url) {
             var deferred = $q.defer();
@@ -49,7 +45,7 @@ module.exports = function(application, angular){
         };
     });
     
-    application.controller('mainCtrl', ['$scope', 'Promises',  function($scope, Promises) {                              
+    ngModule.controller('mainCtrl', ['$scope', 'Promises',  function($scope, Promises) {
         // Promises requests responce
     var responsePromises    = new Array(),
         getMethod           = 'GET',
@@ -125,6 +121,6 @@ module.exports = function(application, angular){
         );
     }]);
     
-    return application;
+    //return ngModule;
     
 };
