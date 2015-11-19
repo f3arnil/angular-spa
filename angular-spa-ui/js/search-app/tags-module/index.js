@@ -2,9 +2,7 @@
 
 module.exports = function(ngModule) {
 
-    var tagsModule = ngModule.module('searchApp.tagsModule', ['ui.router']);
-
-    tagsModule.config(function ($stateProvider) {
+    ngModule.config(function ($stateProvider) {
         $stateProvider
             .state('tags', {
                 url: '/tags',
@@ -12,5 +10,4 @@ module.exports = function(ngModule) {
             })
       });
 
-    return tagsModule;
 }
