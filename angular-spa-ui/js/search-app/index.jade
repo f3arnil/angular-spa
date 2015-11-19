@@ -8,32 +8,14 @@ html
         link(rel="stylesheet" href="../../build/styles/styles.css")
 
     body(id="app" ng-controller="mainCtrl")
-        .container-fluid
-            include ../common/header/header.jade
-        p(ng-model="inited") {{inited}}
-        main
-            .row
-                ul(class="nav navbar-nav")
-                    li
-                        a(ui-sref="search.simple") Модуль: 'Search'
-                    li
-                        a(ui-sref="search.advanced") Модуль: 'advancedSearch'
-                    li
-                        a(ui-sref="cart") Module: 'Cart'
-                    li
-                        a(ui-sref="tags") Module: 'Tags'
+    h1 Loading app..
 
-            .row
-                .col-md-12.ui-view
-
-            include ../common/footer/footer.jade
-            include  error.html
-
-<div ui-view></div>
-
+        
 block scripts
 script.
     var GLOBAL_USER_ID = '#{userId}';
-
+include error.html
+include main.jade
 script(src=locals.way + '../../build/scripts/vendor.js')
 script(src=locals.way + '../../build/scripts/search.bundle.js')
+

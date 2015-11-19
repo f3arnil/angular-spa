@@ -1,11 +1,8 @@
 "use strict";
 
 module.exports = function(ngModule) {
-    
-    var advancedSearch = ngModule.module('searchApp.searchModule.advancedSearch', ['ui.router']);
 
-    advancedSearch
-        .config(function ($stateProvider) {
+    ngModule.config(function ($stateProvider) {
             $stateProvider
                 .state('search.advanced', {
                     url: '.advanced',
@@ -13,5 +10,4 @@ module.exports = function(ngModule) {
             });
         });
 
-    return advancedSearch;
 }

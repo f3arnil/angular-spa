@@ -1,12 +1,8 @@
 "use strict";
 
-module.exports = function(application, angular){
+module.exports = function(ngModule){
 
-    var cartModule = require('./cart-module')(angular);
-    var searchModule = require('./search-module')(angular);
-    var tagsModule = require('./tags-module')(angular);
-    
-    application.factory('Promises', function($q, $http){
+    ngModule.factory('Promises', function($q, $http){
 
         function getAsyncData(method, url) {
             var deferred = $q.defer();
@@ -49,37 +45,27 @@ module.exports = function(application, angular){
         };
     });
     
-    application.factory('getTemplate', function($sce, $compile, $templateRequest){
-        
+    ngModule.factory('getTemplate', function($sce, $compile, $templateRequest){
         function getByTrustedUrl(url, element, scope) {
             var templateUrl = $sce.getTrustedResourceUrl(url);
             $templateRequest(templateUrl)
                 .then(
                     function(template) {
-                        // template is the HTML template as a string
-                        // Let's put it into an HTML element and parse any directives and expressions
-                        // in the code. (Note: This is just an example, modifying the DOM from within
-                        // a controller is considered bad style.)
-                        //return template;
                         $compile(element.html(template).contents())(scope);
-                    }, 
+                    },
                     function() {
-                        // An error has occurred
                         console.log('Can not get template!');
                     }
                 )
         };
-        
+
         return {
             getByTrustedUrl : getByTrustedUrl
         }
+
     });
-//    application.controller('errorCtrl', function($scope, $rootScope){
-//        $scope.err = { code : '404', data : 'Oops.. problems!'};
-//        console.log($scope.err);
-//    });
-    
-    application.controller('mainCtrl', function( $scope, Promises, $q, getTemplate, $compile) {
+        
+    ngModule.controller('mainCtrl', function( $scope, Promises, $q, getTemplate, $compile) {
 
         var responsePromises    = new Array(),
             getMethod           = 'GET',
@@ -88,7 +74,7 @@ module.exports = function(application, angular){
             putMethod           = 'DELETE',
             getUserPath         = '/user/' + GLOBAL_USER_ID,
             getRolePath         = '/role/',
-            getTokenPath        = '/user-token1/',
+            getTokenPath        = '/user-token/',
             getValidatePath     = '/user-validate/',
             userId,
             userToken,
@@ -138,7 +124,8 @@ module.exports = function(application, angular){
                     console.log(data);
                     userValidate = data.data.result;
                     console.log(userValidate);
-                    $scope.inited = userValidate;
+                    var element = angular.element( document.querySelector( '#app' ) );
+                    getTemplate.getByTrustedUrl('/main.html', element, $scope);
                     // all good
                 })
             .catch(
@@ -147,12 +134,9 @@ module.exports = function(application, angular){
                     $scope.err = { code : error.status, data : error.data};
                     var element = angular.element( document.querySelector( '#app' ) );
                     getTemplate.getByTrustedUrl('/error.html', element, $scope);
-                    //$compile(element.html(template).contents())($scope);
-                    //console.log('Error '+ error.status + ' with message ' + error.data);
-                    //return $q.reject(data,status);
+                    console.log('Error '+ error.status);
                     });
     });
-    
-    return application;
-
+ 
 };
+ 
