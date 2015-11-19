@@ -1,15 +1,18 @@
 "use strict";
 
-require('ui.router');
+module.exports = function(ngModule) {
 
-var search = angular.module('search', ['ui.router']);
+    ngModule.config(function ($stateProvider, $urlRouterProvider) {
+        $stateProvider
+            .state('search', {
+                abstract: true,
+                url: '/search',
+                template: '<ui-view/>'
+            })
+            .state('search.simple', {
+                url: '.simple',
+                template: 'Hello world simple search'
+            })
+        });
 
-search.config(function ($stateProvider) {
-    $stateProvider
-        .state('search', {
-          url: '/search',
-          template: 'Hello world from search module',
-        })
-  });
-
-module.exports = search;
+}

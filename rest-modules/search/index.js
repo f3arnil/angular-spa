@@ -206,22 +206,7 @@ module.exports = function(app, mongoose, api) {
         var conditionUnions = [];
         var requestFields = {};
 
-        for (var conditionIndex = 0; conditionIndex < conditions.length; conditionIndex++) {
-            var condition = conditions[conditionIndex];
-
-            if (condition.conditionOperator == 'OR') {
-                conditionUnions.push(requestFields);
-                requestFields = {};
-            }
-
-            for (var fieldIndex = 0; fieldIndex < condition.fieldName.length; fieldIndex++) {
-                if (requestFields.hasOwnProperty(condition.fieldName[fieldIndex])) {
-                    continue;
-                }
-
-                requestFields[condition.fieldName[fieldIndex]] = _AS_getQueryRegexp(condition.matchingOperator, condition.requestQuery);
-            }
-        }
+        _AS_fillConditionRequests(conditions, conditionUnions, requestFields)
 
         if (requestFields != null && requestFields.length != 0) {
             conditionUnions.push(requestFields);
@@ -232,6 +217,29 @@ module.exports = function(app, mongoose, api) {
         }
 
         return databaseQuery;
+    }
+
+    function _AS_fillConditionRequests(conditions, conditionUnions, requestFields) {
+        for (var conditionIndex = 0; conditionIndex < conditions.length; conditionIndex++) {
+            var condition = conditions[conditionIndex];
+
+            if (condition.conditionOperator == 'OR') {
+                conditionUnions.push(requestFields);
+                requestFields = {};
+            }
+
+            _AS_fillConditionRequestFields(requestFields, condition);
+        }
+    }
+
+    function _AS_fillConditionRequestFields(requestFields, condition) {
+        for (var fieldIndex = 0; fieldIndex < condition.fieldName.length; fieldIndex++) {
+            if (requestFields.hasOwnProperty(condition.fieldName[fieldIndex])) {
+                continue;
+            }
+
+            requestFields[condition.fieldName[fieldIndex]] = _AS_getQueryRegexp(condition.matchingOperator, condition.requestQuery);
+        }
     }
 
     function _AS_buildContextsRequest(contexts, response) {

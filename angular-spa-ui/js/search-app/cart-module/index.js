@@ -1,15 +1,13 @@
 "use strict";
 
-require('angular-ui-router');
+module.exports = function(ngModule) {
 
-var cart = angular.module('cart', ['ui.router']);
+    ngModule.config(function ($stateProvider) {
+        $stateProvider
+            .state('cart', {
+              url: '/cart',
+              template: 'Hello world from cart module',
+            })
+      });
 
-cart.config(function ($stateProvider) {
-    $stateProvider
-        .state('cart', {
-          url: '/cart',
-          template: 'Hello world from cart module',
-        })
-  });
-
-module.exports = cart;
+}
