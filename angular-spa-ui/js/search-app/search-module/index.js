@@ -4,7 +4,7 @@ module.exports = function(app) {
 
     require('./advanced-search')(app);
 
-    var searchCtrl = require('./search-ctrl')(app);
+    //var searchCtrl = require('./search-ctrl');
 
     app.config(configCb);
 
@@ -17,10 +17,9 @@ module.exports = function(app) {
             })
             .state('search.simple', {
                 url: '.simple',
-                template: 'Hello world simple search',
-                controller: searchCtrl
+                template: 'Hello world simple search'
+                //controller: searchCtrl
             });
-        });
     };
 
 };

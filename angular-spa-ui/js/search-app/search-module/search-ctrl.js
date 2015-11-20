@@ -1,9 +1,9 @@
 "use strict";
 
-module.exports = function(ngModule) {
-        
-    ngModule.controller('searchCtrl', function($http, appConfig) {
+module.exports = function(ngModal) {
+
+    ngModal.controller('searchCtrl', function($http, appConfig) {
 
     });
 
-}
+};

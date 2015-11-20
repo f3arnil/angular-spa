@@ -50,7 +50,7 @@ module.exports = function(app) {
             .then(
                 function(data) {
                     userData.userValidate = data.data.result;
-                    var element = angular.element( document.querySelector( '#app' ) );
+                    var element = angular.element( document.querySelector( '#main' ) );
                     getTemplate.getByTrustedUrl('/main.html', element, $scope);
                     // all good
                 })
@@ -58,7 +58,7 @@ module.exports = function(app) {
                 function(error){
                     $scope.inited = false;
                     $scope.err = { code : error.status, data : error.data};
-                    var element = angular.element( document.querySelector( '#app' ) );
+                    var element = angular.element( document.querySelector( '#main' ) );
                     getTemplate.getByTrustedUrl('/error.html', element, $scope);
                     console.log('Error '+ error.status);
                     });

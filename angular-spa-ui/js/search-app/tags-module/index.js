@@ -10,6 +10,6 @@ module.exports = function(app) {
                 url: '/tags',
                 template: 'Hello tags'
             })
-    });
+    };
 
-}
+};
