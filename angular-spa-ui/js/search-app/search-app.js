@@ -1,6 +1,7 @@
 "use strict";
 
-var angular = require('angular');
+require('angular');
+
 var uiRouter = require('angular-ui-router');
 
 var app = angular.module('searchApp', [uiRouter]);
@@ -10,12 +11,13 @@ require('./cart-module')(app);
 require('./search-module')(app);
 require('./tags-module')(app);
 
-app
-    .config(function ($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise('search.simple');
-    })
-    .run(function () {
+function configCb($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider
+        .otherwise('search.simple');
+};
 
-    });
+app
+    .config(configCb)
+    .run();
 
 angular.bootstrap(document, [app.name]);

@@ -2,12 +2,14 @@
 
 module.exports = function(app) {
 
-    app.config(function ($stateProvider) {
+    app.config(configCb);
+
+    function configCb($stateProvider) {
         $stateProvider
             .state('tags', {
                 url: '/tags',
-                template: 'Hello world from tags module',
+                template: 'Hello tags'
             })
-      });
-    
+    });
+
 }
