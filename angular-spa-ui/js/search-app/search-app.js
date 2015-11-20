@@ -2,10 +2,13 @@
 
 var angular = require('angular');
 var uiRouter = require('angular-ui-router');
+
 var app = angular.module('searchApp', [uiRouter]);
 
-var cartModule = require('./cart-module')(app);
-var searchModule = require('./search-module')(app);
+require('./bootstrap')(app);
+require('./cart-module')(app);
+require('./search-module')(app);
+require('./tags-module')(app);
 
 app
     .config(function ($stateProvider, $urlRouterProvider) {
@@ -15,4 +18,4 @@ app
 
     });
 
-angular.bootstrap(document, ['searchApp']);
+angular.bootstrap(document, [app.name]);

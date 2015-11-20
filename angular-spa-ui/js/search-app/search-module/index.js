@@ -1,9 +1,11 @@
 "use strict";
 
-module.exports = function(ngModule) {
-    var advencedSearchModule = require('./advanced-search')(ngModule);
+module.exports = function(app) {
 
-    ngModule.config(function ($stateProvider, $urlRouterProvider) {
+    require('./advanced-search')(app);
+    var searchCtrl = require('./search-ctrl')(app);
+    
+    app.config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('search', {
                 abstract: true,
@@ -12,7 +14,8 @@ module.exports = function(ngModule) {
             })
             .state('search.simple', {
                 url: '.simple',
-                template: 'Hello world simple search'
+                template: 'Hello world simple search',
+                controller: searchCtrl
             })
         });
 
