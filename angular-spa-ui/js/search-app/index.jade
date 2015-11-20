@@ -8,16 +8,9 @@ html
 
 
     body(id="app" ng-controller="mainCtrl")
-        header.container
-            include ../common/header/header.jade
-
-        section.container
-            div.row
-                div.col-md-12.ui-view
-                    div(ui-view)
-
-        footer.container
-            include ../common/footer/footer.jade
+        div#main
+        include main.jade
+        include error.html
 
         script.
             var GLOBAL_USER_ID = '#{userId}';
