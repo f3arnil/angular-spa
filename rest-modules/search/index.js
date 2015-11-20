@@ -45,6 +45,14 @@ module.exports = function(app, mongoose, api) {
             ? request.param('field').trim()
             : config.search.field;
 
+        var offset = request.param('offset')
+            ? request.param('offset').trim()
+            : 0;
+
+        var limit = request.param('limit')
+            ? request.param('limit')
+            : 0;
+
         var entityModel = api.getRESTModule(searchingEntity);
 
         if (entityModel == undefined || entityModel == null) {
@@ -84,6 +92,8 @@ module.exports = function(app, mongoose, api) {
         return entityModel
             .find()
             .or([ searchingFieldData ])
+            .skip(offset)
+            .limit(limit)
             .sort(orderingFieldData)
             .exec(function (error, data) {
                 return response.json(JSON.stringify(data));
@@ -98,18 +108,24 @@ module.exports = function(app, mongoose, api) {
      *          "TABLE_NAME": {
      *              "conditions": [
      *                  {
-     *                      "field": "FIELD_NAME || ALL_FIELDS",
+     *                      "field": "FIELD_1_NAME,FIELD_2_NAME,...,FIELD_n_NAME",
      *                      "query": "QUERY",
      *                      "match": "STARTS_FROM || CONTAINS || EXACT",
      *                      "condition_op": "NONE || AND || OR"
+     *                      // First object could not has a condition_op value instead "NONE"
+     *                      // because each condition_op affects only previous one oject.
+     *                      // For example, if you want to create A && B logic use next way:
+     *                      // A: { condition_op: "NONE"; }, B: { condition_op: "AND"; }
      *                  },
      *                  {
-     *                      "field": "FIELD_NAME || ALL_FIELDS",
+     *                      "field": "FIELD_NAME",
      *                      "query": "QUERY",
      *                      "match": "STARTS_FROM || CONTAINS || EXACT",
      *                      "condition_op": "NONE || AND || OR"
      *                  }
-     *              ]
+     *              ],
+     *              "sortingOrder": "ASC",
+     *              "sortingField": "title"
      *          }
      *      },
      *      "limits": {
@@ -147,6 +163,24 @@ module.exports = function(app, mongoose, api) {
 
     function _AS_buildContext(contextName, contextData, limits) {
         var conditions = [];
+        var sortingOrder = 'ASC';
+        var sortingField = '';
+
+        if (contextData.hasOwnProperty('sortingOrder')) {
+            switch (contextData.sortingOrder.trim()) {
+                case 'desc':
+                case 'DESC':
+                    sortingOrder = '-1'; break;
+                case 'asc':
+                case 'ASC':
+                default:
+                    sortingOrder = '1'; break;
+            }
+        }
+
+        if (contextData.hasOwnProperty('sortingField')) {
+            sortingField = contextData.sortingField;
+        }
 
         if (contextData.hasOwnProperty('conditions')) {
             for (var i = 0; i < contextData.conditions.length; i++) {
@@ -160,8 +194,14 @@ module.exports = function(app, mongoose, api) {
                     break;
                 }
 
+                var fields = _AS_filterFieldValue(condition, 'field').split(',');
+
+                if (sortingField.length == 0) {
+                    sortingField = fields[0];
+                }
+
                 conditions.push(_AS_buildConditionObject(
-                    _AS_filterFieldValue(condition, 'field').split(','),
+                    fields,
                     _AS_filterFieldValue(condition, 'query'),
                     _AS_filterFieldValue(condition, 'match'),
                     _AS_filterFieldValue(condition, 'condition_op')
@@ -169,10 +209,13 @@ module.exports = function(app, mongoose, api) {
             }
         }
 
-        return _AS_buildConditionsRequest(conditions, contextName, limits);
+        var sorter = {};
+        sorter[sortingField] = sortingOrder;
+
+        return _AS_buildConditionsRequest(conditions, contextName, limits, sorter);
     }
 
-    function _AS_buildConditionsRequest(conditions, contextName, limits) {
+    function _AS_buildConditionsRequest(conditions, contextName, limits, sorter) {
         var runnableCallback = function (callback) {
 
             var model = api.getRESTModule(contextName);
@@ -189,6 +232,8 @@ module.exports = function(app, mongoose, api) {
             if (limits != undefined && limits != null) {
                 databaseQuery.skip(limits.offset).limit(limits.limit);
             }
+
+            databaseQuery.sort(sorter);
 
             return databaseQuery.exec(function (error, data) {
                 if (error) {
@@ -245,10 +290,10 @@ module.exports = function(app, mongoose, api) {
     function _AS_buildContextsRequest(contexts, response) {
 
         Async.parallel(contexts, function (error, data) {
-           if (error) {
-               console.log("ASync parallel request error:");
-               console.log(error);
-           }
+            if (error) {
+                console.log("ASync parallel request error:");
+                console.log(error);
+            }
 
             return response.json(data);
         });
