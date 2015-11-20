@@ -3,9 +3,12 @@
 module.exports = function(app) {
 
     require('./advanced-search')(app);
+
     var searchCtrl = require('./search-ctrl')(app);
-    
-    app.config(function ($stateProvider, $urlRouterProvider) {
+
+    app.config(configCb);
+
+    function configCb($stateProvider) {
         $stateProvider
             .state('search', {
                 abstract: true,
@@ -16,7 +19,8 @@ module.exports = function(app) {
                 url: '.simple',
                 template: 'Hello world simple search',
                 controller: searchCtrl
-            })
+            });
         });
+    };
 
-}
+};

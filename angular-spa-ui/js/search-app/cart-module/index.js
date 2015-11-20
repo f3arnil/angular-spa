@@ -2,12 +2,14 @@
 
 module.exports = function(app) {
 
-    app.config(function ($stateProvider) {
+    app.config(configCb);
+
+    function configCb($stateProvider) {
         $stateProvider
             .state('cart', {
-              url: '/cart',
-              template: 'Hello world from cart module',
+                url: '/cart',
+                template: 'Hello cart'
             })
-      });
+    };
 
-}
+};

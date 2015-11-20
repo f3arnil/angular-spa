@@ -1,21 +1,26 @@
 doctype html
 html
-
     head
         title Learn Angular!
         meta(charset="utf-8")
         meta(name="viewport" content="width=device-width, initial-scale=1")
         link(rel="stylesheet" href="../../build/styles/styles.css")
 
+
     body(id="app" ng-controller="mainCtrl")
+        header.container
+            include ../common/header/header.jade
 
-        
-block scripts
-script.
-    var GLOBAL_USER_ID = '#{userId}';
-include error.html
-include main.jade
+        section.container
+            div.row
+                div.col-md-12.ui-view
+                    div(ui-view)
 
-script(src=locals.way + '../../build/scripts/vendor.js')
-script(src=locals.way + '../../build/scripts/search.bundle.js')
+        footer.container
+            include ../common/footer/footer.jade
 
+        script.
+            var GLOBAL_USER_ID = '#{userId}';
+
+        script(src=locals.way + '../../build/scripts/vendor.js')
+        script(src=locals.way + '../../build/scripts/search.bundle.js')
