@@ -8,7 +8,6 @@ html
         link(rel="stylesheet" href="../../build/styles/styles.css")
 
     body(id="app" ng-controller="mainCtrl")
-    h1 Loading app..
 
         
 block scripts
@@ -16,6 +15,7 @@ script.
     var GLOBAL_USER_ID = '#{userId}';
 include error.html
 include main.jade
+
 script(src=locals.way + '../../build/scripts/vendor.js')
 script(src=locals.way + '../../build/scripts/search.bundle.js')
 

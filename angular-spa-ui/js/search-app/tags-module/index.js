@@ -1,8 +1,8 @@
 "use strict";
 
-module.exports = function(ngModule) {
+module.exports = function(app) {
 
-    ngModule.config(function ($stateProvider) {
+    app.config(function ($stateProvider) {
         $stateProvider
             .state('tags', {
                 url: '/tags',
