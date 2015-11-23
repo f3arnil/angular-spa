@@ -2,20 +2,20 @@
 
 module.exports = function(app) {
     
-    app.controller('mainCtrl', function( $scope, promises, $q, getTemplate, appConfig) {
+    app.controller('mainCtrl', function( $scope, promises, getTemplate, appConfig) {
 
         var config = appConfig.config;
-        var path = config.path;
+        var paths = config.paths;
         var methods = config.methods;
         var userData = config.userData;
         
-        path.getUserPath = path.getUserPath + GLOBAL_USER_ID;
+        paths.userPath = paths.userPath + GLOBAL_USER_ID;
         
         function initUserData(data) {
             userData.responsePromises.push(data);
             userData.userId = data.data._id;
-            path.getRolePath = path.getRolePath + userData.userId;
-            path.getTokenPath = path.getTokenPath + userData.userId;
+            paths.rolePath += userData.userId;
+            paths.tokenPath += userData.userId;
         };
 
         function initRTData(data) {
@@ -27,29 +27,29 @@ module.exports = function(app) {
 
             function getToken(data) {
                 for (var x in data){
-                    if (data[x].url && (data[x].url === path.getTokenPath)){
+                    if (data[x].url && (data[x].url === paths.tokenPath)){
                         userData.userToken = data[x].data.token;
                     }
                 }
             }
 
-            path.getValidatePath = path.getValidatePath + userData.userId + '/' + userData.userToken;
+            paths.validatePath += userData.userId + '/' + userData.userToken;
         };
 
-        promises.getAsyncData(methods.getMethod, path.getUserPath)
+        promises.getAsyncData(methods.GET, paths.userPath)
             .then(
                 function(data) {
                     initUserData(data);
-                    return promises.getAll(methods.getMethod, [path.getRolePath, path.getTokenPath] )
+                    return promises.getAll(methods.GET, [paths.rolePath, paths.tokenPath] )
                 })
             .then(
                 function(data) {
                     initRTData(data);
-                    return promises.getAsyncData(methods.getMethod, path.getValidatePath);
+                    return promises.getAsyncData(methods.GET, paths.validatePath);
                 })
             .then(
                 function(data) {
-                    userData.userValidate = data.data.result;
+                    userData.userValidateResult = data.data.result;
                     var element = angular.element( document.querySelector( '#app' ) );
                     getTemplate.getByTrustedUrl('/main.html', element, $scope);
                     // all good
