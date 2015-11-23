@@ -7,15 +7,18 @@ html
         meta(name="viewport" content="width=device-width, initial-scale=1")
         link(rel="stylesheet" href="../../build/styles/styles.css")
 
-    body
-        div(id="app" ng-controller="mainCtrl")
+    body(ng-controller="mainCtrl")
+        header
+        div(id="content" ui-view="module-content")
+        footer
 
         
 block scripts
 script.
     var GLOBAL_USER_ID = '#{userId}';
+    
 include error.html
-include main.html
+include search-module/index.jade
 include ../common/header/header.jade
 include ../common/footer/footer.jade
 

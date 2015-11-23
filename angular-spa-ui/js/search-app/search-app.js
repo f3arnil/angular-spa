@@ -12,7 +12,7 @@ require('./tags-module')(app);
 
 app
     .config(function ($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise('search.simple');
+        $urlRouterProvider.otherwise('search/simple');
     })
     .run(function () {
 

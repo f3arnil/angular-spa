@@ -51,14 +51,8 @@ module.exports = function(app) {
                 function(data) {
                     userData.userValidateResult = data.data.result;
                     //var element = ;
-                    var element = angular.element(document.querySelector( '#app' ));
-                    
-                    getTemplate.getByTrustedUrl('/main.html', element, $scope)
-                    .then(
-                        function() {
-                        element = angular.element(document.getElementsByTagName('header'));
-                        return getTemplate.getByTrustedUrl('/header.html', element, $scope);
-                    })
+                    var element = angular.element(document.getElementsByTagName('header'));
+                    getTemplate.getByTrustedUrl('/header.html', element, $scope)
                     .then(
                         function() {
                         element = angular.element(document.getElementsByTagName('footer'));
@@ -68,7 +62,6 @@ module.exports = function(app) {
                         function(err) {
                         console.log(err);
                     });
-                    
                     // all good
                 })
             .catch(

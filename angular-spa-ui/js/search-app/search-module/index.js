@@ -10,12 +10,20 @@ module.exports = function(app) {
             .state('search', {
                 abstract: true,
                 url: '/search',
-                template: '<ui-view/>'
+                views:{
+                        "module-content": {
+                            template: '<div ui-view="content"></div>'
+                        }
+                    }
             })
             .state('search.simple', {
-                url: '.simple',
-                template: 'Hello world simple search',
-                controller: searchCtrl
+                url: '/simple',
+                views:{
+                    "content": {
+                        templateUrl: '/search.html',
+                        controller : 'searchCtrl'
+                    }
+                }
             })
         });
 
