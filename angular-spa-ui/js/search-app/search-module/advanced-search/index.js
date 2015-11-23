@@ -1,8 +1,10 @@
 "use strict";
 
-module.exports = function(app) {
+module.exports = function(angular) {
 
-    app.config(function ($stateProvider) {
+    var advancedSearch = angular.module('searchApp.Search.advanced',[]);
+    
+    advancedSearch.config(function ($stateProvider) {
             $stateProvider
                 .state('search.advanced', {
                     url: '/advanced',

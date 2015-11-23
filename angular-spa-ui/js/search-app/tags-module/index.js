@@ -1,8 +1,10 @@
 "use strict";
 
-module.exports = function(app) {
+module.exports = function(angular) {
 
-    app.config(function ($stateProvider) {
+    var tags = angular.module('searchApp.Tags', []);
+    
+    tags.config(function ($stateProvider) {
         $stateProvider
             .state('tags', {
                 url: '/tags',

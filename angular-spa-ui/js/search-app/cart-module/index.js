@@ -1,8 +1,10 @@
 "use strict";
 
-module.exports = function(app) {
+module.exports = function(angular) {
 
-    app.config(function ($stateProvider) {
+    var cart = angular.module('searchApp.Cart',[]);
+    
+    cart.config(function ($stateProvider) {
         $stateProvider
             .state('cart', {
               url: '/cart',

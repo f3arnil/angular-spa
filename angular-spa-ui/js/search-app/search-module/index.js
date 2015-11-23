@@ -1,11 +1,13 @@
 "use strict";
 
-module.exports = function(app) {
+module.exports = function(angular) {
 
-    require('./advanced-search')(app);
-    var searchCtrl = require('./search-ctrl')(app);
+    require('./advanced-search')(angular);
+        
+    var search = angular.module('searchApp.Search', ['searchApp.Search.advanced'])
+    var searchCtrl = require('./search-ctrl')(search);
     
-    app.config(function ($stateProvider, $urlRouterProvider) {
+    search.config(function ($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('search', {
                 abstract: true,
