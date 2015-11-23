@@ -50,12 +50,29 @@ module.exports = function(app) {
             .then(
                 function(data) {
                     userData.userValidateResult = data.data.result;
-                    var element = angular.element( document.querySelector( '#app' ) );
-                    getTemplate.getByTrustedUrl('/main.html', element, $scope);
+                    //var element = ;
+                    var element = angular.element(document.querySelector( '#app' ));
+                    
+                    getTemplate.getByTrustedUrl('/main.html', element, $scope)
+                    .then(
+                        function() {
+                        element = angular.element(document.getElementsByTagName('header'));
+                        return getTemplate.getByTrustedUrl('/header.html', element, $scope);
+                    })
+                    .then(
+                        function() {
+                        element = angular.element(document.getElementsByTagName('footer'));
+                        return getTemplate.getByTrustedUrl('/footer.html', element, $scope);
+                    })
+                    .catch(
+                        function(err) {
+                        console.log(err);
+                    });
+                    
                     // all good
                 })
             .catch(
-                function(error){
+                function(error) {
                     $scope.inited = false;
                     $scope.err = { code : error.status, data : error.data};
                     var element = angular.element( document.querySelector( '#app' ) );

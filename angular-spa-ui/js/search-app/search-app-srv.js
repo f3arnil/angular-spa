@@ -65,19 +65,22 @@ module.exports = function(app) {
     });
     
     // app service for templates
-    app.service('getTemplate', function($sce, $compile, $templateRequest) {
+    app.service('getTemplate', function($sce, $compile, $templateRequest, $q) {
 
         function getByTrustedUrl(url, element, scope) {
+            var deferred = $q.defer();
             var templateUrl = $sce.getTrustedResourceUrl(url);
             $templateRequest(templateUrl)
                 .then(
                     function(template) {
                         $compile(element.html(template).contents())(scope);
+                        deferred.resolve()
                     },
                     function() {
-                        console.log('Can not get template!');
+                        deferred.reject('Can not get template!');
                     }
-                )
+                );
+            return deferred.promise;
         };
 
         return {

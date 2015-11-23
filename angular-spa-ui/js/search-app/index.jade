@@ -7,14 +7,17 @@ html
         meta(name="viewport" content="width=device-width, initial-scale=1")
         link(rel="stylesheet" href="../../build/styles/styles.css")
 
-    body(id="app" ng-controller="mainCtrl")
+    body
+        div(id="app" ng-controller="mainCtrl")
 
         
 block scripts
 script.
     var GLOBAL_USER_ID = '#{userId}';
 include error.html
-include main.jade
+include main.html
+include ../common/header/header.jade
+include ../common/footer/footer.jade
 
 script(src=locals.way + '../../build/scripts/vendor.js')
 script(src=locals.way + '../../build/scripts/search.bundle.js')
