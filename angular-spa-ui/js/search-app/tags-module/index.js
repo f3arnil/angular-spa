@@ -1,9 +1,11 @@
 "use strict";
 
-module.exports = function(app) {
+module.exports = function (angular) {
 
-    app.config(configCb);
-
+    var tags = angular.module('app.Tags', []);
+    
+    tags.config(configCb);
+    
     function configCb($stateProvider) {
         $stateProvider
             .state('tags', {
