@@ -14,9 +14,9 @@
     },
     "search": {
         "startFrom": 0,
-        "itemsOnPage": 10,
         "searchIn": "publication",
-        "orderBy": "ASC",
+        "orderBy": "title",
+        "sortBy": "ASC",
         "field": "title",
         "validSearchEntities": {
             "article": [

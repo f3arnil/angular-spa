@@ -1,17 +1,24 @@
 "use strict";
 
-module.exports = function(ngModule) {
+module.exports = function (angular) {
+
+    var advancedSearch = angular.module('app.search.advanced',[]);
     
-    var advancedSearch = ngModule.module('searchApp.searchModule.advancedSearch', ['ui.router']);
-
-    advancedSearch
-        .config(function ($stateProvider) {
-            $stateProvider
-                .state('search.advanced', {
-                    url: '.advanced',
-                    template: "Hello world advanced search"
-            });
+    advancedSearch.config(configCb);
+    
+    function configCb($stateProvider) {
+        $stateProvider
+            .state('search.advanced', {
+                url: '/advanced',
+                views:{
+                    "content": {
+                        templateUrl: '/search.html',
+                        controller : function ($scope) {
+                            $scope.greeting = 'Hello world from search advanced!';
+                        }
+                    }
+                }
         });
+    };
 
-    return advancedSearch;
 }

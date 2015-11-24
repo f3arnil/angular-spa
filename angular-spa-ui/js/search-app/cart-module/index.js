@@ -1,16 +1,17 @@
 "use strict";
 
-module.exports = function(ngModule) {
+module.exports = function (angular) {
 
-    var cartModule = ngModule.module('searchApp.cartModule', ['ui.router']);
-
-    cartModule.config(function ($stateProvider) {
+    var cart = angular.module('app.cart',[]);
+    
+    cart.config(configCb);
+    
+    function configCb($stateProvider) {
         $stateProvider
             .state('cart', {
-              url: '/cart',
-              template: 'Hello world from cart module',
-            })
-      });
+                url: '/cart',
+                template: 'Hello world from cart module',
+            });
+    };
 
-    return cartModule;
-}
+};

@@ -1,4 +1,18 @@
-header.row
-    .col-md-12
-        p Angular + webpack + commanJS Application
-        hr
+.header
+    .top-header
+        .wrapper
+            p Angular + webpack + commanJS Application
+
+    .lang
+        .wrapper
+            .container-fluid
+                .row.col-md-12
+                    ul(class="navbar-nav nav")
+                        li
+                            a(ui-sref="search.simple") Module: 'Search'
+                        li
+                            a(ui-sref="search.advanced") Module: 'advancedSearch'
+                        li
+                            a(ui-sref="cart") Module: 'Cart'
+                        li
+                            a(ui-sref="tags") Module: 'Tags'

@@ -1,16 +1,21 @@
 "use strict";
 
-module.exports = function(ngModule) {
+module.exports = function (angular) {
 
-    var tagsModule = ngModule.module('searchApp.tagsModule', ['ui.router']);
+    var tagsCtrl = require('./tags-ctrl');
 
-    tagsModule.config(function ($stateProvider) {
+    var tags = angular.module('app.tags', []);
+
+    tags
+        .config(configCb);
+
+    function configCb($stateProvider) {
         $stateProvider
             .state('tags', {
                 url: '/tags',
-                template: 'Hello world from tags module',
-            })
-      });
+                templateUrl: 'tagsTemplate.html',
+                controller: tagsCtrl
+            });
+    };
 
-    return tagsModule;
-}
+};

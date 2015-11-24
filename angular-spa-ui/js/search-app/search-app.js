@@ -1,19 +1,30 @@
 "use strict";
 
+// Dependency
 var angular = require('angular');
 var uiRouter = require('angular-ui-router');
-var cartModule = require('./cart-module')(angular);
-var searchModule = require('./search-module')(angular);
-var tagsModule = require('./tags-module')(angular);
+var uiBs = require('angular-ui-bootstrap');
 
-var application = angular.module('searchApp', [uiRouter, 'searchApp.searchModule', 'searchApp.cartModule', 'searchApp.tagsModule']);
+var searchApp = angular.module('app', [
+    uiRouter, 
+    uiBs, 
+    'app.search', 
+    'app.cart', 
+    'app.tags'
+]);
 
-application
-    .config(function ($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise('search.simple');
-    })
-    .run(function () {
+require('./bootstrap')(searchApp);
+require('./cart-module')(angular);
+require('./search-module')(angular);
+require('./tags-module')(angular);
 
-    });
+searchApp
+    .config(configCb)
+    .run();
 
-angular.bootstrap(document, ['searchApp']);
+angular.bootstrap(document, [searchApp.name]);
+
+function configCb($stateProvider, $urlRouterProvider) {
+    $urlRouterProvider
+        .otherwise('search/simple');
+};
