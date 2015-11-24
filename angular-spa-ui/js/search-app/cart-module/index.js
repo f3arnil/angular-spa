@@ -1,14 +1,16 @@
 "use strict";
 
-module.exports = function(app) {
+module.exports = function(angular) {
 
-    app.config(configCb);
-
+    var cart = angular.module('searchApp.Cart',[]);
+    
+    cart.config(configCb);
+    
     function configCb($stateProvider) {
         $stateProvider
             .state('cart', {
                 url: '/cart',
-                template: 'Hello cart'
+                template: 'Hello world from cart module',
             })
     };
 
