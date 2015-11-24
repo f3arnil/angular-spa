@@ -5,8 +5,12 @@ module.exports = function (search) {
     search.controller('searchCtrl', function ($scope, $http, appConfig) {
         $scope.greeting = 'Hello world from search simple!';
         var config = appConfig.config;
-        var data = $http({ method : config.methods.GET, url : '/service/search/?query=1&offset=0&limit=15&sortBy=DESC'});
-        console.log(data);
+        var data = 
+            $http({ method : config.methods.GET, url : '/service/search/?query=1&offset=0&limit=15&sortBy=DESC'})
+        .success(function (data) {
+                    console.log(data);
+                });
+        
     });
     
     search.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
