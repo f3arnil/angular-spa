@@ -18,7 +18,7 @@ module.exports = function(search) {
       };
 
       $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
+            $uibModalInstance.dismiss('cancel');
         };
     });
     
