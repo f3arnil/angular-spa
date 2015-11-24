@@ -12,5 +12,7 @@ module.exports = function(angular) {
                 url: '/tags',
                 template: 'Hello world from tags module',
             })
-      };
+
+    };
+
 }
