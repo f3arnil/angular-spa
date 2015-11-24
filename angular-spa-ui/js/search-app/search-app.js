@@ -8,9 +8,9 @@ var uiBs = require('angular-ui-bootstrap');
 var searchApp = angular.module('app', [
     uiRouter, 
     uiBs, 
-    'app.Search', 
-    'app.Cart', 
-    'app.Tags'
+    'app.search', 
+    'app.cart', 
+    'app.tags'
 ]);
 
 require('./bootstrap')(searchApp);

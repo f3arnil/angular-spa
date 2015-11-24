@@ -2,7 +2,7 @@
 
 module.exports = function (angular) {
 
-    var advancedSearch = angular.module('app.Search.advanced',[]);
+    var advancedSearch = angular.module('app.search.advanced',[]);
     
     advancedSearch.config(configCb);
     
