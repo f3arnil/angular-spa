@@ -2,7 +2,7 @@
 
 module.exports = function (angular) {
 
-    var cart = angular.module('searchApp.Cart',[]);
+    var cart = angular.module('app.Cart',[]);
     
     cart.config(configCb);
     

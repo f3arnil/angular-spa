@@ -2,7 +2,7 @@
 
 module.exports = function (angular) {
 
-    var tags = angular.module('searchApp.Tags', []);
+    var tags = angular.module('app.Tags', []);
     
     tags.config(configCb);
     

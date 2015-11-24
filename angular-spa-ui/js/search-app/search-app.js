@@ -5,12 +5,12 @@ var angular = require('angular');
 var uiRouter = require('angular-ui-router');
 var uiBs = require('angular-ui-bootstrap');
 
-var searchApp = angular.module('searchApp', [
+var searchApp = angular.module('app', [
     uiRouter, 
     uiBs, 
-    'searchApp.Search', 
-    'searchApp.Cart', 
-    'searchApp.Tags'
+    'app.Search', 
+    'app.Cart', 
+    'app.Tags'
 ]);
 
 require('./bootstrap')(searchApp);
