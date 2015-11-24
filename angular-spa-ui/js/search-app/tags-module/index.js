@@ -2,16 +2,20 @@
 
 module.exports = function (angular) {
 
+    var tagsCtrl = require('./tags-ctrl');
+
     var tags = angular.module('app.tags', []);
-    
-    tags.config(configCb);
-    
+
+    tags
+        .config(configCb);
+
     function configCb($stateProvider) {
         $stateProvider
             .state('tags', {
                 url: '/tags',
-                template: 'Hello tags'
-            })
+                templateUrl: 'tagsTemplate.html',
+                controller: tagsCtrl
+            });
     };
 
 };
