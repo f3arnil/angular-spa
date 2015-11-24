@@ -47,21 +47,21 @@ module.exports = function (app) {
                     initRTData(data);
                     return promises.getAsyncData(methods.GET, paths.validatePath);
                 })
-            .then(
-                function (data) {
-                    userData.userValidateResult = data.data.result;
-                    var element = angular.element(document.getElementsByTagName('header'));
-                    getTemplate.getByTrustedUrl('/header.html', element, $scope)
-                    .then(
-                        function () {
-                        element = angular.element(document.getElementsByTagName('footer'));
-                        return getTemplate.getByTrustedUrl('/footer.html', element, $scope);
-                    })
-                    .catch(
-                        function (err) {
-                        console.log(err);
-                    });
-                })
+            // .then(
+            //     function (data) {
+            //         userData.userValidateResult = data.data.result;
+            //         var element = angular.element(document.getElementsByTagName('header'));
+            //         getTemplate.getByTrustedUrl('/header.html', element, $scope)
+            //         .then(
+            //             function () {
+            //             element = angular.element(document.getElementsByTagName('footer'));
+            //             return getTemplate.getByTrustedUrl('/footer.html', element, $scope);
+            //         })
+            //         .catch(
+            //             function (err) {
+            //             console.log(err);
+            //         });
+            //     })
             .catch(
                 function (error) {
                     $scope.inited = false;

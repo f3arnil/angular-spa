@@ -1,0 +1,21 @@
+.tags {
+    margin: 10px 0;
+
+    .tag {
+        border-radius: 6px;
+        background-color: #EFEFEF;
+        border: 1px solid #DDD;
+        padding: 5px 10px 5px 10px;
+        margin: 5px 15px 5px 0;
+        display: inline-block;
+
+        &:hover {
+            box-shadow: 2px 2px 2px #ccc;
+        }
+
+    }
+
+    input { 
+        margin-bottom: 0px !important;
+    }
+}

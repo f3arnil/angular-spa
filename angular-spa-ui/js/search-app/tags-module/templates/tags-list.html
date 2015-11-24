@@ -1,0 +1,12 @@
+<script id="tagsTemplate.html" type="text/ng-template">
+    <div class="container">
+        <div class="row">
+            <h2>{{ titlePage }}</h2>
+            <ul class="tags" tags-list>
+                <li class="tag" ng-repeat="tag in tags" tid="{{tag._id}}" style="background-color:{{tag.backgroundColor}};">
+                    <span style="color: {{tag.textColor}};" >{{tag.name}}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</script>

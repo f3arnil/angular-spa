@@ -7,19 +7,24 @@ html
         link(rel="stylesheet" href="../../build/styles/styles.css")
 
     body(ng-controller="mainCtrl")
+
         header
-        div(id="content" ui-view="module-content")
+            include ../common/header/header.jade
+
+        div#content(ui-view="module-content")
+            .row.col-md-12.ui-view
+
         footer
-        
-        block scripts
+            include ../common/footer/footer.jade
+
         script.
             var GLOBAL_USER_ID = '#{userId}';
 
         include error.html
-        include search-module/index.jade
-        include ../common/header/header.jade
-        include ../common/footer/footer.jade
+        include ./search-module/index.jade
         include ../common/modal/index.html
+
+        include ./tags-module/tags.jade
 
         script(src=locals.way + '../../build/scripts/vendor.js')
         script(src=locals.way + '../../build/scripts/search.bundle.js')
