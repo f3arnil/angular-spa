@@ -7,16 +7,18 @@ module.exports = function(angular) {
     var search = angular.module('searchApp.Search', ['searchApp.Search.advanced'])
     var searchCtrl = require('./search-ctrl')(search);
     
-    search.config(function ($stateProvider, $urlRouterProvider) {
+    search.config(configCb);
+    
+    function configCb($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('search', {
                 abstract: true,
                 url: '/search',
                 views:{
-                        "module-content": {
-                            template: '<div ui-view="content"></div>'
-                        }
+                    "module-content": {
+                        template: '<div ui-view="content"></div>'
                     }
+                }
             })
             .state('search.simple', {
                 url: '/simple',
@@ -27,6 +29,6 @@ module.exports = function(angular) {
                     }
                 }
             })
-        });
+    };
 
 }
