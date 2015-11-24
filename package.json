@@ -9,7 +9,8 @@
     "async": "*",
     "express": "3.0.x",
     "jade": ">= 0.0.1",
-    "mongoose": "4.2.x"
+    "mongoose": "4.2.x",
+    "underscore": "*"
   },
   "devDependencies": {},
   "engines": {
