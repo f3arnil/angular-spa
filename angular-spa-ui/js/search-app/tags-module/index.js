@@ -8,7 +8,7 @@ module.exports = function (angular) {
     
     function configCb($stateProvider) {
         $stateProvider
-            .state('app.tags', {
+            .state('tags', {
                 url: '/tags',
                 template: 'Hello tags'
             })

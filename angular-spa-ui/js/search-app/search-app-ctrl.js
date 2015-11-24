@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function (app) {
-    
+
     app.controller('mainCtrl', function ($scope, promises, getTemplate, appConfig) {
 
         var config = appConfig.config;

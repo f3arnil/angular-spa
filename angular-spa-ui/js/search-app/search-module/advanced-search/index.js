@@ -8,7 +8,7 @@ module.exports = function (angular) {
     
     function configCb($stateProvider) {
         $stateProvider
-            .state('app.search.advanced', {
+            .state('search.advanced', {
                 url: '/advanced',
                 views:{
                     "content": {

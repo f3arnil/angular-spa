@@ -8,7 +8,7 @@ module.exports = function (angular) {
     
     function configCb($stateProvider) {
         $stateProvider
-            .state('app.cart', {
+            .state('cart', {
                 url: '/cart',
                 template: 'Hello world from cart module',
             });

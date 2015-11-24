@@ -11,7 +11,7 @@ module.exports = function (angular) {
     
     function configCb($stateProvider, $urlRouterProvider) {
         $stateProvider
-            .state('app.search', {
+            .state('search', {
                 abstract: true,
                 url: '/search',
                 views:{
@@ -20,7 +20,7 @@ module.exports = function (angular) {
                     }
                 }
             })
-            .state('app.search.simple', {
+            .state('search.simple', {
                 url: '/simple',
                 views:{
                     "content": {
