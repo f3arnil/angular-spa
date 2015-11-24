@@ -1,10 +1,10 @@
 "use strict";
 
-module.exports = function(angular) {
+module.exports = function (angular) {
 
     require('./advanced-search')(angular);
         
-    var search = angular.module('searchApp.Search', ['searchApp.Search.advanced'])
+    var search = angular.module('app.Search', ['app.Search.advanced'])
     var searchCtrl = require('./search-ctrl')(search);
     
     search.config(configCb);
@@ -31,32 +31,4 @@ module.exports = function(angular) {
             })
     };
 
-}
-
-
-
-// "use strict";
-
-// module.exports = function(app) {
-
-//     require('./advanced-search')(app);
-
-//     //var searchCtrl = require('./search-ctrl');
-
-//     app.config(configCb);
-
-//     function configCb($stateProvider) {
-//         $stateProvider
-//             .state('search', {
-//                 abstract: true,
-//                 url: '/search',
-//                 template: '<ui-view/>'
-//             })
-//             .state('search.simple', {
-//                 url: '.simple',
-//                 template: 'Hello world simple search'
-//                 //controller: searchCtrl
-//             });
-//     };
-
-// };
+};

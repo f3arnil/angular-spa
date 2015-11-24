@@ -1,27 +1,17 @@
 "use strict";
 
-module.exports = function(angular) {
+module.exports = function (angular) {
 
-    // app.config(configCb);
-
-    // function configCb($stateProvider) {
-    //     $stateProvider
-    //         .state('tags', {
-    //             url: '/tags',
-    //             template: 'Hello tags'
-    //         });
-    // };
-
-    var tags = angular.module('searchApp.Tags', []);
-
+    var tags = angular.module('app.Tags', []);
+    
     tags.config(configCb);
-
+    
     function configCb($stateProvider) {
         $stateProvider
             .state('tags', {
                 url: '/tags',
-                template: 'Hello world from tags module',
-            });
+                template: 'Hello tags'
+            })
     };
 
 };

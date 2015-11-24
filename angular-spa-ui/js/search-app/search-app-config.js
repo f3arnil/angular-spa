@@ -1,22 +1,21 @@
 module.exports =
     {
-        path: {
-            getUserPath : '/user/',
-            getRolePath : '/role/',
-            getTokenPath : '/user-token/',
-            getValidatePath : '/user-validate/'
+        paths: {
+            userPath : '/user/',
+            rolePath : '/role/',
+            tokenPath : '/user-token/',
+            validatePath : '/user-validate/'
         },
         methods: {
-            getMethod : 'GET',
-            postMethod : 'POST',
-            putMethod : 'PUT',
-            deleteMethod : 'DELETE',
+            GET : 'GET',
+            POST : 'POST',
+            PUT : 'PUT',
+            DELETE : 'DELETE'
         },
         userData: {
             userId : '',
             userToken : '',
-            userValidate : '',
-            responsePromises: [],
+            userValidateResult : '',
+            responsePromises: []
         }
     }
-
