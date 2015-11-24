@@ -3,6 +3,7 @@ module.exports = function(app, mongoose, api) {
     var api = api;
     var config = require('../../config.json');
     var Async = require('async');
+    var _ = require('underscore');
 
     app.get('/search-app', searchAppIndexPageRequest);
 
@@ -18,6 +19,18 @@ module.exports = function(app, mongoose, api) {
         });
     }
 
+    /**
+     * @param request:
+     * - query - search query, the search is working by rule "CONTAINS IN"
+     * - searchIn - context (entity) name for searching in (must persist in "config.json" in "/rest-modules" folder)
+     * - field - field for applying the query (must persist in "config.json" in "/rest-modules" folder)
+     * - orderBy - field for ordering response
+     * - sortBy - order direction (ASC, DESC)
+     * - offset - a number of search result items that should be ignored from the beginning
+     * - limit - a number of search result items that should be returned
+     * @param response
+     * @returns {*}
+     */
     function searchRequest(request, response) {
         var operationName = 'search';
 
@@ -29,21 +42,17 @@ module.exports = function(app, mongoose, api) {
             ? request.param('searchIn').trim()
             : config.search.searchIn;
 
-        var startFrom = request.param('startFrom')
-            ? request.param('startFrom').trim()
-            : config.search.startFrom;
-
-        var itemsOnPage = request.param('showItems')
-            ? request.param('showItems').trim()
-            : config.search.itemsOnPage;
-
-        var sortingOrder = request.param('orderBy')
-            ? request.param('orderBy').trim()
-            : config.search.orderBy;
-
         var searchingField = request.param('field')
             ? request.param('field').trim()
             : config.search.field;
+
+        var sortingField = request.param('orderBy')
+            ? request.param('orderBy').trim()
+            : config.search.orderBy;
+
+        var sortingOrder = request.param('sortBy')
+            ? request.param('sortBy').trim()
+            : config.search.sortBy;
 
         var offset = request.param('offset')
             ? request.param('offset').trim()
@@ -87,16 +96,37 @@ module.exports = function(app, mongoose, api) {
         var orderingFieldData = {};
 
         searchingFieldData[searchingField] = searchingRegexp;
-        orderingFieldData[searchingField] = sortingOrder == 'ASC' ? '1' : '-1';
+        orderingFieldData[sortingField] = sortingOrder == 'ASC' ? '1' : '-1';
 
         return entityModel
             .find()
             .or([ searchingFieldData ])
-            .skip(offset)
-            .limit(limit)
             .sort(orderingFieldData)
             .exec(function (error, data) {
-                return response.json(JSON.stringify(data));
+                var finalData = {};
+
+                var filteredItems = data.slice(
+                    offset,
+                    offset + limit
+                );
+
+                var contextResults = {
+                    foundItems: data,
+                    offset: offset,
+                    limit: limit,
+                    context: searchingEntity,
+                    sortingColumn: sortingField,
+                    sortingOrder: sortingOrder == 'ASC' ? '1' : '-1'
+                }
+
+                finalData[searchingEntity] = _buildContextSearchResults(contextResults, filteredItems);
+
+                return response.json(api.generateResponseObject(
+                    'search simple',
+                    error == null ? 'ok' : 'error',
+                    error == null ? null : error,
+                    finalData
+                ));
             }
         );
     }
@@ -170,9 +200,11 @@ module.exports = function(app, mongoose, api) {
             switch (contextData.sortingOrder.trim()) {
                 case 'desc':
                 case 'DESC':
+                case '-1':
                     sortingOrder = '-1'; break;
                 case 'asc':
                 case 'ASC':
+                case '1':
                 default:
                     sortingOrder = '1'; break;
             }
@@ -229,10 +261,6 @@ module.exports = function(app, mongoose, api) {
 
             databaseQuery = _AS_buildQueryConditions(conditions, databaseQuery);
 
-            if (limits != undefined && limits != null) {
-                databaseQuery.skip(limits.offset).limit(limits.limit);
-            }
-
             databaseQuery.sort(sorter);
 
             return databaseQuery.exec(function (error, data) {
@@ -240,7 +268,17 @@ module.exports = function(app, mongoose, api) {
                     console.log('Oups... Something bad on executing context condition request!');
                     console.log(error);
                 }
-                callback(error, data);
+
+                var dataObject = {
+                    foundItems: data,
+                    offset: limits.offset,
+                    limit: limits.limit,
+                    context: contextName,
+                    sortingColumn: Object.keys(sorter)[0],
+                    sortingOrder: sorter[Object.keys(sorter)[0]]
+                };
+
+                callback(error, dataObject);
             });
         }
 
@@ -295,7 +333,42 @@ module.exports = function(app, mongoose, api) {
                 console.log(error);
             }
 
-            return response.json(data);
+            var finalData = {};
+
+            _.each(data, function (contextResult, index) {
+                var context = contextResult.context;
+                var filteredItems = contextResult.foundItems;
+
+                if (contextResult.offset < 0) {
+                    contextResult.offset = 0;
+                }
+                else if (contextResult.offset > filteredItems.length) {
+                    contextResult.offset = filteredItems.length;
+                }
+
+                if (contextResult.limit < 0) {
+                    contextResult.limit = 0;
+                }
+                else if (contextResult.limit > filteredItems.length) {
+                    contextResult.limit = filteredItems.length
+                }
+
+                if (contextResult.limit > 0) {
+                    filteredItems = contextResult.foundItems.slice(
+                        contextResult.offset,
+                        contextResult.offset + contextResult.limit
+                    );
+                }
+
+                finalData[context] = _buildContextSearchResults(contextResult, filteredItems);
+            });
+
+            return response.json(api.generateResponseObject(
+                'search advanced',
+                error == null ? 'ok' : 'error',
+                error == null ? null : error,
+                finalData
+            ));
         });
     }
 
@@ -333,4 +406,33 @@ module.exports = function(app, mongoose, api) {
 
         return '';
     }
-}
+
+    function _buildContextSearchResults(contextResult, items) {
+        var totalItemsFound = contextResult.foundItems.length;
+        var maxPageIndex = Math.ceil(totalItemsFound / contextResult.limit);
+        var pageNumber = contextResult.limit > 0
+            ? Math.ceil((contextResult.offset + contextResult.limit) / contextResult.limit)
+            : 1;
+        var itemsPerPage = contextResult.limit > 0
+            ? contextResult.limit
+            : contextResult.foundItems.length;
+
+        if (pageNumber > maxPageIndex) {
+            pageNumber = maxPageIndex;
+        }
+
+        if (itemsPerPage > items.length) {
+            itemsPerPage = items.length;
+        }
+
+        return {
+            count: totalItemsFound,
+            page: pageNumber,
+            perPage: itemsPerPage,
+            itemsForward: items.length,
+            sortingColumn: contextResult.sortingColumn,
+            sortingOrder: contextResult.sortingOrder,
+            items: items
+        }
+    }
+};
