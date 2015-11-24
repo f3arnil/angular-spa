@@ -1,8 +1,8 @@
 "use strict";
 
-module.exports = function(app) {
+module.exports = function (app) {
     
-    app.service('promises', function($q, $http) {
+    app.service('promises', function ($q, $http) {
 
         function getAsyncData(method, url) {
             
@@ -13,11 +13,11 @@ module.exports = function(app) {
                     method: method,
                     url: url
                 })
-                .success(function(data) {
+                .success(function (data) {
                     data.url = url;
                     deferred.resolve(data);
                 })
-                .error(function(data,status) {
+                .error(function (data, status) {
                     deferred.reject(
                         {
                             data: data,
@@ -37,10 +37,10 @@ module.exports = function(app) {
             var deferred = $q.defer();
             $q.all(promiseList)
                 .then(
-                    function(values) {
+                    function (values) {
                         deferred.resolve(values)
                     },
-                    function(values) {
+                    function (values) {
                         deferred.reject(values);
                     }
                 );
@@ -55,28 +55,28 @@ module.exports = function(app) {
     });
 
     //app config service - can be used with all changes anywhere
-    app.service('appConfig', function() {
+    app.service('appConfig', function () {
         
         var config = require('./search-app-config');
         
         return {
             config : config
-            }
+        }
     });
     
     // app service for templates
-    app.service('getTemplate', function($sce, $compile, $templateRequest, $q) {
+    app.service('getTemplate', function ($sce, $compile, $templateRequest, $q) {
 
         function getByTrustedUrl(url, element, scope) {
             var deferred = $q.defer();
             var templateUrl = $sce.getTrustedResourceUrl(url);
             $templateRequest(templateUrl)
                 .then(
-                    function(template) {
+                    function (template) {
                         $compile(element.html(template).contents())(scope);
                         deferred.resolve()
                     },
-                    function() {
+                    function () {
                         deferred.reject('Can not get template!');
                     }
                 );

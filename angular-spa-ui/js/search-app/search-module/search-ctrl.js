@@ -1,8 +1,8 @@
 "use strict";
 
-module.exports = function(search) {
+module.exports = function (search) {
     
-    search.controller('searchCtrl', function($scope, $http, appConfig) {
+    search.controller('searchCtrl', function ($scope, $http, appConfig) {
         $scope.greeting = 'Hello world from search simple!';
     });
     
@@ -22,7 +22,7 @@ module.exports = function(search) {
         };
     });
     
-    search.controller('ModalDemoCtrl', function($scope, $uibModal, $log) {
+    search.controller('ModalDemoCtrl', function ($scope, $uibModal, $log) {
          
         $scope.items = ['item1', 'item2', 'item3'];
 

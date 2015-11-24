@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(angular) {
+module.exports = function (angular) {
 
     var tags = angular.module('searchApp.Tags', []);
     
@@ -8,7 +8,7 @@ module.exports = function(angular) {
     
     function configCb($stateProvider) {
         $stateProvider
-            .state('tags', {
+            .state('app.tags', {
                 url: '/tags',
                 template: 'Hello tags'
             })

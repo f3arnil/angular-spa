@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(angular) {
+module.exports = function (angular) {
 
     var cart = angular.module('searchApp.Cart',[]);
     
@@ -8,10 +8,10 @@ module.exports = function(angular) {
     
     function configCb($stateProvider) {
         $stateProvider
-            .state('cart', {
+            .state('app.cart', {
                 url: '/cart',
                 template: 'Hello world from cart module',
-            })
+            });
     };
 
 };

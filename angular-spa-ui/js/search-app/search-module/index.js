@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function(angular) {
+module.exports = function (angular) {
 
     require('./advanced-search')(angular);
         
@@ -11,7 +11,7 @@ module.exports = function(angular) {
     
     function configCb($stateProvider, $urlRouterProvider) {
         $stateProvider
-            .state('search', {
+            .state('app.search', {
                 abstract: true,
                 url: '/search',
                 views:{
@@ -20,7 +20,7 @@ module.exports = function(angular) {
                     }
                 }
             })
-            .state('search.simple', {
+            .state('app.search.simple', {
                 url: '/simple',
                 views:{
                     "content": {

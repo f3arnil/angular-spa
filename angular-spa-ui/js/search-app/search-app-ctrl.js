@@ -1,15 +1,15 @@
 "use strict";
 
-module.exports = function(app) {
+module.exports = function (app) {
     
-    app.controller('mainCtrl', function( $scope, promises, getTemplate, appConfig) {
+    app.controller('mainCtrl', function ($scope, promises, getTemplate, appConfig) {
 
         var config = appConfig.config;
         var paths = config.paths;
         var methods = config.methods;
         var userData = config.userData;
         
-        paths.userPath = paths.userPath + GLOBAL_USER_ID;
+        paths.userPath += GLOBAL_USER_ID;
         
         function initUserData(data) {
             userData.responsePromises.push(data);
@@ -38,35 +38,35 @@ module.exports = function(app) {
 
         promises.getAsyncData(methods.GET, paths.userPath)
             .then(
-                function(data) {
+                function (data) {
                     initUserData(data);
                     return promises.getAll(methods.GET, [paths.rolePath, paths.tokenPath] )
                 })
             .then(
-                function(data) {
+                function (data) {
                     initRTData(data);
                     return promises.getAsyncData(methods.GET, paths.validatePath);
                 })
             .then(
-                function(data) {
+                function (data) {
                     userData.userValidateResult = data.data.result;
                     var element = angular.element(document.getElementsByTagName('header'));
                     getTemplate.getByTrustedUrl('/header.html', element, $scope)
                     .then(
-                        function() {
+                        function () {
                         element = angular.element(document.getElementsByTagName('footer'));
                         return getTemplate.getByTrustedUrl('/footer.html', element, $scope);
                     })
                     .catch(
-                        function(err) {
+                        function (err) {
                         console.log(err);
                     });
                 })
             .catch(
-                function(error) {
+                function (error) {
                     $scope.inited = false;
                     $scope.err = { code : error.status, data : error.data};
-                    var element = angular.element( document.querySelector( '#app' ) );
+                    var element = angular.element(document.querySelector('#app'));
                     getTemplate.getByTrustedUrl('/error.html', element, $scope);
                     console.log('Error '+ error.status);
                 });
