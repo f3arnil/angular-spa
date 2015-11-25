@@ -22,7 +22,32 @@
         <div class="wrapper" ng-show="showResults">
             <div class="result-panel">
                 <div class="result-header">
-                    {{result.publisher}}
+                    <div class="col-md-6">{{result.publisher}}</div>
+                    <div class="col-md-6">
+                        <select class="select-sort">
+                          <option>Sort by Relevance</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                        </select>
+                        <select class="select-result">
+                          <option>15 Results/page</option>
+                          <option>2</option>
+                          <option>3</option>
+                          <option>4</option>
+                          <option>5</option>
+                        </select>
+                        <div class="pagination">
+                            <a href="#" class="page">first</a>
+                            <a href="#" class="page">2</a>
+                            <a href="#" class="page">3</a>
+                            <span class="page active">4</span>
+                            <a href="#" class="page">5</a>
+                            <a href="#" class="page">6</a>
+                            <a href="#" class="page">last</a>
+                        </div>
+                    </div>
                 </div>
                     <div class="result-list">
                         <div class="result-row" ng-repeat="result in queryResult">

@@ -3,7 +3,7 @@
 module.exports = function (advancedSearch) {
 
     
-    advancedSearch.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
+    advancedSearch.controller('advancedSearchCtrl', function ($scope, $uibModalInstance, items, $state) {
 
         $scope.items = items;
         $scope.selected = {
