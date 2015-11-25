@@ -2,35 +2,14 @@
 
 module.exports = function (angular) {
 
-    var tagsCtrl = require('./tags-ctrl');
+    var configCb = require('./tags-cfg');
 
     var tags = angular.module('app.tags', []);
 
-    tags
-        .config(configCb)
-        .directive('tagIteme', tagIteme);
+    var tagsCtrl = require('./tags-ctrl')(tags);
+    var tagsSrv = require('./tags-srv')(tags);
+    var tagsDirs = require('./tags-dir')(tags);
 
-    function configCb($stateProvider) {
-        $stateProvider
-            .state('tags', {
-                url: '/tags',
-                templateUrl: 'tagsTemplate.html',
-                controller: tagsCtrl
-            });
-    };
-
-    function tagIteme() {
-        return {
-            restrict: 'E',
-            templateUrl: 'tagItemTemplate.html',
-            link: function(scope, element, attrs) {
-                //console.log(scope)
-                element.bind('click', function(el) {
-                    console.log(el.target)
-                    //scope.toggle();
-                });
-            }
-        };
-    }
+    configCb(tags);
 
 };

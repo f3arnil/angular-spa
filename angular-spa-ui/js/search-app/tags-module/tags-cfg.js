@@ -1,12 +1,16 @@
-var tagsCtrl = require('./tags-ctrl');
+"use strict";
 
-var stateProvider = function($stateProvider) {
-    $stateProvider
-        .state('tags', {
-            url: '/tags',
-            templateUrl: '/js/search-app/tags-module/tags.jade',
-            controller: tagsCtrl
-        });
+module.exports = function(tags) {
+
+    tags
+        .config(configCb);
+
+    function configCb($stateProvider) {
+        $stateProvider
+            .state('tags', {
+                url: '/tags',
+                templateUrl: 'tagsListTemplate.html'
+            });
+    };
+
 }
-
-module.exports = stateProvider;
