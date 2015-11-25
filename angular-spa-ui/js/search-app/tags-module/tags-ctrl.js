@@ -2,14 +2,10 @@
 
 module.exports = function($scope, $http) {
 
+    var tagsSrv = require('./tags-srv');
+
     var tagsCtrl = $scope;
 
-    tagsCtrl.titlePage = 'Manage tags';
-
-    $http
-        .get('/service/tags')
-        .success(function(data) {
-            tagsCtrl.tags = data.data;
-        });
+    tagsSrv(tagsCtrl, $http);
 
 };

@@ -11,10 +11,10 @@ module.exports = function(moduleTags) {
             templateUrl: 'tagItemTemplate.html',
             link: function(scope, element, attrs) {
                 element.bind('click', function(el) {
-
+                    
                 });
             }
-        }
+        };
     };
 
 };
