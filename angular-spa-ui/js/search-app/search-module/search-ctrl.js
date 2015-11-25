@@ -18,8 +18,13 @@ module.exports = function (search) {
                         +params.limit+'&sortBy='+params.sortBy+'&orderBy='+params.orderBy;
             $scope.query = params.query;
             promises.getAsyncData(config.methods.GET, queryUrl)
-            .then(function (data) {
-                $scope.queryResult = data.data.publication.items;
+            .then(function (result) {
+                console.log(result);
+                $scope.queryResult = result.data.publication.items;
+                $scope.resMetrics = {};
+                $scope.resMetrics.page = result.data.publication.page;
+                $scope.resMetrics.perPage = result.data.publication.perPage;
+                $scope.resMetrics.count = result.data.publication.count;
                 $scope.showResults = true;
             })
             .catch(function (err) {
@@ -30,7 +35,7 @@ module.exports = function (search) {
         $scope.find = function () {
             $scope.showResults = false;
             $stateParams = {};
-            $state.go('search.simpleQuery', { query: $scope.query }, { inherit : false });
+            $state.go('search.simpleQuery', { query: $scope.query }, { inherit : false, reload : true });
         };
 
         $scope.open = function (size) {

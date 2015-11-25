@@ -22,13 +22,14 @@
         <div class="wrapper" ng-show="showResults">
             <div class="result-panel">
                 <div class="result-header">
-                    {{result.publisher}}
+                   <h4 ng-model="resMetrics">Results: {{resMetrics.page*resMetrics.perPage-resMetrics.perPage+1}} - {{resMetrics.page*resMetrics.perPage}} of {{resMetrics.count}}</h4>
                 </div>
                     <div class="result-list">
                         <div class="result-row" ng-repeat="result in queryResult">
                             <h3 class="title">
                                 {{result.title}}
                             </h3>
+                            <p> {{result.publisher}}</p>
                             <p>{{result.updated}}</p>
                         </div>
                     </div>
