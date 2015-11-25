@@ -1,11 +1,25 @@
 "use strict";
 
-module.exports = function($scope, $http) {
+module.exports = function(tags) {
 
-    var tagsSrv = require('./tags-srv');
+    //tags.controller('tagsCtrl');
+    tags.controller('titlePage');
 
-    var tagsCtrl = $scope;
+    function titlePage($scope, getTitlePage) {
+        $scope.titlePage = getTitlePage.titlePage();
+    }
 
-    tagsSrv(tagsCtrl, $http);
+    function tagsCtrl($http, getTagsRequest){
+        getTagsRequest.testFunc();
+    }
+
+
+
+
+    // var tagsCtrl = $scope;
+
+    // tagsCtrl.titlePage = GetTitleService.getText();
+
+    // tagsCtrl.titlePage = 'Manage tags';
 
 };

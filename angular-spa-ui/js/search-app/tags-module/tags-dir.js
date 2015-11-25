@@ -1,17 +1,19 @@
 "use strict";
 
-module.exports = function(moduleTags) {
+module.exports = function(tags) {
 
-    moduleTags
-        .directive('tagIteme', tagIteme);
+    console.log(arguments);
 
-    function tagIteme() {
+    tags
+        .directive('tagItem', tagItem);
+
+    function tagItem() {
         return {
             restrict: 'E',
             templateUrl: 'tagItemTemplate.html',
             link: function(scope, element, attrs) {
                 element.bind('click', function(el) {
-                    
+
                 });
             }
         };

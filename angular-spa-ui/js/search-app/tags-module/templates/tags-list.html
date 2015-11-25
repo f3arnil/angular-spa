@@ -1,10 +1,10 @@
-<script id="tagsTemplate.html" type="text/ng-template">
-    <div class="container">
+<script id="tagsListTemplate.html" type="text/ng-template">
+    <div class="container" ng-controller="tagsCtrl">
         <div class="row">
             <h2>{{ titlePage }}</h2>
             <ul class="tags" tags-list>
                 <li ng-repeat="tag in tags">
-                    <tag-iteme></tag-iteme>
+                    <tag-item></tag-item>
                 </li>
             </ul>
         </div>
