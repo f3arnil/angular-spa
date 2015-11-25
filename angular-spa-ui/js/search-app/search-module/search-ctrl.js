@@ -1,8 +1,8 @@
 "use strict";
 
 module.exports = function (search) {
-    
-    search.controller('searchCtrl', function ($scope, $http, appConfig) {
+
+    search.controller('searchCtrl', function ($scope, $http, appConfig, $uibModal) {
         $scope.query = '';
         $scope.queryOffset = 0;
         $scope.queryLimit = 15;
@@ -21,62 +21,40 @@ module.exports = function (search) {
                 sortBy = $scope.querySortBy;
             
             $http({ method : config.methods.GET, url : '/service/search/?query='+query+'&offset='+offset+'&limit='+limit+'&sortBy='+sortBy})
-        .success(function (data) {
-                $scope.queryResult = data.data.publication.items;
-                $scope.showResults = true;
-                console.log($scope.queryResult);
-            });
+                .success(function (data) {
+                    $scope.queryResult = data.data.publication.items;
+                    $scope.showResults = true;
+                });
         };
-    });
-    
-    search.controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, items) {
-
-      $scope.items = items;
-      $scope.selected = {
-        item: $scope.items[0]
-      };
-
-      $scope.ok = function () {
-        $uibModalInstance.close($scope.selected.item);
-      };
-
-      $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
-        };
-    });
-    
-    search.controller('ModalDemoCtrl', function ($scope, $uibModal, $log) {
-         
-        $scope.items = ['item1', 'item2', 'item3'];
-
-        $scope.animationsEnabled = true;
 
         $scope.open = function (size) {
 
-        var modalInstance = $uibModal.open({
-              animation: $scope.animationsEnabled,
-              templateUrl: 'myModalContent.html',
-              controller: 'ModalInstanceCtrl',
-              size: size,
-              resolve: {
-                items: function () {
-                  return $scope.items;
+            var modalInstance = $uibModal.open({
+
+                animation: $scope.animationsEnabled,
+                templateUrl: 'myModalContent.html',
+                controller: 'ModalInstanceCtrl',
+                size: size,
+                resolve: {
+                    items: function () {
+                        return $scope.items;
+                    }
                 }
-              }
-        });
-
-        modalInstance.result.then(
-            function (selectedItem) {
-                $scope.selected = selectedItem;
-            },
-            function () {
-                $log.info('Modal dismissed at: ' + new Date());
             });
-        };
 
-        $scope.toggleAnimation = function () {
-            $scope.animationsEnabled = !$scope.animationsEnabled;
+            modalInstance.result.then(
+                function (selectedItem) {
+                    $scope.selected = selectedItem;
+                    console.log($scope.selected);
+                },
+                function () {
+                    console.log('Modal dismissed at: ' + new Date());
+                });
         };
+        
+        $scope.items = ['item1', 'item2', 'item3'];
+        $scope.animationsEnabled = true;
+
     });
-
+    
 };
