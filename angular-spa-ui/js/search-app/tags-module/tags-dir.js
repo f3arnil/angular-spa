@@ -1,7 +1,20 @@
 "use strict";
 
-function tagItem($scope) {
-    console.log($scope);
-}
+module.exports = function(moduleTags) {
 
-module.exports = tagsDirective;
+    moduleTags
+        .directive('tagIteme', tagIteme);
+
+    function tagIteme() {
+        return {
+            restrict: 'E',
+            templateUrl: 'tagItemTemplate.html',
+            link: function(scope, element, attrs) {
+                element.bind('click', function(el) {
+
+                });
+            }
+        }
+    };
+
+};
