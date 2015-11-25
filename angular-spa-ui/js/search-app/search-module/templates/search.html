@@ -3,30 +3,30 @@
         <div class="wrapper">
             <div class="colLeftPanel">
                 <label>SEARCH:</label>
-                <div><a class="active" href="#">Publications</a> | <a href="#">Articles/Chapters</a></div>
+                <div><a class="active">Publications</a> | <a>Articles/Chapters</a></div>
             </div>
             <div class="colRightPanel">
                 <div class="search">
-                    <input type="text" value="" />
-                    <a href="#" class="searchButton"><img src="/img/search-button.png" ></a>
+                    <input type="text" value="" ng-model='query'/>
+                    <a class="searchButton" ng-click="find()">
+                        <img src="/img/search-button.png" >
+                    </a>
                 </div>
             </div>
         </div>
     </div>
     <div class="result">
-        <div class="wrapper">
+        <div class="wrapper" ng-show="showResults">
             <div class="result-panel">
                 <div class="result-header">
-                    dfsdfsd
+                    {{result.publisher}}
                 </div>
                     <div class="result-list">
-                        <div class="result-row">
+                        <div class="result-row" ng-repeat="result in queryResult">
                             <h3 class="title">
-                                Diversity and abundance of fungivorous thrips (Thysanoptera) associated with
-                                leaf-litter and bark across forest types and two tree genera in subtropical
-                                Australia
+                                {{result.title}}
                             </h3>
-                            <p>Test</p>
+                            <p>{{result.updated}}</p>
                         </div>
                     </div>
                 </div>
