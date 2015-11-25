@@ -1,6 +1,3 @@
 <script id="tagItemTemplate.html" type="text/ng-template">
-    <span tag-property="name">
-        <span class="tag">{{name}}<span>
-        <span class="tag" ng-click="remove(idx)"><span>
-    </span>
-</script> 
+    <span class="tag" tid="{{tag._id}}" style="color: {{tag.textColor}}; background-color:{{tag.backgroundColor}};" >{{tag.name}}</span>
+</script>

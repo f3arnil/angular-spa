@@ -3,8 +3,8 @@
         <div class="row">
             <h2>{{ titlePage }}</h2>
             <ul class="tags" tags-list>
-                <li class="tag" ng-repeat="tag in tags" tid="{{tag._id}}" style="background-color:{{tag.backgroundColor}};">
-                    <span style="color: {{tag.textColor}};" >{{tag.name}}</span>
+                <li ng-repeat="tag in tags">
+                    <tag-iteme></tag-iteme>
                 </li>
             </ul>
         </div>
