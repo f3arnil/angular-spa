@@ -7,7 +7,8 @@ module.exports = function (angular) {
     var tags = angular.module('app.tags', []);
 
     tags
-        .config(configCb);
+        .config(configCb)
+        .directive('tagIteme', tagIteme);
 
     function configCb($stateProvider) {
         $stateProvider
@@ -17,5 +18,19 @@ module.exports = function (angular) {
                 controller: tagsCtrl
             });
     };
+
+    function tagIteme() {
+        return {
+            restrict: 'E',
+            templateUrl: 'tagItemTemplate.html',
+            link: function(scope, element, attrs) {
+                //console.log(scope)
+                element.bind('click', function(el) {
+                    console.log(el.target)
+                    //scope.toggle();
+                });
+            }
+        };
+    }
 
 };

@@ -9,13 +9,10 @@ html
     body(ng-controller="mainCtrl")
 
         header
-            include ../common/header/header.jade
 
         div#content(ui-view="module-content")
-            .row.col-md-12.ui-view
 
         footer
-            include ../common/footer/footer.jade
 
         script.
             var GLOBAL_USER_ID = '#{userId}';
@@ -23,6 +20,9 @@ html
         include error.html
         include ./search-module/index.jade
         include ../common/modal/index.html
+
+        include ../common/header/header.jade
+        include ../common/footer/footer.jade
 
         include ./tags-module/tags.jade
 
