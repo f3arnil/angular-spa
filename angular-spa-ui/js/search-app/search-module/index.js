@@ -5,7 +5,7 @@ module.exports = function (angular) {
     require('./advanced-search')(angular);
         
     var search = angular.module('app.search', ['app.search.advanced'])
-    var searchCtrl = require('./search-ctrl')(search);
+    var searchCtrl = require('./search-ctrl')(search, angular);
     
     search.config(configCb);
     
@@ -29,6 +29,22 @@ module.exports = function (angular) {
                     }
                 }
             })
+            .state('search.simpleQuery', {
+                url: '/simple/?query&limit&searchIn&sortBy&offset&orderBy',
+                params: {
+                    searchIn : {squash: true , value: 'publication'},
+                    limit : {squash: true , value: '15'},
+                    sortBy : {squash: true , value: 'ASC'},
+                    offset : {squash: true , value: '0'},
+                    orderBy : {squash: true , value: 'title'},
+                },
+                views:{
+                    "content": {
+                        templateUrl: '/search.html',
+                        controller : 'searchCtrl'
+                    }
+                }
+            });
     };
 
 };
