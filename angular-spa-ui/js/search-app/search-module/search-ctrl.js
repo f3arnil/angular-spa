@@ -2,29 +2,35 @@
 
 module.exports = function (search) {
 
-    search.controller('searchCtrl', function ($scope, $http, appConfig, $uibModal) {
-        $scope.query = '';
-        $scope.queryOffset = 0;
-        $scope.queryLimit = 15;
-        $scope.querySortBy = 'DESC';
-        $scope.searchPlace = 'Publications';
+    search.controller('searchCtrl', function ($scope, $http, appConfig, $uibModal, $stateParams, $state, promises) {
+        
+        var config = appConfig.config;
         $scope.queryResult = '';
         $scope.showResults = false;
-        $scope.greeting = 'Hello world from search simple!';
-        var config = appConfig.config;
-
+        $scope.queryParams = $stateParams;
+        var countParams = Object.keys($scope.queryParams).length;
+        if (countParams === 0) {
+            $scope.queryParams = null;
+        } else {
+            var params = $scope.queryParams,
+                queryUrl = '/service/search/?query='+params.query
+                        +'&offset='+params.offset+'&limit='
+                        +params.limit+'&sortBy='+params.sortBy+'&orderBy='+params.orderBy;
+            $scope.query = params.query;
+            promises.getAsyncData(config.methods.GET, queryUrl)
+            .then(function (data) {
+                $scope.queryResult = data.data.publication.items;
+                $scope.showResults = true;
+            })
+            .catch(function (err) {
+                console.log('Error - cant get data!' + err);
+            })
+        }
+        
         $scope.find = function () {
             $scope.showResults = false;
-            var query = $scope.query,
-                offset = $scope.queryOffset,
-                limit = $scope.queryLimit,
-                sortBy = $scope.querySortBy;
-            
-            $http({ method : config.methods.GET, url : '/service/search/?query='+query+'&offset='+offset+'&limit='+limit+'&sortBy='+sortBy})
-                .success(function (data) {
-                    $scope.queryResult = data.data.publication.items;
-                    $scope.showResults = true;
-                });
+            $stateParams = {};
+            $state.go('search.simpleQuery', { query: $scope.query }, { inherit : false });
         };
 
         $scope.open = function (size) {
