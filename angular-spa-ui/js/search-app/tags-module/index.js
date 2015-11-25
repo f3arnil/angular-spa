@@ -3,12 +3,14 @@
 module.exports = function (angular) {
 
     var tagsCtrl = require('./tags-ctrl');
+    var tagsDirs = require('./tags-dir');
 
     var tags = angular.module('app.tags', []);
 
+    tagsDirs(tags);
+
     tags
-        .config(configCb)
-        .directive('tagIteme', tagIteme);
+        .config(configCb);
 
     function configCb($stateProvider) {
         $stateProvider
@@ -18,19 +20,5 @@ module.exports = function (angular) {
                 controller: tagsCtrl
             });
     };
-
-    function tagIteme() {
-        return {
-            restrict: 'E',
-            templateUrl: 'tagItemTemplate.html',
-            link: function(scope, element, attrs) {
-                //console.log(scope)
-                element.bind('click', function(el) {
-                    console.log(el.target)
-                    //scope.toggle();
-                });
-            }
-        };
-    }
 
 };
