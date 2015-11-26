@@ -2,9 +2,19 @@
     <div class="container" ng-controller="tagsCtrl">
         <div class="row">
             <h2>{{ titlePage }}</h2>
-            <ul class="tags" tags-list>
+
+            <form ng-submit="createTag()">
+                <input type="text" ng-model="form.tagName" size="20" />
+                <input type="submit" value="Add tag" />
+            </form>
+
+            <ul class="tags">
                 <li ng-repeat="tag in tags">
-                    <tag-item></tag-item>
+                    <span class="tag" tag-item tid="{{ tag._id }}" style="color: {{ tag.textColor }}; background-color:{{ tag.backgroundColor }};" >
+                        <span>{{ tag.name }}</span>
+                        (<a ng-click="editTag(tag)">edit</a>)
+                        (<a ng-click="removeTag(tag)">x</a>)
+                    </span>
                 </li>
             </ul>
         </div>

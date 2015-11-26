@@ -2,18 +2,18 @@
 
 module.exports = function(tags) {
 
-    console.log(arguments);
+    //console.log(tags);
 
     tags
         .directive('tagItem', tagItem);
 
     function tagItem() {
         return {
-            restrict: 'E',
-            templateUrl: 'tagItemTemplate.html',
+            restrict: 'A',
+            //templateUrl: 'tagItemTemplate.html',
             link: function(scope, element, attrs) {
                 element.bind('click', function(el) {
-
+                    //console.log(el);
                 });
             }
         };

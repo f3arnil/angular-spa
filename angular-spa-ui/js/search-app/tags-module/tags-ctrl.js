@@ -2,24 +2,63 @@
 
 module.exports = function(tags) {
 
-    //tags.controller('tagsCtrl');
-    tags.controller('titlePage');
+    tags.controller('tagsCtrl', function($scope, $http, tagsService){
 
-    function titlePage($scope, getTitlePage) {
-        $scope.titlePage = getTitlePage.titlePage();
-    }
+        $scope.tags = [];
+        $scope.titlePage = tagsService.titlePageTags;
 
-    function tagsCtrl($http, getTagsRequest){
-        getTagsRequest.testFunc();
-    }
+        $scope.form = {
+            name: ""
+        };
 
+        loadRemoteData($http);
 
+        $scope.createTag = function() {
+           // console.log($http);
+            tagsService.createTag($scope.form.tagName, $http)
+                .then(
+                    loadRemoteData($http),
+                    function( errorMessage ) {
+                        console.warn(errorMessage);
+                    }
+                );
 
+            $scope.form.tagName = "";
+        };
 
-    // var tagsCtrl = $scope;
+        $scope.editTag = function(tagName) {
+            console.log(tagName.name);
+            tagsService.editTag(tagName.name, $http)
+                // .then(
+                //     loadRemoteData($http),
+                //     function( errorMessage ) {
+                //         console.warn(errorMessage);
+                //     }
+                // );
 
-    // tagsCtrl.titlePage = GetTitleService.getText();
+            //$scope.form.tagName = "";
+        };
 
-    // tagsCtrl.titlePage = 'Manage tags';
+        $scope.removeTag = function(tag) {
+            console.log(tag);
+            tagsService.removeTag(tag._id, $http)
+                .then(loadRemoteData);
+        };
+
+        function applyRemoteData(tagsList) {
+            console.log(tagsList);
+            $scope.tags = tagsList.data;
+        }
+
+        function loadRemoteData(serv) {
+            tagsService.getTags(serv)
+                .then(
+                    function(tags) {
+                        applyRemoteData(tags);
+                    }
+                );
+        }
+
+    });
 
 };
