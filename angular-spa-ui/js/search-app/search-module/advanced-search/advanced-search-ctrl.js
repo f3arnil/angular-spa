@@ -3,20 +3,26 @@
 module.exports = function (advancedSearch) {
 
     
-    advancedSearch.controller('advancedSearchCtrl', function ($scope, $uibModalInstance, items, $state) {
+    advancedSearch.controller('advancedSearchCtrl', function ($scope, $uibModalInstance, $state, $uibModal, $controller) {
 
-        $scope.items = items;
-        $scope.selected = {
-            item: $scope.items[0]
-        };
-
+        $controller('searchCtrl', {$scope: $scope});
+                
         $scope.ok = function () {
-            $uibModalInstance.close($scope.selected.item);
+            $uibModalInstance.close($state.go('search.advancedQuery', { query: $scope.data.repeatSelect, test: $scope.inputAdvancedSearch.text }, { inherit : false }));
         };
 
         $scope.cancel = function () {
-            $uibModalInstance.dismiss('cancel');
+            $uibModalInstance.close($state.go('search.simple'));
         };
+        
+        $scope.data = {
+            repeatSelect: null,
+            availableOptions: [
+                {id: '1', name: 'All fields'},
+                {id: '2', name: 'Title'}
+            ],
+        };
+        
     });
     
 }

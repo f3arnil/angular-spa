@@ -40,15 +40,9 @@ module.exports = function (angular) {
     };
     
     function showModal($uibModal) {
-        var items = ['item1', 'item2', 'item3'];
         var modalInstance = $uibModal.open({
             templateUrl: 'modalAdvancedSearch.html',
             controller: 'advancedSearchCtrl',
-            resolve: {
-                items: function () {
-                    return items;
-                }
-            }
         });
 
     };
