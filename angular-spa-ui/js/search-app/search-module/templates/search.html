@@ -22,7 +22,35 @@
         <div class="wrapper" ng-show="showResults">
             <div class="result-panel">
                 <div class="result-header">
-                   <h4 ng-model="resMetrics">Results: {{resMetrics.page*resMetrics.perPage-resMetrics.perPage+1}} - {{resMetrics.page*resMetrics.perPage}} of {{resMetrics.count}}</h4>
+                    <div class="col-md-3">
+                   <h4 ng-model="resMetrics">
+                       Results: {{resultsFrom}} - {{resultsTo}} of {{resultsCount}}</h4>
+                       </div>
+                    <div class="col-md-9">
+                        
+                        <select class="select-sort" 
+                                ng-model="sortBy" 
+                                ng-options="sortParam.name for sortParam in sortParams"
+                                ng-change="sortChange()">
+                        </select>
+                        
+                        <select class="select-result" 
+                                ng-model="resultCount" 
+                                ng-options="resultsPerPage.name for resultsPerPage in resultsPerPages"
+                                ng-change="resultsCountChange()">
+                        </select>
+                        <uib-pagination total-items="resultsCount" 
+                                        ng-model="currentPage" 
+                                        max-size="5" 
+                                        class="pagination-sm" 
+                                        boundary-links="true" 
+                                        rotate="true" 
+                                        num-pages="numPages"
+                                        items-per-page="pubPerPage"
+                                        ng-change = "goToPage()"
+                                        style = "float:right">
+                        </uib-pagination>
+                    </div>
                 </div>
                     <div class="result-list">
                         <div class="result-row" ng-repeat="result in queryResult">
