@@ -90,7 +90,6 @@ module.exports = function (search) {
             
             $scope.sortBy = $scope.sortParams[findValue(params.sortBy, $scope.sortParams)];
             $scope.resultCount = $scope.resultsPerPages[findValue(params.limit, $scope.resultsPerPages)];
-            
             $scope.query = params.query;
             promises.getAsyncData(config.methods.GET, queryUrl)
             .then(function (result) {
@@ -113,6 +112,10 @@ module.exports = function (search) {
                 console.log('Error - cant get data!' + err);
             });
         };
-    });
-    
+        
+        $scope.modal = function () {
+            $state.go('search.advanced');
+        }
+        
+    }); 
 };
