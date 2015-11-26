@@ -21,7 +21,9 @@ module.exports = function (app, mongoose, api) {
 
     app.get('/service/tag/get-by-article/:articleId', getTagByArticleIdRequest);
 
-    app.put('/service/tag/create', createTagRequest);
+    app.post('/service/tag/create', createTagRequest);
+
+    app.put('/service/tag/update/:tagId', updateTagRequest);
 
     app.delete('/service/tag/delete/:tagId', deleteTagRequest);
 
@@ -93,8 +95,13 @@ module.exports = function (app, mongoose, api) {
         var operationName = 'create tag';
         var tagName = request.body.hasOwnProperty('name') ? request.body.name : null;
 
-        if (tagName == null) {
-            return response.send(api.generateResponseObject(operationName, 'error', 'Tag with name ' + tagName + ' already exists, please pick another name'));
+        if (tagName == null || tagName == "") {
+            return response.send(
+                api.generateResponseObject(
+                    operationName, 'error',
+                    'Tag with name ' + tagName + ' already exists, please pick another name'
+                )
+            );
         }
 
         var tagFields = {
@@ -108,12 +115,51 @@ module.exports = function (app, mongoose, api) {
 
         var tag = new model(tagFields);
 
-        tag.save(function (error) {
+        return tag.save(function (error) {
             if (!error) {
                 return response.send(api.generateResponseObject(operationName, 'ok', null, tag));
             }
 
             return response.send(api.generateResponseObject(operationName, 'error', error));
+        });
+    };
+
+    function updateTagRequest(request, response) {
+        var operationName = 'update tag';
+        var tagId = request.params.tagId;
+        var tagName = request.body.hasOwnProperty('name') ? request.body.name : null;
+
+        if (tagName == null || tagName == "") {
+            return response.send(
+                api.generateResponseObject(
+                    operationName, 'error',
+                    'Tag name is a mandatory parameter, it could not be empty'
+                )
+            );
+        }
+
+        return model.findById(tagId, function (error, data) {
+            if (error || data == null) {
+                return response.send(api.generateResponseObject(
+                    operationName,
+                    'error',
+                    error != null ? error : 'Null data'
+                ));
+            }
+
+            data.name = tagName;
+            data.textColor = api.getRequestBodyFieldValue(request.body, 'textColor', '#000');
+            data.backgroundColor = api.getRequestBodyFieldValue(request.body, 'backgroundColor', '#EEE');
+            data.glyph = api.getRequestBodyFieldValue(request.body, 'glyph', 'none');
+            data.published = api.getRequestBodyFieldValue(request.body, 'published', true);
+
+            return data.save(function (saveTagError, savedTag) {
+                if (saveTagError) {
+                    return response.send(api.generateResponseObject(operationName, 'error', saveTagError));
+                }
+
+                return response.send(api.generateResponseObject(operationName, 'ok', null, savedTag));
+            });
         });
     };
 
