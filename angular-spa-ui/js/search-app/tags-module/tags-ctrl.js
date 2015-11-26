@@ -29,6 +29,23 @@ module.exports = function(tags) {
             $scope.formCreate.tagName = "";
         };
 
+        $scope.editorEnabled = false;
+
+        $scope.editTag = function(tag, $http) {
+        //     console.log(tag);
+        //     //tagsService.editTag(tag._id, tag.name, $http);
+        };
+
+        /*
+        // $scope.enableEditor = function() {
+        //     $scope.editorEnabled = true;
+        // };
+
+        // $scope.disableEditor = function() {
+        //     $scope.editorEnabled = false;
+        // };
+        */
+
         $scope.removeTag = function(tag) {
             tagsService.removeTag(tag._id, $http)
                 .then(loadRemoteData($http),
@@ -42,7 +59,7 @@ module.exports = function(tags) {
 
         function applyRemoteData(tagsList) {
             $scope.tags = tagsList.data;
-        }
+        };
 
         function loadRemoteData(serv) {
             tagsService.getTags(serv)
@@ -51,45 +68,7 @@ module.exports = function(tags) {
                         applyRemoteData(tags);
                     }
                 );
-        }
-
-
-        // $scope.editTag = function(tag) {
-        //     console.log(tag);
-        //     console.log(this);
-        //     tagsService.editTag(tag._id, tag.name, $http);
-
-        //     //$scope.showStatus = function() {
-        //     ClickToEditCtrl();
-        //         // .then(
-        //         //     loadRemoteData($http),
-        //         //     function( errorMessage ) {
-        //         //         console.warn(errorMessage);
-        //         //     }
-        //         // );
-
-        //     //$scope.form.tagName = "";
-        // };
-
-        // $scope.editorEnabled = false;
-
-        // $scope.enableEditor = function(tag) {
-        //     console.log(tag)
-        //     $scope.editorEnabled = true;
-        //     //$scope.editableTitle = $scope.title;
-        // };
-
-        // $scope.disableEditor = function() {
-        //     console.log(arguments)
-        //     $scope.editorEnabled = false;
-        // };
-
-        // $scope.save = function(tag) {
-        //     console.log(arguments)
-        //     $scope.title = $scope.editableTitle;
-        //     $scope.disableEditor();
-        // };
-
+        };
 
     });
 

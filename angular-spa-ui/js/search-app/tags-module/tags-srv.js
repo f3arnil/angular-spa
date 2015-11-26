@@ -2,16 +2,6 @@
 
 module.exports = function(tags) {
 
-    tags.service('tagsService', function($http, $q) {
-        return({
-            titlePageTags: 'Manage tags',
-            getTags: getTags,
-            createTag: createTag,
-            removeTag: removeTag,
-            editTag: editTag
-        });
-    });
-
     function getTags($http) {
         var request = $http({
             method: 'get',
@@ -42,10 +32,10 @@ module.exports = function(tags) {
         return(request.then(handleSuccess, handleError));
     }
 
-    function removeTag(id, $http) {
+    function removeTag(tagId, $http) {
         var request = $http({
             method: "delete",
-            url: "/service/tag/delete/"+ id
+            url: "/service/tag/delete/"+ tagId
         });
         return(request.then(handleSuccess, handleError));
     }
@@ -63,5 +53,15 @@ module.exports = function(tags) {
     function handleSuccess( response ) {
         return( response.data );
     }
+
+    tags.service('tagsService', function($http, $q) {
+        return {
+            titlePageTags: 'Manage tags',
+            getTags: getTags,
+            createTag: createTag,
+            removeTag: removeTag,
+            editTag: editTag
+        };
+    });
 
 };

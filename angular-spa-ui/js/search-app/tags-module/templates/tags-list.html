@@ -3,7 +3,7 @@
         <div class="row">
             <h2>{{ titlePage }}</h2>
 
-            <form id="form-create" ng-submit="createTag()">
+            <form ng-submit="createTag()">
                 <input type="text" ng-model="formCreate.tagName" size="20" />
                 <input type="submit" value="Add tag" />
             </form>
@@ -12,21 +12,24 @@
                 <li ng-repeat="tag in tags">
                     <span class="tag" tag-item tid="{{ tag._id }}" style="color: {{ tag.textColor }}; background-color:{{ tag.backgroundColor }};" >
                         <span>{{ tag.name }}</span>
-                        
-                        <a ng-click="enableEditor()" ng-hide="editorEnabled">Edit title</a>
 
                         <a class="remove-tag" ng-click="removeTag(tag)">x</a>
-                    </span>
 
-                    <span ng-show="editorEnabled">
-                        <input ng-model="formEditName.tagName" ng-show="editorEnabled(tag)">
-                        <a ng-click="save()">Save</a>
-                        or
-                        <a ng-click="disableEditor()">cancel</a>.
+                        <!--
+                        <a ng-click="editTag(tag)" ng-hide="editorEnabled">Edit</a>
+
+                        <span ng-show="editorEnabled">
+                            <input ng-model="" ng-show="editorEnabled">
+                            <a ng-click="save()">Save</a>
+                            <a ng-click="disable Editor()">Cancel</a>
+                        </span>
+                        -->
+
                     </span>
 
                 </li>
             </ul>
+
         </div>
     </div>
 </script>
