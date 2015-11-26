@@ -15,7 +15,7 @@ module.exports = function (search) {
             var params = $scope.queryParams,
                 queryUrl = '/service/search/?query='+params.query
                         +'&offset='+params.offset+'&limit='
-                        +params.limit+'&sortBy='+params.sortBy+'&orderBy='+params.orderBy;
+                        +params.limit+'&sortBy='+params.sortBy+'&orderBy='+params.orderBy+'&test='+params.test;
             $scope.query = params.query;
             promises.getAsyncData(config.methods.GET, queryUrl)
             .then(function (data) {
@@ -26,7 +26,9 @@ module.exports = function (search) {
                 console.log('Error - cant get data!' + err);
             })
         }
-        
+        $scope.modal = function () {
+            $state.go('search.advanced');
+        }
         $scope.find = function () {
             $scope.showResults = false;
             $stateParams = {};
