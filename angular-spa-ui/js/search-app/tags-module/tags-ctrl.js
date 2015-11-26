@@ -4,18 +4,21 @@ module.exports = function(tags) {
 
     tags.controller('tagsCtrl', function($scope, $http, tagsService){
 
-        $scope.tags = [];
+        $scope.tags = {};
         $scope.titlePage = tagsService.titlePageTags;
 
-        $scope.form = {
+        $scope.formCreate = {
+            name: ""
+        };
+
+        $scope.formEditName = {
             name: ""
         };
 
         loadRemoteData($http);
 
         $scope.createTag = function() {
-           // console.log($http);
-            tagsService.createTag($scope.form.tagName, $http)
+            tagsService.createTag($scope.formCreate.tagName, $http)
                 .then(
                     loadRemoteData($http),
                     function( errorMessage ) {
@@ -23,30 +26,21 @@ module.exports = function(tags) {
                     }
                 );
 
-            $scope.form.tagName = "";
-        };
-
-        $scope.editTag = function(tagName) {
-            console.log(tagName.name);
-            tagsService.editTag(tagName.name, $http)
-                // .then(
-                //     loadRemoteData($http),
-                //     function( errorMessage ) {
-                //         console.warn(errorMessage);
-                //     }
-                // );
-
-            //$scope.form.tagName = "";
+            $scope.formCreate.tagName = "";
         };
 
         $scope.removeTag = function(tag) {
-            console.log(tag);
             tagsService.removeTag(tag._id, $http)
-                .then(loadRemoteData);
+                .then(loadRemoteData($http),
+                    function( errorMessage ) {
+                        console.warn(errorMessage);
+                    }
+                );
+
+            loadRemoteData($http)
         };
 
         function applyRemoteData(tagsList) {
-            console.log(tagsList);
             $scope.tags = tagsList.data;
         }
 
@@ -58,6 +52,44 @@ module.exports = function(tags) {
                     }
                 );
         }
+
+
+        // $scope.editTag = function(tag) {
+        //     console.log(tag);
+        //     console.log(this);
+        //     tagsService.editTag(tag._id, tag.name, $http);
+
+        //     //$scope.showStatus = function() {
+        //     ClickToEditCtrl();
+        //         // .then(
+        //         //     loadRemoteData($http),
+        //         //     function( errorMessage ) {
+        //         //         console.warn(errorMessage);
+        //         //     }
+        //         // );
+
+        //     //$scope.form.tagName = "";
+        // };
+
+        // $scope.editorEnabled = false;
+
+        // $scope.enableEditor = function(tag) {
+        //     console.log(tag)
+        //     $scope.editorEnabled = true;
+        //     //$scope.editableTitle = $scope.title;
+        // };
+
+        // $scope.disableEditor = function() {
+        //     console.log(arguments)
+        //     $scope.editorEnabled = false;
+        // };
+
+        // $scope.save = function(tag) {
+        //     console.log(arguments)
+        //     $scope.title = $scope.editableTitle;
+        //     $scope.disableEditor();
+        // };
+
 
     });
 
