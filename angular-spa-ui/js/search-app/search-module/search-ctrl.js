@@ -50,9 +50,9 @@ module.exports = function (search) {
         };
 
         $scope.goToPage = function () {
-            console.log($scope.currentPage);
+            console.log('Go to page '+$scope.currentPage);
             var offset = $scope.currentPage * $scope.pubPerPage - $scope.pubPerPage;
-            console.log(offset);
+            console.log('Offset is '+offset);
             $state.go(
                 'search.simpleQuery', 
                 { query: $scope.query, offset : offset }, 

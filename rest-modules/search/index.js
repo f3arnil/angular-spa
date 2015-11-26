@@ -55,11 +55,11 @@ module.exports = function(app, mongoose, api) {
             : config.search.sortBy;
 
         var offset = request.param('offset')
-            ? request.param('offset').trim()
+            ? parseInt(request.param('offset').trim())
             : 0;
 
         var limit = request.param('limit')
-            ? request.param('limit')
+            ? parseInt(request.param('limit').trim())
             : 0;
 
         var entityModel = api.getRESTModule(searchingEntity);
@@ -104,6 +104,23 @@ module.exports = function(app, mongoose, api) {
             .sort(orderingFieldData)
             .exec(function (error, data) {
                 var finalData = {};
+
+                if (offset < 0) {
+                    offset = 0;
+                }
+                else if (offset > data.length) {
+                    offset = data.length;
+                }
+
+                if (limit < 0) {
+                    limit = 0;
+                }
+                else if (limit == 0) {
+                    limit = data.length;
+                }
+                else if (limit > data.length) {
+                    limit = data.length;
+                }
 
                 var filteredItems = data.slice(
                     offset,
