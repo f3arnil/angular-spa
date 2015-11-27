@@ -6,15 +6,17 @@
         
         <div class="col-md-12">
             <div class="col-md-5">
-                <select  class="form-control" name="repeatSelect" id="repeatSelect" ng-model="data.repeatSelect">
-                    <option ng-repeat="option in data.availableOptions" value="{{option.name}}">{{option.name}}</option>
+<!--                    <option ng-repeat="option in data.availableOptions" value="{{option.name}}">{{option.name}}</option>-->
+                <select  class="form-control" name="repeatSelect" id="repeatSelect"
+                    ng-model="data.repeatSelect" 
+                    ng-options="option.name for option in data.availableOptions">
                 </select>
             </div>
             <div class="col-md-7"><input type="text" class="form-control" ng-model="inputAdvancedSearch.text" placeholder="Enter text"></div>
         </div>
         <hr>
 
-        <div>Selected field: <b>{{ data.repeatSelect }}</b></div>
+        <div>Selected field: <b>{{ data.repeatSelect.name }}</b></div>
         <div>Enter text: <b>{{ inputAdvancedSearch.text }}</b></div>
     </div>
     <div class="modal-footer">

@@ -5,10 +5,11 @@ module.exports = function (advancedSearch) {
     
     advancedSearch.controller('advancedSearchCtrl', function ($scope, $uibModalInstance, $state, $uibModal, $controller) {
 
-        $controller('searchCtrl', {$scope: $scope});
+        //$controller('searchCtrl', {$scope: $scope});
                 
         $scope.ok = function () {
-            $uibModalInstance.close($state.go('search.advancedQuery', { query: $scope.data.repeatSelect, test: $scope.inputAdvancedSearch.text }, { inherit : false }));
+            //$uibModalInstance.close($state.go('search.advancedQuery', { title: $scope.data.repeatSelect.name }, { inherit : false }));
+            console.log($scope.data.repeatSelect.name, $scope.inputAdvancedSearch.text);
         };
 
         $scope.cancel = function () {

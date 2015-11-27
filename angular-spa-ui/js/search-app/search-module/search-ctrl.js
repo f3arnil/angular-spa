@@ -93,8 +93,6 @@ module.exports = function (search) {
             $scope.query = params.query;
             promises.getAsyncData(config.methods.GET, queryUrl)
             .then(function (result) {
-                console.log(result);
-                
                 var publications = result.data.publication;
                 $scope.queryResult = publications.items;
                 $scope.pubPerPage = publications.perPage;
@@ -105,7 +103,6 @@ module.exports = function (search) {
                 
                 $scope.resultsCount = publications.count;
                 $scope.pagesCount = Math.ceil($scope.resultsCount / $scope.pubPerPage);
-                console.log($scope.pagesCount);
                 $scope.showResults = true;
             })
             .catch(function (err) {
@@ -114,7 +111,16 @@ module.exports = function (search) {
         };
         
         $scope.modal = function () {
-            $state.go('search.advanced');
+            $state.go('search.advanced',params,{
+                // prevent the events onStart and onSuccess from firing
+                notify:false,
+                // prevent reload of the current state
+                reload:false, 
+                // replace the last record when changing the params so you don't hit the back button and get old params
+                location:'replace', 
+                // inherit the current params on the url
+                inherit:true
+            });
         }
         
     }); 
