@@ -3,7 +3,14 @@
         <div class="wrapper">
             <div class="colLeftPanel">
                 <label>SEARCH:</label>
-                <div><a class="active">Publications</a> | <a>Articles/Chapters</a></div>
+                <div ng-model="searchIn">
+                    <a ng-repeat="searchplace in searchInList"
+                       ng-click="setSearchIn(searchplace.value)"
+                       ng-model="searchIn.value"
+                       ng-class="{active : searchplace.value==searchIn.value }">
+                        {{searchplace.name}}
+                    </a>
+                </div>
             </div>
             <div class="colRightPanel">
                 <div class="search">

@@ -39,7 +39,7 @@ module.exports = function (angular) {
                     limit : {squash: true , value: '15'},
                     sortBy : {squash: true , value: 'ASC'},
                     offset : {squash: true , value: '0'},
-                    orderBy : {squash: true , value: 'title'},
+                    orderBy : {squash: true , value: 'title'}
                 },
                 views:{
                     "content": {
