@@ -1,75 +1,72 @@
 "use strict";
 
-module.exports = function(tags) {
+module.exports =  function mainTagCtrl($scope, resultTagPageSrv) {
 
-    tags.controller('tagsCtrl', function($scope, $http, tagsService){
+    // Property of object (default params)
+    $scope.titlePage = resultTagPageSrv.titlePage;
+    $scope.titleCreateTag = resultTagPageSrv.titleCreateTag;
+    $scope.titleResultTagList = resultTagPageSrv.titleResultTagList;
+    $scope.tags = {};
+    $scope.formCreateTag = {
+        name: ""
+    };
+    $scope.isVisibilityTagsList = true;
 
-        $scope.tags = {};
-        $scope.titlePage = tagsService.titlePageTags;
+    // Visibility (show/hide) list tags
+    function isVisibilityTagsList(tagsList) {
+        console.log(tagsList);
+        if (tagsList.length > 0) {
+            return $scope.isVisibilityTagsList = true;
+        } else {
+            return $scope.isVisibilityTagsList = false;
+        }
+    };
 
-        $scope.formCreate = {
-            name: ""
-        };
+    // Get list tags
+    $scope.loadRemoteData = function () {
+        resultTagPageSrv.getTags()
+            .then(
+                function(tagsList) {
+                    applyRemoteData(tagsList);
+                }
+            );
+    };
 
-        $scope.formEditName = {
-            name: ""
-        };
+    // Remove tag
+    $scope.removeTagItem = function(tag) {
+        resultTagPageSrv.removeTagItem(tag._id)
+            .then(
+                $scope.loadRemoteData(),
+                function(errorMessage) {
+                    console.warn(errorMessage);
+                }
+            );
 
-        loadRemoteData($http);
+        $scope.loadRemoteData();
+    };
 
-        $scope.createTag = function() {
-            tagsService.createTag($scope.formCreate.tagName, $http)
-                .then(
-                    loadRemoteData($http),
-                    function( errorMessage ) {
-                        console.warn(errorMessage);
-                    }
-                );
+    // Create new tag
+    $scope.createTag = function() {
+        var tagName = $scope.formCreateTag.tagName;
+        resultTagPageSrv.createTag(tagName)
+            .then(
+                $scope.loadRemoteData(),
+                function( errorMessage ) {
+                    console.warn(errorMessage);
+                }
+            );
 
-            $scope.formCreate.tagName = "";
-        };
+        $scope.loadRemoteData();
+        $scope.formCreateTag.tagName = "";
+    };
 
-        $scope.editorEnabled = false;
+    // Update list tag of scope
+    function applyRemoteData(tagsList) {
+        $scope.tags = tagsList.data;
+        isVisibilityTagsList($scope.tags);
+    };
 
-        $scope.editTag = function(tag, $http) {
-        //     console.log(tag);
-        //     //tagsService.editTag(tag._id, tag.name, $http);
-        };
-
-        /*
-        // $scope.enableEditor = function() {
-        //     $scope.editorEnabled = true;
-        // };
-
-        // $scope.disableEditor = function() {
-        //     $scope.editorEnabled = false;
-        // };
-        */
-
-        $scope.removeTag = function(tag) {
-            tagsService.removeTag(tag._id, $http)
-                .then(loadRemoteData($http),
-                    function( errorMessage ) {
-                        console.warn(errorMessage);
-                    }
-                );
-
-            loadRemoteData($http)
-        };
-
-        function applyRemoteData(tagsList) {
-            $scope.tags = tagsList.data;
-        };
-
-        function loadRemoteData(serv) {
-            tagsService.getTags(serv)
-                .then(
-                    function(tags) {
-                        applyRemoteData(tags);
-                    }
-                );
-        };
-
-    });
+    // Start module tag
+    $scope.loadRemoteData();
 
 };

@@ -1,22 +1,21 @@
 "use strict";
 
-module.exports = function(tags) {
+module.exports = function tagItem() {
 
-    //console.log(tags);
+var tagItem = {
+        restrict: 'E',
+        transclude: true,
+        scope: {},
+        link: function(scope, element, attrs) {
 
-    tags
-        .directive('tagItem', tagItem);
-
-    function tagItem() {
-        return {
-            restrict: 'A',
-            //templateUrl: 'tagItemTemplate.html',
-            link: function(scope, element, attrs) {
-                element.bind('click', function(el) {
-                    //console.log(el);
-                });
-            }
-        };
+        },
+        controller: function($scope, $element) {
+            console.log($scope)
+        },
+        templateUrl: '/tagItemTemplate.html',
+        replace: true
     };
+
+    return tagItem;
 
 };

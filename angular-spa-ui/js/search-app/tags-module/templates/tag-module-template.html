@@ -1,0 +1,30 @@
+<script type="text/ng-template" id="/tagModuleTemplate.html">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
+                <h2>{{ titlePage }}</h2>
+            </div>
+        </div>
+
+        <div class="row result" >
+            <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
+
+                <h3>{{ titleCreateTag }}</h3>
+                <tag-controll-panel>result...</tag-controll-panel>
+
+                <form ng-submit="createTag()">
+                    <input type="text" ng-model="formCreateTag.tagName" size="20" />
+                    <input type="submit" value="Add tag" />
+                </form>
+
+                <h3>{{ titleResultTagList }}</h3>
+                <ul class="tags" ng-show="{{ isVisibilityTagsList }}">
+                    <tag-item></tag-item>
+                </ul>
+
+            </div>
+        </div>
+
+    </div>
+</script>

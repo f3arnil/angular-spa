@@ -1,16 +1,24 @@
 "use strict";
 
-module.exports = function(tags) {
+module.exports = function resultTagPageSrv($http, $q) {
 
-    function getTags($http) {
+    function getTags() {
         var request = $http({
             method: 'get',
             url: '/service/tags'
         });
-        return(request.then(handleSuccess, handleError));
+        return request.then(handleSuccess, handleError);
     }
 
-    function createTag(tagName, $http) {
+    function removeTagItem(tagId) {
+        var request = $http({
+            method: "delete",
+            url: "/service/tag/delete/"+ tagId
+        });
+        return request.then(handleSuccess, handleError);
+    }
+
+    function createTag(tagName) {
         var request = $http({
             method: "post",
             url: '/service/tag/create',
@@ -18,10 +26,10 @@ module.exports = function(tags) {
                 name: tagName
             }
         });
-        return(request.then(handleSuccess, handleError));
+        return request.then(handleSuccess, handleError);
     }
 
-    function editTag(tagId, tagName, $http) {
+    function editTag(tagId, tagName) {
         var request = $http({
             method: "put",
             url: '/service/tag/update/' + tagId,
@@ -29,39 +37,29 @@ module.exports = function(tags) {
                 name: tagName
             }
         });
-        return(request.then(handleSuccess, handleError));
-    }
-
-    function removeTag(tagId, $http) {
-        var request = $http({
-            method: "delete",
-            url: "/service/tag/delete/"+ tagId
-        });
-        return(request.then(handleSuccess, handleError));
+        return request.then(handleSuccess, handleError);
     }
 
     function handleError(response) {
-        if (
-            ! angular.isObject( response.data ) ||
-            ! response.data.message
-            ) {
-            return( $q.reject( "An unknown error occurred." ) );
+        if ( !angular.isObject(response.data) || !response.data.message ) {
+            return $q.reject("An unknown error occurred.");
         }
-        return( $q.reject( response.data.message ) );
+        return $q.reject(response.data.message);
     }
 
-    function handleSuccess( response ) {
-        return( response.data );
+    function handleSuccess(response) {
+        return response.data;
     }
 
-    tags.service('tagsService', function($http, $q) {
-        return {
-            titlePageTags: 'Manage tags',
-            getTags: getTags,
-            createTag: createTag,
-            removeTag: removeTag,
-            editTag: editTag
-        };
-    });
+    return {
+        titlePage: 'Manage tags',
+        titleCreateTag: 'Create tag',
+        titleResultTagList: 'Tag list result',
+        getTags: getTags,
+        removeTagItem: removeTagItem,
+        createTag: createTag,
+        editTag: editTag
+    }
+
 
 };
