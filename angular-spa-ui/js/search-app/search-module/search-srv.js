@@ -10,7 +10,7 @@ module.exports = function (search) {
         }
     });
     
-        search.service('queryParams', function () {
+    search.service('queryParams', function () {
         
         var generateQueryParams = function (path, stateParams) {
             var url = path;
@@ -28,4 +28,5 @@ module.exports = function (search) {
             generateQueryParams : generateQueryParams
         }
     });
+    
 }

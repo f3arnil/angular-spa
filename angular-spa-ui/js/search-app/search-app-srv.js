@@ -89,4 +89,15 @@ module.exports = function (app) {
 
     });
     
+    app.service('searchStorage', function () {
+        var data = {};
+        
+        var params = {};
+        
+        return {
+            data : data,
+            params : params
+        }
+    });
+    
 }
