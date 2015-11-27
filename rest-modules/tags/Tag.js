@@ -1,9 +1,14 @@
 module.exports = function (app, mongoose) {
 
+    var uniqueValidator = require('mongoose-unique-validator');
+
     var Tag = mongoose.Schema({
         name: {
             type: String,
-            mandatory: true
+            mandatory: true,
+            required: true,
+            unique: true,
+            index: true
         },
         textColor: {
             type: String,
@@ -26,6 +31,8 @@ module.exports = function (app, mongoose) {
             default: true
         }
     });
+
+    Tag.plugin(uniqueValidator);
 
     return mongoose.model('Tag', Tag);
 }
