@@ -7,6 +7,7 @@ module.exports = function (angular) {
     var search = angular.module('app.search', ['app.search.advanced']);
     
     var searchCtrl = require('./search-ctrl')(search);
+    var searchSrv = require('./search-srv')(search);
     //var searchDir = require('./search-dir')(search);
     
     search.config(configCb);

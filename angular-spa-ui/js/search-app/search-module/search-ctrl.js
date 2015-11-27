@@ -2,64 +2,54 @@
 
 module.exports = function (search) {
 
-    search.controller('searchCtrl', function ($scope, $http, appConfig, $uibModal, $stateParams, $state, promises) {
+    search.controller('searchCtrl', function ($scope, $http, searchConfig, $uibModal, $stateParams, $state, promises, queryParams) {
         
-        var config = appConfig.config;
+        var config = searchConfig.config;
         $scope.queryResult = '';
         $scope.showResults = false;
         $scope.queryParams = $stateParams;
-        
-        // will be in config file
-        $scope.sortParams = [
-            {name :'sort by A-Z', value :'ASC'},
-            {name :'sort by Z-A', value : 'DESC'}
-        ];
-        $scope.resultsPerPages = [
-            {name :'15 Results/page', value :'15'},
-            {name :'20 Results/page', value : '20'},
-            {name :'25 Results/page', value :'25'},
-            {name :'30 Results/page', value : '30'}
-        ];
-        //
-        
+        $scope.sortParams = config.sortParams;
+        $scope.resultsPerPages = config.resultsPerPage;
         // Function to find smth
         $scope.find = function () {
             $scope.showResults = false;
             $stateParams = {};
             $state.go(
                 'search.simpleQuery', 
-                { query: $scope.query, limit : $scope.resultCount.value, sortBy : $scope.sortBy.value }, 
+                { query: $scope.query, limit : $scope.limit.value, sortBy : $scope.sortBy.value }, 
                 { inherit : false, reload : true }
             );
         };
         
+        //Action when sortBy changed
         $scope.sortChange = function () {
             $state.go(
                 'search.simpleQuery', 
                 { query: $scope.query, sortBy : $scope.sortBy.value }, 
-                { reload : true }
+                { reload : false }
             );
         };
         
-        $scope.resultsCountChange = function () {
+        //Action when limit changed
+        $scope.limitChange = function () {
             $state.go(
                 'search.simpleQuery', 
-                { query: $scope.query, limit : $scope.resultCount.value }, 
-                { reload : true }
+                { query: $scope.query, limit : $scope.limit.value }, 
+                { reload : false }
             );
         };
 
+        //Pagination change page
         $scope.goToPage = function () {
-            console.log('Go to page '+$scope.currentPage);
-            var offset = $scope.currentPage * $scope.pubPerPage - $scope.pubPerPage;
-            console.log('Offset is '+offset);
+            var offset = $scope.currentPage * $scope.limit.value - $scope.limit.value;
             $state.go(
                 'search.simpleQuery', 
                 { query: $scope.query, offset : offset }, 
-                { inherit : false }
+                { inherit : true }
             );
         };
         
+        //Find value in objects list (for limits and sortBy)
         function findValue(val, object) {
             for (var x in object) {
                 if (object[x].value === val ) {
@@ -67,7 +57,8 @@ module.exports = function (search) {
                 }
             }
         };
-                
+        
+        //Generate fount results "to" (RESULTS $from - $to )
         function setResultsTo(currentPage, pubPerPage, resultsCount) {
             var resultsTo = currentPage * pubPerPage;
             if (resultsTo > resultsCount){
@@ -76,36 +67,32 @@ module.exports = function (search) {
             return resultsTo;
         }
 
+        // If count params = 0 means that no params come in stateParams
         var countParams = Object.keys($scope.queryParams).length;
         
         if (countParams === 0) {
             $scope.queryParams = null;
             $scope.sortBy = $scope.sortParams[0];
-            $scope.resultCount = $scope.resultsPerPages[0];
+            $scope.limit = $scope.resultsPerPages[0];
         } else {
-            var params = $scope.queryParams,
-                queryUrl = '/service/search/?query='+params.query
-                        +'&offset='+params.offset+'&limit='
-                        +params.limit+'&sortBy='+params.sortBy+'&orderBy='+params.orderBy;
             
-            $scope.sortBy = $scope.sortParams[findValue(params.sortBy, $scope.sortParams)];
-            $scope.resultCount = $scope.resultsPerPages[findValue(params.limit, $scope.resultsPerPages)];
-            $scope.query = params.query;
-            promises.getAsyncData(config.methods.GET, queryUrl)
+            //Do when we have params in $stateParams - means that it is search action
+            
+            var queryUrl = queryParams.generateQueryParams(config.paths.simpleSearchPath, $scope.queryParams);
+            
+            promises.getAsyncData('GET', queryUrl)
             .then(function (result) {
                 console.log(result);
-                
+                $scope.sortBy = $scope.sortParams[findValue($scope.queryParams.sortBy, $scope.sortParams)];
+                $scope.limit = $scope.resultsPerPages[findValue($scope.queryParams.limit, $scope.resultsPerPages)];
+                $scope.query = $scope.queryParams.query;
                 var publications = result.data.publication;
                 $scope.queryResult = publications.items;
-                $scope.pubPerPage = publications.perPage;
                 $scope.currentPage = publications.page;
-                
-                $scope.resultsFrom = ($scope.currentPage * $scope.pubPerPage) - $scope.pubPerPage + 1;
-                $scope.resultsTo = setResultsTo($scope.currentPage, $scope.pubPerPage, $scope.resultCount);
-                
+                $scope.resultsFrom = ($scope.currentPage * $scope.limit.value) - $scope.limit.value + 1;
                 $scope.resultsCount = publications.count;
-                $scope.pagesCount = Math.ceil($scope.resultsCount / $scope.pubPerPage);
-                console.log($scope.pagesCount);
+                $scope.resultsTo = setResultsTo($scope.currentPage, $scope.limit.value, $scope.resultsCount);
+                $scope.pagesCount = Math.ceil($scope.resultsCount / $scope.limit.value);
                 $scope.showResults = true;
             })
             .catch(function (err) {
