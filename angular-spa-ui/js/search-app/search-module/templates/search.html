@@ -35,9 +35,9 @@
                         </select>
                         
                         <select class="select-result" 
-                                ng-model="resultCount" 
+                                ng-model="limit" 
                                 ng-options="resultsPerPage.name for resultsPerPage in resultsPerPages"
-                                ng-change="resultsCountChange()">
+                                ng-change="limitChange()">
                         </select>
                         <uib-pagination total-items="resultsCount" 
                                         ng-model="currentPage" 
@@ -46,7 +46,7 @@
                                         boundary-links="true" 
                                         rotate="true" 
                                         num-pages="numPages"
-                                        items-per-page="pubPerPage"
+                                        items-per-page="limit.value"
                                         ng-change = "goToPage()"
                                         style = "float:right">
                         </uib-pagination>
