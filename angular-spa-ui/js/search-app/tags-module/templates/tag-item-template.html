@@ -1,8 +1,0 @@
-<script type="text/ng-template" id="/tagItemTemplate.html">
-    <li ng-repeat="tag in $parent.tags">
-        <span class="tag" tid="{{ tag._id }}" style="color: {{ tag.textColor }}; background-color:{{ tag.backgroundColor }};">
-            <span>{{ tag.name }}</span>
-            <a class="remove-tag" ng-click="removeTagItem(tag)">x</a>
-        </span>
-    </li>
-</script>

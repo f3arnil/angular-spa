@@ -1,0 +1,10 @@
+<script type="text/ng-template" id="/tagItemTemplate.html">
+    <ul class="tags {{ isEmpty }}">
+        <li ng-repeat="tag in tags">
+            <span class="tag" ng-click="eventTag(tag)" style="color: {{ tag.textColor }}; background-color:{{ tag.backgroundColor }};">
+                <span>{{ tag.name }}</span>
+                <a class="remove-tag" ng-click="removeTagItem(tag)">x</a>
+            </span>
+        </li>
+    </ul>
+</script>

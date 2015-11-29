@@ -43,7 +43,7 @@
         }
     }
 
-    input { 
-        margin-bottom: 0px !important;
+    &.empty {
+        display: none !important;
     }
 }

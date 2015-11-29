@@ -2,16 +2,14 @@
 
 module.exports = function tagItem() {
 
-var tagItem = {
+    var tagItem = {
         restrict: 'E',
         transclude: true,
-        scope: {},
-        link: function(scope, element, attrs) {
-
+        scope: {
+            tags: "=",
+            tag: "@"
         },
-        controller: function($scope, $element) {
-            console.log($scope)
-        },
+        controller: 'apiTagCtrl',
         templateUrl: '/tagItemTemplate.html',
         replace: true
     };
