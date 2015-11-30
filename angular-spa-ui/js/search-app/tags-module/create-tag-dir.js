@@ -8,7 +8,8 @@ module.exports = function() {
         scope: {
 
         },
-        controller: 'createTagContrller',
+        //controller: 'createTagContrller',
+        controller: 'tagsListContrller',
         templateUrl: '/createTagTemplate.html',
         replace: true
     };
