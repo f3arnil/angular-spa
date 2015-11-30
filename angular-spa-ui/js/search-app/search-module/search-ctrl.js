@@ -168,8 +168,17 @@ module.exports = function (search) {
         };
         
         $scope.modal = function () {
-            $state.go('search.advanced');
-        };
+            $state.go('search.advanced',searchStorage.params,{
+                // prevent the events onStart and onSuccess from firing
+                notify:false,
+                // prevent reload of the current state
+                reload:false, 
+                // replace the last record when changing the params so you don't hit the back button and get old params
+                location:'replace', 
+                // inherit the current params on the url
+                inherit:true
+            });
+        }
     });
 
 };
