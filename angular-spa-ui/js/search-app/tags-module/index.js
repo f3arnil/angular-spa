@@ -1,23 +1,21 @@
 "use strict";
 
-module.exports = function (angular) {
+module.exports = function(angular) {
 
     // Dependency
     var configCb = require('./tags-cfg');
     var tagModule = angular.module('app.tags', []);
-    var tCtrl = require('./tags-ctrl');
-    var tAPICtrl = require('./tags-api-ctrl');
-    var tSrv = require('./tags-srv');
-    var tDir = require('./tags-dir');
-    var tCreateDir = require('./create-tag-dir');
+    var tagCtrl = require('./tags-ctrl');
+    var tagSrv = require('./tags-srv');
+    var tagDir = require('./tags-dir');
+    var createTagDir = require('./create-tag-dir');
 
-    // Implement
+    // Implementation dependency of module Tags
     tagModule
-        .controller('mainTagCtrl', tCtrl)
-        .controller('apiTagCtrl', tAPICtrl)
-        .service('resultTagPageSrv', tSrv)
-        .directive('tagItem', tDir)
-        .directive('tagControllPanel', tCreateDir);
+        .controller('tagController', tagCtrl)
+        .service('tagService', tagSrv)
+        .directive('tagsList', tagDir)
+        .directive('createTag', createTagDir);
 
     configCb(tagModule);
 

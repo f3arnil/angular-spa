@@ -10,13 +10,13 @@ module.exports = function(tagModule) {
                 views:{
                     "module-content": {
                         templateUrl: '/tagModuleTemplate.html',
-                        controller : 'mainTagCtrl'
+                        controller : 'tagController'
                     }
                 }
             });
     };
 
-    // Implement
+    // Implementation config of module Tags
     tagModule.config(configCb);
 
 }

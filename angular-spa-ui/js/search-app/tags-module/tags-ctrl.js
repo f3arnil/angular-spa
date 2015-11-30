@@ -1,10 +1,11 @@
 "use strict";
 
-module.exports =  function mainTagCtrl($scope, resultTagPageSrv) {
+module.exports = function($scope, tagService) {
 
+    // Implementation config of main controller Tags
     // Property of object (get static params)
-    $scope.titlePage = resultTagPageSrv.titlePage;
-    $scope.titleCreateTag = resultTagPageSrv.titleCreateTag;
-    $scope.titleResultTagList = resultTagPageSrv.titleResultTagList;
+    $scope.titlePage = tagService.titlePage;
+    $scope.titleCreateTag = tagService.titleCreateTag;
+    $scope.titleResultTagList = tagService.titleResultTagList;
 
 };

@@ -1,5 +1,5 @@
-<script type="text/ng-template" id="/tagItemTemplate.html">
-    <ul class="tags {{ isEmpty }}">
+<script type="text/ng-template" id="/listTagsTemplate.html">
+    <ul class="tags {{ visiblilityList }}">
         <li ng-repeat="tag in tags">
             <span class="tag" ng-click="eventTag(tag)" style="color: {{ tag.textColor }}; background-color:{{ tag.backgroundColor }};">
                 <span>{{ tag.name }}</span>
