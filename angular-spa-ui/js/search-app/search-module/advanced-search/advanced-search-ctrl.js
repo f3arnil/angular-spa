@@ -8,6 +8,7 @@ module.exports = function (advancedSearch) {
         
         // The search function with parameters SearchAdvanced
         $scope.find = function () {
+            console.log($scope.query);
         };
         
         // Function close modal window without request.
