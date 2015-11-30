@@ -1,17 +1,24 @@
-<script type="text/ng-template" id="myModalContent.html">
+<script type="text/ng-template" id="modalAdvancedSearch.html">
     <div class="modal-header">
-        <h3 class="modal-title">I'm a modal!</h3>
+        <h3 class="modal-title">Advanced Search</h3>
     </div>
     <div class="modal-body">
-        <ul>
-            <li ng-repeat="item in items">
-                <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
-            </li>
-        </ul>
-        Selected: <b>{{ selected.item }}</b>
+        
+        <div class="col-md-12">
+            <div class="col-md-5">
+                <select  class="form-control" name="repeatSelect" id="repeatSelect" ng-model="data.repeatSelect">
+                    <option ng-repeat="option in data.availableOptions" value="{{option.name}}">{{option.name}}</option>
+                </select>
+            </div>
+            <div class="col-md-7"><input type="text" class="form-control" ng-model="inputAdvancedSearch.text" placeholder="Enter text"></div>
+        </div>
+        <hr>
+
+        <div>Selected field: <b>{{ data.repeatSelect }}</b></div>
+        <div>Enter text: <b>{{ inputAdvancedSearch.text }}</b></div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-warning" type="button" ng-click="ok()">Search</button>
+        <button class="btn btn-primary" type="button" ng-click="cancel()">Cancel</button>
     </div>
 </script>
