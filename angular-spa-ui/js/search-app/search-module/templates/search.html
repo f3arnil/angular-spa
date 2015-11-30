@@ -3,45 +3,74 @@
         <div class="wrapper">
             <div class="colLeftPanel">
                 <label>SEARCH:</label>
-                <div><a class="active" href="#">Publications</a> | <a href="#">Articles/Chapters</a></div>
+                <div ng-model="searchIn">
+                    <a ng-repeat="searchplace in searchInList"
+                       ng-click="setSearchIn(searchplace.value)"
+                       ng-model="searchIn.value"
+                       ng-class="{active : searchplace.value==searchIn.value }">
+                        {{searchplace.name}}
+                    </a>
+                </div>
             </div>
             <div class="colRightPanel">
                 <div class="search">
-                    <input type="text" value="" />
-                    <a href="#" class="searchButton"><img src="/img/search-button.png" ></a>
+                    <input type="text" value="" ng-model='query'/>
+                    <a class="searchButton"
+                       ng-click="find()">
+                        <img src="/img/search-button.png" >
+                    </a>
+                </div>
+                <div class="advancedSearch">
+                    <button type="button" class="btn btn-primary" ng-click="modal()">Advanced</button>
                 </div>
             </div>
         </div>
     </div>
     <div class="result">
-        <div class="wrapper">
+        <div class="wrapper" ng-show="showResults">
             <div class="result-panel">
                 <div class="result-header">
-                    dfsdfsd
+                    <div class="col-md-3">
+                   <h4 ng-model="resMetrics">
+                       Results: {{resultsFrom}} - {{resultsTo}} of {{resultsCount}}</h4>
+                       </div>
+                    <div class="col-md-9">
+                        
+                        <select class="select-sort" 
+                                ng-model="sortBy" 
+                                ng-options="sortParam.name for sortParam in sortParams"
+                                ng-change="sortChange()">
+                        </select>
+                        
+                        <select class="select-result" 
+                                ng-model="limit" 
+                                ng-options="resultsPerPage.name for resultsPerPage in resultsPerPages"
+                                ng-change="limitChange()">
+                        </select>
+                        <uib-pagination total-items="resultsCount" 
+                                        ng-model="currentPage" 
+                                        max-size="5" 
+                                        class="pagination-sm" 
+                                        boundary-links="true" 
+                                        rotate="true" 
+                                        num-pages="numPages"
+                                        items-per-page="limit.value"
+                                        ng-change = "goToPage()"
+                                        style = "float:right">
+                        </uib-pagination>
+                    </div>
                 </div>
                     <div class="result-list">
-                        <div class="result-row">
+                        <div class="result-row" ng-repeat="result in queryResult">
                             <h3 class="title">
-                                Diversity and abundance of fungivorous thrips (Thysanoptera) associated with
-                                leaf-litter and bark across forest types and two tree genera in subtropical
-                                Australia
+                                {{result.title}}
                             </h3>
-                            <p>Test</p>
+                            <p> {{result.publisher}}</p>
+                            <p>{{result.updated}}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-<!-- Will use in future -->
-<!--
-    <div ng-controller="ModalDemoCtrl">
-    
-    <button type="button" class="btn btn-default" ng-click="open()">Open me!</button>
-    <button type="button" class="btn btn-default" ng-click="open('lg')">Advanced Modal</button>
-    <button type="button" class="btn btn-default" ng-click="open('sm')">Small modal</button>
-    <button type="button" class="btn btn-default" ng-click="toggleAnimation()">Toggle Animation ({{ animationsEnabled }})</button>
-    <div ng-show="selected">Selection from a modal: {{ selected }}</div>
--->
-</div>
 </script>
