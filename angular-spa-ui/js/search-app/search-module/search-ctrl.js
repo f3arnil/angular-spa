@@ -93,7 +93,6 @@ module.exports = function (search) {
             $scope.query = $scope.queryParams.query;
             $scope.queryResult = publications.items;
             $scope.currentPage = publications.page;
-            $scope.searchIn = $scope.searchInList[findValue($scope.queryParams.searchIn, $scope.searchInList)];
             $scope.resultsFrom = ($scope.currentPage * $scope.limit.value) - $scope.limit.value + 1;
             $scope.resultsCount = publications.count;
             $scope.resultsTo = setResultsTo($scope.currentPage, $scope.limit.value, $scope.resultsCount);
@@ -152,8 +151,6 @@ module.exports = function (search) {
         
         if (isEmptyObject($scope.queryParams) || $scope.queryParams.query === undefined) {
             $scope.queryParams = setDefaultParams();
-            $scope.sortBy = $scope.sortParams[findValue($scope.queryParams.sortBy, $scope.sortParams)];
-            $scope.limit = $scope.resultsPerPages[findValue($scope.queryParams.limit, $scope.resultsPerPages)];
             $scope.searchIn = $scope.searchInList[findValue($scope.queryParams.searchIn, $scope.searchInList)];
             if (!isEmptyObject(searchStorage.data) && !isEmptyObject(searchStorage.params)) {
                 $scope.queryParams = searchStorage.params;
@@ -163,6 +160,7 @@ module.exports = function (search) {
             //Do when we have params in $stateParams - means that it is search action
             var queryUrl = queryParams.generateQueryParams(config.paths.simpleSearchPath, $scope.queryParams);
             $scope.searchIn = $scope.searchInList[findValue($scope.queryParams.searchIn, $scope.searchInList)];
+            
             promises.getAsyncData('GET', queryUrl)
             .then(function (result) {
                 console.log($scope.queryParams);
