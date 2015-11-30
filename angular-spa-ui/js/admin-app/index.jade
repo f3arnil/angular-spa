@@ -1,0 +1,24 @@
+doctype html
+html
+    head
+        title Administrative panel
+        meta(charset="utf-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        link(rel="stylesheet" href="../../build/styles/styles.css")
+
+    body(ng-controller="mainCtrl")
+
+        header
+
+        div#content(ui-view="module-content")
+
+        footer
+
+        script.
+            var GLOBAL_USER_ID = '#{userId}';
+
+        include ../common/header/header.jade
+        include ../common/footer/footer.jade
+
+        script(src=locals.way + '../../build/scripts/vendor.js')
+        script(src=locals.way + '../../build/scripts/admin.bundle.js')
