@@ -1,8 +1,5 @@
 "use strict";
 
-// to do 
-// when some parametr changed put it in $scope.queryParams and use only $scope.find
-
 module.exports = function (search) {
 
     search.controller('searchCtrl', function ($scope, $http, searchConfig, $uibModal, $stateParams, $state, promises, queryParams, searchStorage) {
@@ -47,7 +44,7 @@ module.exports = function (search) {
                 'search.simpleQuery',
                 $scope.queryParams,
                 {
-                    reload : true 
+                    reload : true
                 }
             );
         };
@@ -81,9 +78,8 @@ module.exports = function (search) {
         $scope.hasQuery = function () {
             if ($scope.query) {
                 return true;
-            } else {
-                return false;
             }
+            return false;
         };
         
         //Set results data to controllers values
@@ -124,9 +120,8 @@ module.exports = function (search) {
         function isEmptyObject(obj) {
             if (Object.keys(obj).length === 0) {
                 return true;
-            } else {
-                return false;
             }
+            return false;
         }
 
         //If query params is empty set it to default
