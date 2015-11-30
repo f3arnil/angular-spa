@@ -5,6 +5,8 @@ module.exports = function (angular) {
     var advancedSearch = angular.module('app.search.advanced',[]);
     
     var advancedSearchCtrl = require('./advanced-search-ctrl')(advancedSearch);
+    var advancedSearchDir = require('./advanced-search-dir')(advancedSearch);
+    var advancedSearchSrv = require('./advanced-search-srv')(advancedSearch);
     
     advancedSearch.config(configCb);
     
@@ -43,6 +45,7 @@ module.exports = function (angular) {
         var modalInstance = $uibModal.open({
             templateUrl: 'modalAdvancedSearch.html',
             controller: 'advancedSearchCtrl',
+            size: 'lg'
         });
 
     };
