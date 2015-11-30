@@ -9,6 +9,17 @@ module.exports = function (search) {
         $scope.queryParams = $stateParams;
         $scope.sortParams = config.sortParams;
         $scope.resultsPerPages = config.resultsPerPage;
+        $scope.searchInList = config.searchIn;
+        
+        //Change current searchIn
+        $scope.setSearchIn = function (val){
+            $scope.searchIn = $scope.searchInList[findValue(val, $scope.searchInList)];
+            $state.go(
+                'search.simpleQuery', 
+                { query: $scope.query, searchIn : $scope.searchIn.value }, 
+                { reload : true }
+            );
+        };
         
         // Function to find smth
         $scope.find = function () {
@@ -16,8 +27,8 @@ module.exports = function (search) {
             $stateParams = {};
             $state.go(
                 'search.simpleQuery', 
-                { query: $scope.query, limit : $scope.limit.value, sortBy : $scope.sortBy.value }, 
-                { inherit : true, reload : false }
+                { query: $scope.query, limit : $scope.limit.value, sortBy : $scope.sortBy.value, searchIn : $scope.searchIn.value }, 
+                { inherit : false, reload : true }
             );
         };
         
@@ -26,7 +37,7 @@ module.exports = function (search) {
             $state.go(
                 'search.simpleQuery', 
                 { query: $scope.query, sortBy : $scope.sortBy.value }, 
-                { reload : false }
+                { reload : true }
             );
         };
         
@@ -56,6 +67,7 @@ module.exports = function (search) {
             $scope.query = $scope.queryParams.query;
             $scope.queryResult = publications.items;
             $scope.currentPage = publications.page;
+            $scope.searchIn = $scope.searchInList[findValue($scope.queryParams.searchIn, $scope.searchInList)];
             $scope.resultsFrom = ($scope.currentPage * $scope.limit.value) - $scope.limit.value + 1;
             $scope.resultsCount = publications.count;
             $scope.resultsTo = setResultsTo($scope.currentPage, $scope.limit.value, $scope.resultsCount);
@@ -95,6 +107,7 @@ module.exports = function (search) {
             $scope.queryParams = null;
             $scope.sortBy = $scope.sortParams[0];
             $scope.limit = $scope.resultsPerPages[0];
+            $scope.searchIn = $scope.searchInList[0];
             if (!isEmptyObject(searchStorage.data) && !isEmptyObject(searchStorage.params)) {
                 $scope.queryParams = searchStorage.params;
                 setCtrlData(searchStorage.data);
@@ -102,10 +115,10 @@ module.exports = function (search) {
         } else {
             //Do when we have params in $stateParams - means that it is search action
             var queryUrl = queryParams.generateQueryParams(config.paths.simpleSearchPath, $scope.queryParams);
+            $scope.searchIn = $scope.searchInList[findValue($scope.queryParams.searchIn, $scope.searchInList)];
             promises.getAsyncData('GET', queryUrl)
             .then(function (result) {
-                console.log(result);
-                var publications = result.data.publication;
+                var publications = result.data[$scope.searchIn.value];
                 setCtrlData(publications);
             })
             .catch(function (err) {

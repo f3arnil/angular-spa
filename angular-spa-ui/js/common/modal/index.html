@@ -5,37 +5,37 @@
     <div class="modal-body">
         
         <div class="col-md-12">
+            
+            <div ng-repeat="row in rows" class="row">
                 
-            <div ng-repeat="field in fields" class="row">
-                <div class="col-md-4">
+                <div ng-repeat="selectField in row.selectFields" class="col-md-2">
                     <select class="form-control"
-                        ng-model="field.data.row"
-                        ng-options="option.name for option in data.options">
+                        ng-model="selectFieldMod[row.id]"
+                        ng-change="changeAdvanced(row.id, selectFieldMod[row.id], selectField.name)"
+                        ng-options="optionField.value for optionField in selectField.options">
                     </select>
                 </div>
-                <div class="col-md-6">
-                    <input type="text" class="form-control col-md-7" ng-model="field.data.text" placeholder="Enter text">
+                
+                <div class="col-md-6" ng-repeat="textField in row.textsFields">
+                    <input type="text" 
+                           class="form-control col-md-7" 
+                           ng-model="textFieldMod[row.id].value" 
+                           ng-change="changeAdvanced(row.id, textFieldMod[row.id], textField.name)"
+                           placeholder="Enter text">
                 </div>
+                <div class="col-md-2">
+                    <div class="advanced-plus-button"><button ng-click="addNewRow()">+</button></div>
+                    <div class="advanced-minus-button"><button ng-click="deleteRow()">-</button></div>
+                </div>
+                
             </div>
-            <div class="advanced-plus-button"><button ng-click="addNewField()">+</button></div>
-            
         </div>
-        
-<!--
-        <div class="form-group" data-ng-repeat="field in fields">
-            <label for="field" ng-show="showChoiceLabel(field)">Choices</label>
-            <input type="text" ng-model="field.name" name="" placeholder="Enter a restaurant name">
-            <button ng-show="showAddField(field)" ng-click="addNewField()">Add field</button>
-        </div>
--->
         
         <hr>
 
-        <div>Selected field: <b>{{ data.repeatSelect.name }}</b></div>
-        <div>Enter text: <b>{{ inputAdvancedSearch.text }}</b></div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-warning" type="button" ng-click="ok()">Search</button>
+        <button class="btn btn-warning" type="button" ng-click="find()">Search</button>
         <button class="btn btn-primary" type="button" ng-click="cancel()">Cancel</button>
     </div>
 </script>

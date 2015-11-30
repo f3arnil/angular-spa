@@ -1,35 +1,42 @@
 "use strict";
 
 module.exports = function (advancedSearch) {
-
     
-    advancedSearch.controller('advancedSearchCtrl', function ($scope, $uibModalInstance, $state, $uibModal, $controller, searchStorage) {
+    advancedSearch.controller('advancedSearchCtrl', function ($scope, $uibModalInstance, $state, $uibModal, $controller, searchStorage, advancedSearchConfig) {
 
-        //$controller('searchCtrl', {$scope: $scope});
-                
-        $scope.ok = function () {
-            //$uibModalInstance.close($state.go('search.advancedQuery', { title: $scope.data.repeatSelect.name }, { inherit : false }));
-            console.log($scope.fields);
+        var config = advancedSearchConfig.config;
+        
+        // The search function with parameters SearchAdvanced
+        $scope.find = function () {
         };
-
+        
+        // Function close modal window without request.
         $scope.cancel = function () {
             $uibModalInstance.close($state.go('search.simpleQuery', searchStorage.params));
         };
         
-        $scope.data = {
-            row: 0,
-            text: null,
-            options: [
-                {id: '1', name: 'All fields'},
-                {id: '2', name: 'Title'}
-            ],
+        $scope.data = config.tplRow;
+        $scope.rows = config.baseRows;
+        $scope.query = config.baseQuery;
+        
+        $scope.addNewRow = function() {
+            var tmp = angular.copy($scope.data),
+                id = $scope.rows.length,
+                tmpResult = angular.copy(config.baseQuery[0]);
+            tmp.id = id;
+            tmpResult.id = id;
+            $scope.rows.push(tmp);
+            $scope.query.push(tmpResult);
         };
         
-        $scope.fields = [$scope.data];
-        $scope.addNewField = function() {
-            var newItemNo = $scope.fields.length+1;
-            $scope.fields.push({'row': $scope.data.row+newItemNo, 'text':$scope.data.text, 'options': $scope.data.options});
+        $scope.changeAdvanced = function(index, val, param) {
+            $scope.query[index][param] = val.value;
+        }
+        
+        $scope.deleteRow = function(id) {
+            delete($scope.rows[id]);
         };
+        
     });
     
 }
