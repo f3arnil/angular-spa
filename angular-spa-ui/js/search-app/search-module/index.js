@@ -25,6 +25,7 @@ module.exports = function (angular) {
             })
             .state('search.simple', {
                 url: '/simple',
+                name: 'simple',
                 views:{
                     "content": {
                         templateUrl: '/search.html',
