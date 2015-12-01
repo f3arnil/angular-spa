@@ -17,5 +17,19 @@ module.exports =
         searchIn: [
                 { name :'Publications', value : 'publication' },
                 { name :'Articles/Chapters', value : 'article' }
-            ]
+            ],
+        detailsAcceptedFields : [
+            'title',
+            'description',
+            'content',
+            'language',
+            'author',
+            'created',
+            'updated',
+            'publisher',
+            'publicationType',
+            'issn',
+            'publishingCountry',
+            'isbn13'
+        ]
     }

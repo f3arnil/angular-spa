@@ -2,24 +2,24 @@
 
 module.exports = function (search) {
 
-    search.controller('searchCtrl', function ($scope, $http, searchConfig, $uibModal, $stateParams, $state, promises, queryParams, searchStorage) {
+    search.controller('searchCtrl', function ($scope, searchConfig, $uibModal, $stateParams, $state, promises, queryParams, searchStorage) {
         
         $scope.goToDetails = function (data) {
             searchStorage.details = { type : $scope.searchIn.value, data : data };
             console.log(searchStorage.details);
-//            $state.go(
-//                    'search.simpleQuery',
-//                    $scope.queryParams,
-//                    {
-//                        inherit : true,
-//                        reload : true
-//                    }
-//                );
+            $state.go(
+                    'search.detail',
+                    { id : data._id },
+                    {
+                        inherit : true,
+                        reload : true
+                    }
+                );
         };
         
         //Change current searchIn
         $scope.setSearchIn = function (val) {
-            $scope.searchIn = $scope.searchInList[findValue(val, $scope.searchInList)];
+            $scope.searchIn = $scope.searchInList[findValueId(val, $scope.searchInList)];
             $scope.queryParams.searchIn = $scope.searchIn.value;
             $scope.queryParams.offset = 0;
             if ($scope.hasQuery()){
@@ -43,7 +43,7 @@ module.exports = function (search) {
                     'search.simpleQuery',
                     $scope.queryParams,
                     {
-                        inherit : true,
+                        inherit : false,
                         reload : true
                     }
                 );
@@ -98,8 +98,8 @@ module.exports = function (search) {
         
         //Set results data to controllers values
         function setCtrlData(publications) {
-            $scope.sortBy = $scope.sortParams[findValue($scope.queryParams.sortBy, $scope.sortParams)];
-            $scope.limit = $scope.resultsPerPages[findValue($scope.queryParams.limit, $scope.resultsPerPages)];
+            $scope.sortBy = $scope.sortParams[findValueId($scope.queryParams.sortBy, $scope.sortParams)];
+            $scope.limit = $scope.resultsPerPages[findValueId($scope.queryParams.limit, $scope.resultsPerPages)];
             $scope.query = $scope.queryParams.query;
             $scope.queryResult = publications.items;
             $scope.currentPage = publications.page;
@@ -114,7 +114,7 @@ module.exports = function (search) {
         }
         
         //Find value in objects list (for limits and sortBy) and returns its id
-        function findValue(val, object) {
+        function findValueId(val, object) {
             for (var x in object) {
                 if (object[x].value === val ) {
                     return x;
@@ -161,7 +161,7 @@ module.exports = function (search) {
         
         if (isEmptyObject($scope.queryParams) || $scope.queryParams.query === undefined) {
             $scope.queryParams = setDefaultParams();
-            $scope.searchIn = $scope.searchInList[findValue($scope.queryParams.searchIn, $scope.searchInList)];
+            $scope.searchIn = $scope.searchInList[findValueId($scope.queryParams.searchIn, $scope.searchInList)];
             if (!isEmptyObject(searchStorage.data) && !isEmptyObject(searchStorage.params)) {
                 $scope.queryParams = searchStorage.params;
                 setCtrlData(searchStorage.data);
@@ -169,7 +169,7 @@ module.exports = function (search) {
         } else {
             //Do when we have params in $stateParams - means that it is search action
             var queryUrl = queryParams.generateQueryParams(config.paths.simpleSearchPath, $scope.queryParams);
-            $scope.searchIn = $scope.searchInList[findValue($scope.queryParams.searchIn, $scope.searchInList)];
+            $scope.searchIn = $scope.searchInList[findValueId($scope.queryParams.searchIn, $scope.searchInList)];
             
             promises.getAsyncData('GET', queryUrl)
             .then(function (result) {
@@ -197,7 +197,61 @@ module.exports = function (search) {
         }
     });
 
-    search.controller('detailCtrl', function($scope) {
+    search.filter('validateDetailsRows', function (searchConfig) {
         
+        function isAssepted(field) {
+            for ( var x in searchConfig.config.detailsAcceptedFields) {
+                if (field === searchConfig.config.detailsAcceptedFields[x] ) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        
+        return function (details) {
+            var data = [];
+            angular.forEach(details, function(detail){
+                if (isAssepted(detail.name) && detail.name !='title' && detail.value !=''){
+                    data.push(detail);
+                }
+            });
+            
+//            for (var x in details) {
+//                if (isAssepted(details[x].name) && details[x].name !='title' && details[x].value !=''){
+//                    data.push({ name : details[x].name, value : details[x].value });
+//                    //console.log({ name : details[x].name, value : details[x].value });
+//                }
+//            }
+
+            return data;
+        }
+    })
+    
+    search.controller('detailCtrl', function($scope, searchConfig, searchStorage, $stateParams, $state, promises) {
+        
+        //if object has no keys return true, else false
+        function isEmptyObject(obj) {
+            if (Object.keys(obj).length === 0) {
+                return true;
+            }
+            return false;
+        }
+        
+        function convertDetails(details) {
+            var data = [];
+            for (var x in details) {
+                data.push({ name : x, value : details[x] })
+            }
+            return data;
+        }
+        
+        $scope.capitalize = function (data) {
+            return data[0].toUpperCase() + data.slice(1);
+        };
+        
+        if (!isEmptyObject(searchStorage.details)) {
+            $scope.title = searchStorage.details.data.title;
+            $scope.detailsData = convertDetails(searchStorage.details.data);
+        }
     });
 };

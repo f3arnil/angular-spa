@@ -53,7 +53,7 @@ module.exports = function (angular) {
                     url: '/detail/:id',
                     views:{
                         "content": {
-                            templateUrl: '/detail.html',
+                            templateUrl: '/details.html',
                             controller : 'detailCtrl'
                         }
                     }
