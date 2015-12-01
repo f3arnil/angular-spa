@@ -4,10 +4,24 @@ module.exports = function (search) {
 
     search.controller('searchCtrl', function ($scope, $http, searchConfig, $uibModal, $stateParams, $state, promises, queryParams, searchStorage) {
         
+        $scope.goToDetails = function (data) {
+            searchStorage.details = { type : $scope.searchIn.value, data : data };
+            console.log(searchStorage.details);
+//            $state.go(
+//                    'search.simpleQuery',
+//                    $scope.queryParams,
+//                    {
+//                        inherit : true,
+//                        reload : true
+//                    }
+//                );
+        };
+        
         //Change current searchIn
         $scope.setSearchIn = function (val) {
             $scope.searchIn = $scope.searchInList[findValue(val, $scope.searchInList)];
             $scope.queryParams.searchIn = $scope.searchIn.value;
+            $scope.queryParams.offset = 0;
             if ($scope.hasQuery()){
                 $state.go(
                     'search.simpleQuery',
@@ -96,6 +110,7 @@ module.exports = function (search) {
             $scope.showResults = true;
             searchStorage.data = publications;
             searchStorage.params = $scope.queryParams;
+            searchStorage.searchType = { type : 'simple' };
         }
         
         //Find value in objects list (for limits and sortBy) and returns its id
@@ -158,8 +173,9 @@ module.exports = function (search) {
             
             promises.getAsyncData('GET', queryUrl)
             .then(function (result) {
-                console.log($scope.queryParams);
                 var publications = result.data[$scope.searchIn.value];
+                console.log($scope.queryParams);
+                console.log(publications);
                 setCtrlData(publications);
             })
             .catch(function (err) {
@@ -172,4 +188,7 @@ module.exports = function (search) {
         };
     });
 
+    search.controller('detailCtrl', function($scope) {
+        
+    });
 };

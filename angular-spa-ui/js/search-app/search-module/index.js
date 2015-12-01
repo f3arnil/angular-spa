@@ -47,7 +47,16 @@ module.exports = function (angular) {
                         controller : 'searchCtrl'
                     }
                 }
-            });
+            })
+            .state('search.detail', {
+                    url: '/detail/:id',
+                    views:{
+                        "content": {
+                            templateUrl: '/detail.html',
+                            controller : 'detailCtrl'
+                        }
+                    }
+                });
     };
 
 };

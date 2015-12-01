@@ -61,8 +61,9 @@
                     </div>
                 </div>
                     <div class="result-list">
-                        <div class="result-row" ng-repeat="result in queryResult">
-                            <h3 class="title">
+                        <div class="result-row" 
+                             ng-repeat="result in queryResult">
+                            <h3 class="title" ng-click="goToDetails(result)">
                                 {{result.title}}
                             </h3>
                             <p> {{result.publisher}}</p>
