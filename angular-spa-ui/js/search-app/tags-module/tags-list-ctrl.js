@@ -3,18 +3,15 @@
 module.exports = function($scope, tagService) {
 
     // Property of tag list (and create tag) (directive)
-    // Use current scope
     $scope.tags = {};
     $scope.visiblilityList = 'empty';
-    $scope.form = {
-        tagName: ""
-    };
 
     // Get list tags
     $scope.loadRemoteData = function () {
         tagService.getTags()
             .then(
                 function(tagsList) {
+                    // Remote data tags list
                     applyRemoteData(tagsList);
                 },
                 function(errorMessage) {
@@ -32,23 +29,6 @@ module.exports = function($scope, tagService) {
                     $scope.loadRemoteData();
                 },
                 function(errorMessage) {
-                    console.warn(errorMessage);
-                }
-            );
-    };
-
-    // Create new tag
-    $scope.createTag = function() {
-        var tagName = $scope.form.tagName;
-        tagService.createTag(tagName)
-            .then(
-                function(data) {
-                    // $scope.tags.push(data.data);
-                    $scope.loadRemoteData();
-                    $scope.form.tagName = "";
-                },
-                //$scope.loadRemoteData(),
-                function( errorMessage ) {
                     console.warn(errorMessage);
                 }
             );

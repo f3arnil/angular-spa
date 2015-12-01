@@ -5,11 +5,7 @@ module.exports = function() {
     var createTag = {
         restrict: 'E',
         transclude: true,
-        scope: {
-
-        },
-        //controller: 'createTagContrller',
-        controller: 'tagsListContrller',
+        controller: 'createTagContrller',
         templateUrl: '/createTagTemplate.html',
         replace: true
     };

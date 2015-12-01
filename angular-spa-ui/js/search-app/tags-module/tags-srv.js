@@ -60,7 +60,6 @@ module.exports = function($http, $q) {
     return {
         titlePage: 'Manage tags',
         titleCreateTag: 'Create tag',
-        titleResultTagList: 'Tag list result',
         getTags: getTags,
         removeTagItem: removeTagItem,
         createTag: createTag,
