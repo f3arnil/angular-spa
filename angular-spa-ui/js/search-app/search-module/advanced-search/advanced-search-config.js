@@ -13,6 +13,16 @@ module.exports =
                     name: 'query',
                     value: ''
                 }
+            ],
+            buttonFields : [
+                {
+                    name: 'plus',
+                    value: true
+                },
+                {
+                    name: 'minus',
+                    value: false
+                }
             ]
         }],
         tplRow: {
@@ -31,6 +41,16 @@ module.exports =
                 {
                     name: 'query',
                     value: ''
+                }
+            ],
+            buttonFields : [
+                {
+                    name: 'plus',
+                    value: true
+                },
+                {
+                    name: 'minus',
+                    value: true
                 }
             ]
         },

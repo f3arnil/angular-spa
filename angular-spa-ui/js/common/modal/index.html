@@ -6,7 +6,7 @@
         
         <div class="col-md-12">
             
-            <div ng-repeat="row in rows" class="row">
+            <div ng-repeat="row in rows track by $index" class="row">
                 
                 <div ng-repeat="selectField in row.selectFields" class="col-md-2">
                     <select class="form-control"
@@ -24,8 +24,8 @@
                            placeholder="Enter text">
                 </div>
                 <div class="col-md-2">
-                    <div class="advanced-plus-button"><button ng-click="addNewRow()">+</button></div>
-                    <div class="advanced-minus-button"><button ng-click="deleteRow()">-</button></div>
+                    <div class="advanced-plus-button" ng-show="row.buttonFields[0].value"><button ng-click="addNewRow($index)">+</button></div>
+                    <div class="advanced-minus-button" ng-show="row.buttonFields[1].value"><button ng-click="deleteRow(row.id, $index)">-</button></div>
                 </div>
                 
             </div>
