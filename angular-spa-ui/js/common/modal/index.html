@@ -5,20 +5,37 @@
     <div class="modal-body">
         
         <div class="col-md-12">
-            <div class="col-md-5">
-                <select  class="form-control" name="repeatSelect" id="repeatSelect" ng-model="data.repeatSelect">
-                    <option ng-repeat="option in data.availableOptions" value="{{option.name}}">{{option.name}}</option>
-                </select>
+            
+            <div ng-repeat="row in rows track by $index" class="row">
+                
+                <div ng-repeat="selectField in row.selectFields" class="col-md-2">
+                    <select class="form-control"
+                        ng-model="selectFieldMod[row.id]"
+                        ng-change="changeAdvanced(row.id, selectFieldMod[row.id], selectField.name)"
+                        ng-options="optionField.value for optionField in selectField.options">
+                    </select>
+                </div>
+                
+                <div class="col-md-6" ng-repeat="textField in row.textsFields">
+                    <input type="text" 
+                           class="form-control col-md-7" 
+                           ng-model="textFieldMod[row.id].value" 
+                           ng-change="changeAdvanced(row.id, textFieldMod[row.id], textField.name)"
+                           placeholder="Enter text">
+                </div>
+                <div class="col-md-2">
+                    <div class="advanced-plus-button" ng-show="row.buttonFields[0].value"><button ng-click="addNewRow($index)">+</button></div>
+                    <div class="advanced-minus-button" ng-show="row.buttonFields[1].value"><button ng-click="deleteRow(row.id, $index)">-</button></div>
+                </div>
+                
             </div>
-            <div class="col-md-7"><input type="text" class="form-control" ng-model="inputAdvancedSearch.text" placeholder="Enter text"></div>
         </div>
+        
         <hr>
 
-        <div>Selected field: <b>{{ data.repeatSelect }}</b></div>
-        <div>Enter text: <b>{{ inputAdvancedSearch.text }}</b></div>
     </div>
     <div class="modal-footer">
-        <button class="btn btn-warning" type="button" ng-click="ok()">Search</button>
+        <button class="btn btn-warning" type="button" ng-click="find()">Search</button>
         <button class="btn btn-primary" type="button" ng-click="cancel()">Cancel</button>
     </div>
 </script>
