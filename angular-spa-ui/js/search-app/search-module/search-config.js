@@ -4,7 +4,7 @@ module.exports =
             simpleSearchPath : '/service/search/?',
             advancedSearchPath : '/service/search/',
             publicationDetail : '/service/publication/',
-            articledetail : '/service/article/'
+            articleDetail : '/service/article/'
         },
         sortParams: [
             { name : 'sort by A-Z', value : 'ASC' },
