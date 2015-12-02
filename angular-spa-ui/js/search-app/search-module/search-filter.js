@@ -4,19 +4,21 @@ module.exports = function (search) {
     
     search.filter('validateDetailsRows', function (searchConfig) {
         
-        function isAssepted(field) {
-            for ( var x in searchConfig.config.detailsAcceptedFields) {
-                if (field === searchConfig.config.detailsAcceptedFields[x] ) {
-                    return true;
-                }
-            }
-            return false;
+        // Check detail - if title accepted in config 
+        // and value not empty -> true, else -> false
+        function isAccepted(detail) {
+            var AcceptedArray = searchConfig.config.detailsAcceptedFields;
+            return AcceptedArray.some(function(item) {
+                                if (detail.title === item && detail.value !=='') {
+                                    return true;
+                                }
+                            });
         };
         
         return function (details) {
             var data = [];
             angular.forEach(details, function(detail){
-                if (isAssepted(detail.title) && detail.title !='title' && detail.value !=''){
+                if (detail.title !='title' && isAccepted(detail)){
                     data.push(detail);
                 }
             });
