@@ -1,0 +1,30 @@
+<script type="text/ng-template" id="/details.html">
+        <div class="search-panel">
+            <div class="wrapper">
+                <div class="return-results"> 
+                    <div ng-click="back()"> > Return to results</div>
+            </div>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="article-details">
+                <h2>ARTICLE DETAILS</h2>
+                <div class="article-body col-md-12">
+                    <div class="article-title">
+                        {{title}}
+                    </div>
+                    <hr>
+                    <div class="article-left-col col-md-6">
+                        <dl class="dl-horizontal">
+                            <div ng-repeat="data in detailsData | validateDetailsRows">
+                                <dt>{{capitalize(data.title)}}</dt>
+                                <dd>{{data.value}}</dd>
+                            </div>
+                        </dl>
+                    </div>
+                    <div class="article-right-col col-md-6">
+                    </div>
+                </div>
+            </div>
+        </div>
+</script>
