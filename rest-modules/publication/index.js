@@ -5,11 +5,29 @@ module.exports = function (app, mongoose, api) {
 
     // Routes list
     // -----------
+    app.get('/service/publication/:id', getPublicationRequest);
     app.get('/search/publication/:searchQuery', searchPublicationRequest);
     app.get('/generate/publication/:number', generateRandomPublicationsRequest);
 
     // Routes implementation
     // ---------------------
+    function getPublicationRequest(request, response) {
+        var operationName = 'get publication';
+        var publicationId = request.params.id;
+
+        model.findById(publicationId, function (error, data) {
+            if (error) {
+                response.send(api.generateResponseObject(
+                    operationName, 'error', error
+                ));
+            }
+
+            response.send(api.generateResponseObject(
+                operationName, 'ok', null, data
+            ));
+        });
+    }
+
     function searchPublicationRequest(request, response) {
         var query = request.params.searchQuery;
         var searchRegEx = new RegExp(query, 'i');
