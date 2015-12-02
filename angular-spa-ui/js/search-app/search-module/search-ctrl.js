@@ -2,11 +2,10 @@
 
 module.exports = function (search) {
 
-    search.controller('searchCtrl', function ($scope, searchConfig, $uibModal, $stateParams, $state, promises, queryParams, searchStorage) {
+    search.controller('searchCtrl', function ($scope, searchConfig, $uibModal, $stateParams, $state, promises, queryParams, searchStorage, searchFunctional) {
         
         $scope.goToDetails = function (data) {
             searchStorage.details = { type : $scope.searchIn.value, data : data };
-            console.log(searchStorage.details);
             $state.go(
                     'search.detail',
                     { id : data._id, type : $scope.searchIn.value },
@@ -19,7 +18,7 @@ module.exports = function (search) {
         
         //Change current searchIn
         $scope.setSearchIn = function (val) {
-            $scope.searchIn = $scope.searchInList[findValueId(val, $scope.searchInList)];
+            $scope.searchIn = $scope.searchInList[searchFunctional.findValueId(val, $scope.searchInList)];
             $scope.queryParams.searchIn = $scope.searchIn.value;
             $scope.queryParams.offset = 0;
             if ($scope.hasQuery()){
@@ -98,8 +97,8 @@ module.exports = function (search) {
         
         //Set results data to controllers values
         function setCtrlData(publications) {
-            $scope.sortBy = $scope.sortParams[findValueId($scope.queryParams.sortBy, $scope.sortParams)];
-            $scope.limit = $scope.resultsPerPages[findValueId($scope.queryParams.limit, $scope.resultsPerPages)];
+            $scope.sortBy = $scope.sortParams[searchFunctional.findValueId($scope.queryParams.sortBy, $scope.sortParams)];
+            $scope.limit = $scope.resultsPerPages[searchFunctional.findValueId($scope.queryParams.limit, $scope.resultsPerPages)];
             $scope.query = $scope.queryParams.query;
             $scope.queryResult = publications.items;
             $scope.currentPage = publications.page;
@@ -113,15 +112,6 @@ module.exports = function (search) {
             searchStorage.searchType = { type : 'simple' };
         }
         
-        //Find value in objects list (for limits and sortBy) and returns its id
-        function findValueId(val, object) {
-            for (var x in object) {
-                if (object[x].value === val ) {
-                    return x;
-                }
-            }
-        };
-        
         //Generate fount results "to" (RESULTS $from - $to )
         function setResultsTo(currentPage, pubPerPage, resultsCount) {
             var resultsTo = currentPage * pubPerPage;
@@ -129,14 +119,6 @@ module.exports = function (search) {
                 resultsTo = resultsCount;
             }
             return resultsTo;
-        }
-
-        //if object has no keys return true, else false
-        function isEmptyObject(obj) {
-            if (Object.keys(obj).length === 0) {
-                return true;
-            }
-            return false;
         }
 
         //If query params is empty set it to default
@@ -159,24 +141,22 @@ module.exports = function (search) {
         $scope.resultsPerPages = config.resultsPerPage;
         $scope.searchInList = config.searchIn;
         
-        if (isEmptyObject($scope.queryParams) || $scope.queryParams.query === undefined) {
+        if (searchFunctional.isEmptyObject($scope.queryParams) || $scope.queryParams.query === undefined) {
             $scope.queryParams = setDefaultParams();
-            $scope.searchIn = $scope.searchInList[findValueId($scope.queryParams.searchIn, $scope.searchInList)];
-            if (!isEmptyObject(searchStorage.data) && !isEmptyObject(searchStorage.params)) {
+            $scope.searchIn = $scope.searchInList[searchFunctional.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
+            if (!searchFunctional.isEmptyObject(searchStorage.data) && !searchFunctional.isEmptyObject(searchStorage.params)) {
                 $scope.queryParams = searchStorage.params;
-                $scope.searchIn = $scope.searchInList[findValueId($scope.queryParams.searchIn, $scope.searchInList)];
+                $scope.searchIn = $scope.searchInList[searchFunctional.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
                 setCtrlData(searchStorage.data);
             }
         } else {
             //Do when we have params in $stateParams - means that it is search action
             var queryUrl = queryParams.generateQueryParams(config.paths.simpleSearchPath, $scope.queryParams);
-            $scope.searchIn = $scope.searchInList[findValueId($scope.queryParams.searchIn, $scope.searchInList)];
+            $scope.searchIn = $scope.searchInList[searchFunctional.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
             
             promises.getAsyncData('GET', queryUrl)
             .then(function (result) {
                 var publications = result.data[$scope.searchIn.value];
-                console.log($scope.queryParams);
-                console.log(publications);
                 setCtrlData(publications);
             })
             .catch(function (err) {
@@ -228,15 +208,7 @@ module.exports = function (search) {
         }
     })
     
-    search.controller('detailCtrl', function($scope, searchConfig, searchStorage, $stateParams, $state, promises) {
-        
-        //if object has no keys return true, else false
-        function isEmptyObject(obj) {
-            if (Object.keys(obj).length === 0) {
-                return true;
-            }
-            return false;
-        }
+    search.controller('detailCtrl', function($scope, searchConfig, searchStorage, $stateParams, $state, promises, searchFunctional) {
         
         // Convert details data for ng-repeat
         function convertDetails(details) {
@@ -249,7 +221,7 @@ module.exports = function (search) {
         
         // Return to result action
         $scope.back = function () {
-            if (!isEmptyObject(searchStorage.data))
+            if (!searchFunctional.isEmptyObject(searchStorage.data))
                 window.history.back();
             else $state.go('search.simple');
         };
@@ -260,7 +232,7 @@ module.exports = function (search) {
         };
         
         var config = searchConfig.config;
-        if (!isEmptyObject(searchStorage.details)) {
+        if (!searchFunctional.isEmptyObject(searchStorage.details)) {
             $scope.title = searchStorage.details.data.title;
             $scope.detailsData = convertDetails(searchStorage.details.data);
         } else {
