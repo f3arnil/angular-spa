@@ -3,6 +3,8 @@ module.exports =
         paths: {
             simpleSearchPath : '/service/search/?',
             advancedSearchPath : '/service/search/',
+            publicationDetail : '/service/publication/',
+            articledetail : '/service/article/'
         },
         sortParams: [
             { name : 'sort by A-Z', value : 'ASC' },

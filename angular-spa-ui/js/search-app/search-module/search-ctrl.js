@@ -9,7 +9,7 @@ module.exports = function (search) {
             console.log(searchStorage.details);
             $state.go(
                     'search.detail',
-                    { id : data._id },
+                    { id : data._id, type : $scope.searchIn.value },
                     {
                         inherit : true,
                         reload : true
@@ -164,6 +164,7 @@ module.exports = function (search) {
             $scope.searchIn = $scope.searchInList[findValueId($scope.queryParams.searchIn, $scope.searchInList)];
             if (!isEmptyObject(searchStorage.data) && !isEmptyObject(searchStorage.params)) {
                 $scope.queryParams = searchStorage.params;
+                $scope.searchIn = $scope.searchInList[findValueId($scope.queryParams.searchIn, $scope.searchInList)];
                 setCtrlData(searchStorage.data);
             }
         } else {
@@ -237,6 +238,7 @@ module.exports = function (search) {
             return false;
         }
         
+        // Convert details data for ng-repeat
         function convertDetails(details) {
             var data = [];
             for (var x in details) {
@@ -245,13 +247,37 @@ module.exports = function (search) {
             return data;
         }
         
+        // Return to result action
+        $scope.back = function () {
+            if (!isEmptyObject(searchStorage.data))
+                window.history.back();
+            else $state.go('search.simple');
+        };
+        
+        // Capitalize field name
         $scope.capitalize = function (data) {
             return data[0].toUpperCase() + data.slice(1);
         };
         
+        var config = searchConfig.config;
         if (!isEmptyObject(searchStorage.details)) {
             $scope.title = searchStorage.details.data.title;
             $scope.detailsData = convertDetails(searchStorage.details.data);
+        } else {
+            var path = $stateParams.type + 'Detail';
+            var queryUrl = config.paths[path] + $stateParams.id;
+            promises.getAsyncData('GET', queryUrl)
+            .then(
+                function (result) {
+                    $scope.title = result.data.title;
+                    $scope.detailsData = convertDetails(result.data);
+                }
+            )
+            .catch(
+                function (err) {
+                    console.log('Error ' + err.status);
+                }
+            )
         }
     });
 };

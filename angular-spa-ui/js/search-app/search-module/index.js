@@ -50,7 +50,7 @@ module.exports = function (angular) {
                 }
             })
             .state('search.detail', {
-                    url: '/detail/:id',
+                    url: '/detail/:type/:id',
                     views:{
                         "content": {
                             templateUrl: '/details.html',
