@@ -137,6 +137,7 @@ module.exports = function (search) {
         var config = searchConfig.config;
         $scope.queryResult = '';
         $scope.showResults = false;
+        console.log($stateParams);
         $scope.queryParams = $stateParams;
         $scope.sortParams = config.sortParams;
         $scope.resultsPerPages = config.resultsPerPage;
