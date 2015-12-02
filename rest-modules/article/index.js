@@ -5,11 +5,29 @@ module.exports = function (app, mongoose,api) {
 
     // Routes list
     // -----------
+    app.get('/service/article/:id', getArticleRequest);
     app.get('/search/article/:searchQuery', searchArticleRequest);
     app.get('/generate/article/:number', generateRandomArticlesRequest);
 
     // Routes implementation
     // ---------------------
+    function getArticleRequest(request, response) {
+        var operationName = 'get article';
+        var articleId = request.params.id;
+
+        model.findById(articleId, function (error, data) {
+            if (error) {
+                response.send(api.generateResponseObject(
+                    operationName, 'error', error
+                ));
+            }
+
+            response.send(api.generateResponseObject(
+                operationName, 'ok', null, data
+            ));
+        });
+    }
+
     function searchArticleRequest(request, response) {
         var query = request.params.searchQuery;
         var searchRegEx = new RegExp(query, 'i');
