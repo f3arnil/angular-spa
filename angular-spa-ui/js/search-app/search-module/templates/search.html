@@ -8,7 +8,7 @@
                        ng-click="setSearchIn(searchplace.value)"
                        ng-model="searchIn.value"
                        ng-class="{active : searchplace.value==searchIn.value }">
-                        {{searchplace.name}}
+                        {{searchplace.title}}
                     </a>
                 </div>
             </div>
@@ -17,7 +17,7 @@
                     <input type="text" value="" ng-model='query'/>
                     <a class="searchButton"
                        ng-click="find()">
-                        <img src="/img/search-button.png" >
+                        <img ng-src="/img/search-button.png" >
                     </a>
                 </div>
                 <div class="advancedSearch">
@@ -38,13 +38,13 @@
                         
                         <select class="select-sort" 
                                 ng-model="sortBy" 
-                                ng-options="sortParam.name for sortParam in sortParams"
+                                ng-options="sortParam.title for sortParam in sortParams"
                                 ng-change="sortChange()">
                         </select>
                         
                         <select class="select-result" 
                                 ng-model="limit" 
-                                ng-options="resultsPerPage.name for resultsPerPage in resultsPerPages"
+                                ng-options="resultsPerPage.title for resultsPerPage in resultsPerPages"
                                 ng-change="limitChange()">
                         </select>
                         <uib-pagination total-items="resultsCount" 
