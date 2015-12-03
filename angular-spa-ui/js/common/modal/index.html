@@ -26,8 +26,8 @@
                 <div class="col-md-6" ng-repeat="textField in row.textsFields">
                     <input type="text" 
                            class="form-control col-md-7" 
-                           ng-model="textField[$parent.$index]"
-                           ng-change="changeAdvanced($parent.$index, textField[$parent.$index], textField.name)">
+                           ng-model="textField[row.id]"
+                           ng-change="changeAdvanced($parent.$index, textField[row.id], textField.name)">
                 </div>
                 <div class="col-md-2">
                     <div class="advanced-plus-button" ng-show="$last"><button ng-click="addNewRow($index)">+</button></div>
