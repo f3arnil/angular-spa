@@ -15,10 +15,10 @@
                 <div ng-repeat="selectField in row.selectFields track by $index" class="col-md-2">
                     <div ng-show="($parent.$index == 0 && $last) || ($parent.$index > 0)">
                         <select class="form-control"
-                            ng-model="selectField[$parent.$index]"
+                            ng-model="selectField[row.id]"
                             ng-change="changeAdvanced($parent.$index, selectField[$parent.$index], selectField.name)"
                             ng-options="optionField.value for optionField in selectField.options"
-                            data-ng-init="selectField[$parent.$index] = selectField.options[0]">
+                            data-ng-init="selectField[row.id] = selectField.options[0]">
                         </select>
                     </div>
                 </div>

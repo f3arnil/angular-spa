@@ -6,6 +6,7 @@ module.exports = function (advancedSearch) {
 
         var config = advancedSearchConfig.config;
         var result = config.tplQuery;
+        var prevId = 1;
         
         // The search function with parameters SearchAdvanced
         $scope.find = function () {
@@ -46,8 +47,10 @@ module.exports = function (advancedSearch) {
         $scope.addNewRow = function(index) {
             var rowObj = angular.copy(config.tplRow),
                 rowObjResult = angular.copy(config.baseQuery);
+            rowObj.id = prevId;
             $scope.rows.push(rowObj);
             $scope.query.push(rowObjResult);
+            prevId++;
         };
         
         // Function change all fields
