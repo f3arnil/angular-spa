@@ -7,11 +7,13 @@ var uiBs = require('angular-ui-bootstrap');
 
 var adminApp = angular.module('app', [
     uiRouter, 
-    uiBs
+    uiBs,
+    'app.records'
 ]);
 
 require('../common')(adminApp);
 require('./admin-app-srv')(adminApp);
+require('./records-module')(angular);
 
 adminApp
     .config(configCb)
@@ -21,5 +23,5 @@ angular.bootstrap(document, [adminApp.name]);
 
 function configCb($stateProvider, $urlRouterProvider) {
     $urlRouterProvider
-        .otherwise('index');
+        .otherwise('records/publications');
 };
