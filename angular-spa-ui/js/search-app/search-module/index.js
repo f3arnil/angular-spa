@@ -8,6 +8,7 @@ module.exports = function (angular) {
     
     var searchCtrl = require('./search-ctrl')(search);
     var searchSrv = require('./search-srv')(search);
+    var searchFilter = require('./search-filter')(search);
     //var searchDir = require('./search-dir')(search);
     
     search.config(configCb);
@@ -48,7 +49,16 @@ module.exports = function (angular) {
                         controller : 'searchCtrl'
                     }
                 }
-            });
+            })
+            .state('search.details', {
+                    url: '/details/:type/:id/:backUrl',
+                    views:{
+                        "content": {
+                            templateUrl: '/details.html',
+                            controller : 'searchDetailsCtrl'
+                        }
+                    }
+                });
     };
 
 };

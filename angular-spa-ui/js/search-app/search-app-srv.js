@@ -92,7 +92,9 @@ module.exports = function (app) {
     app.service('searchStorage', function () {
         return {
             data : {},
-            params : {}
+            params : {},
+            details : {},
+            searchType: {}
         }
     });
     

@@ -2,12 +2,26 @@
 
 module.exports = function (search) {
 
-    search.controller('searchCtrl', function ($scope, $http, searchConfig, $uibModal, $stateParams, $state, promises, queryParams, searchStorage) {
+    search.controller('searchCtrl', function ($scope, searchConfig, $uibModal, $stateParams, $state, promises, queryParams, searchStorage, searchService) {
+        
+        $scope.goToDetails = function (data) {
+            searchStorage.details = { type : $scope.searchIn.value, data : data };
+            
+            $state.go(
+                    'search.details',
+                    { id : data._id, type : $scope.searchIn.value, backUrl : location.hash },
+                    {
+                        inherit : true,
+                        reload : true
+                    }
+                );
+        };
         
         //Change current searchIn
         $scope.setSearchIn = function (val) {
-            $scope.searchIn = $scope.searchInList[findValue(val, $scope.searchInList)];
+            $scope.searchIn = $scope.searchInList[searchService.findValueId(val, $scope.searchInList)];
             $scope.queryParams.searchIn = $scope.searchIn.value;
+            $scope.queryParams.offset = 0;
             if ($scope.hasQuery()){
                 $state.go(
                     'search.simpleQuery',
@@ -29,7 +43,7 @@ module.exports = function (search) {
                     'search.simpleQuery',
                     $scope.queryParams,
                     {
-                        inherit : true,
+                        inherit : false,
                         reload : true
                     }
                 );
@@ -84,8 +98,8 @@ module.exports = function (search) {
         
         //Set results data to controllers values
         function setCtrlData(publications) {
-            $scope.sortBy = $scope.sortParams[findValue($scope.queryParams.sortBy, $scope.sortParams)];
-            $scope.limit = $scope.resultsPerPages[findValue($scope.queryParams.limit, $scope.resultsPerPages)];
+            $scope.sortBy = $scope.sortParams[searchService.findValueId($scope.queryParams.sortBy, $scope.sortParams)];
+            $scope.limit = $scope.resultsPerPages[searchService.findValueId($scope.queryParams.limit, $scope.resultsPerPages)];
             $scope.query = $scope.queryParams.query;
             $scope.queryResult = publications.items;
             $scope.currentPage = publications.page;
@@ -96,16 +110,8 @@ module.exports = function (search) {
             $scope.showResults = true;
             searchStorage.data = publications;
             searchStorage.params = $scope.queryParams;
+            searchStorage.searchType = { type : 'simple' };
         }
-        
-        //Find value in objects list (for limits and sortBy) and returns its id
-        function findValue(val, object) {
-            for (var x in object) {
-                if (object[x].value === val ) {
-                    return x;
-                }
-            }
-        };
         
         //Generate fount results "to" (RESULTS $from - $to )
         function setResultsTo(currentPage, pubPerPage, resultsCount) {
@@ -114,14 +120,6 @@ module.exports = function (search) {
                 resultsTo = resultsCount;
             }
             return resultsTo;
-        }
-
-        //if object has no keys return true, else false
-        function isEmptyObject(obj) {
-            if (Object.keys(obj).length === 0) {
-                return true;
-            }
-            return false;
         }
 
         //If query params is empty set it to default
@@ -144,21 +142,21 @@ module.exports = function (search) {
         $scope.resultsPerPages = config.resultsPerPage;
         $scope.searchInList = config.searchIn;
         
-        if (isEmptyObject($scope.queryParams) || $scope.queryParams.query === undefined) {
+        if (searchService.isEmptyObject($scope.queryParams) || $scope.queryParams.query === undefined) {
             $scope.queryParams = setDefaultParams();
-            $scope.searchIn = $scope.searchInList[findValue($scope.queryParams.searchIn, $scope.searchInList)];
-            if (!isEmptyObject(searchStorage.data) && !isEmptyObject(searchStorage.params)) {
+            $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
+            if (!searchService.isEmptyObject(searchStorage.data) && !searchService.isEmptyObject(searchStorage.params)) {
                 $scope.queryParams = searchStorage.params;
+                $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
                 setCtrlData(searchStorage.data);
             }
         } else {
             //Do when we have params in $stateParams - means that it is search action
             var queryUrl = queryParams.generateQueryParams(config.paths.simpleSearchPath, $scope.queryParams);
-            $scope.searchIn = $scope.searchInList[findValue($scope.queryParams.searchIn, $scope.searchInList)];
+            $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
             
             promises.getAsyncData('GET', queryUrl)
             .then(function (result) {
-                console.log($scope.queryParams);
                 var publications = result.data[$scope.searchIn.value];
                 setCtrlData(publications);
             })
@@ -180,5 +178,53 @@ module.exports = function (search) {
             });
         }
     });
-
+    
+    search.controller('searchDetailsCtrl', function($scope, searchConfig, searchStorage, $stateParams, $state, promises, searchService) {
+        
+        // Convert details data for ng-repeat
+        function convertDetails(details) {
+            var data = [];
+            for (var x in details) {
+                data.push({ title : x, value : details[x] })
+            }
+            return data;
+        }
+        
+        // Return to result action
+        $scope.back = function () {
+            if (!searchService.isEmptyObject(searchStorage.data))
+                history.back();
+            else {
+                //$state.go('search.simple');
+                location.href = $stateParams.backUrl;
+                
+            }
+        };
+        
+        // Capitalize field name
+        $scope.capitalize = function (data) {
+            return data[0].toUpperCase() + data.slice(1);
+        };
+        
+        var config = searchConfig.config;
+        if (!searchService.isEmptyObject(searchStorage.details)) {
+            $scope.title = searchStorage.details.data.title;
+            $scope.detailsData = convertDetails(searchStorage.details.data);
+        } else {
+            var path = $stateParams.type + 'Detail';
+            var queryUrl = config.paths[path] + $stateParams.id;
+            promises.getAsyncData('GET', queryUrl)
+            .then(
+                function (result) {
+                    $scope.title = result.data.title;
+                    $scope.detailsData = convertDetails(result.data);
+                }
+            )
+            .catch(
+                function (err) {
+                    console.log('Error ' + err.status);
+                }
+            )
+        }
+    });
 };
