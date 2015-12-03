@@ -2,45 +2,63 @@
 
 module.exports = function (advancedSearch) {
     
-    advancedSearch.controller('advancedSearchCtrl', function ($scope, $uibModalInstance, $state, $uibModal, $controller, searchStorage, advancedSearchConfig) {
+    advancedSearch.controller('advancedSearchCtrl', function ($http, $scope, $uibModalInstance, $state, $uibModal, $controller, searchStorage, advancedSearchConfig) {
 
         var config = advancedSearchConfig.config;
-        var prevId = 0;
+        var result = config.tplQuery;
+        
         // The search function with parameters SearchAdvanced
         $scope.find = function () {
-            console.log($scope.query);
+            
+            // Formation of the array objects to the request
+            result.context.publication.conditions = $scope.query;
+            
+            $http({method: 'POST', url: '/service/advanced-search', data: result}).
+                success(function(data, status, headers, config) {
+                    console.log(data);  
+                }).
+                error(function(data, status, headers, config) {
+                    console.log(data);
+                });
+            console.log(result);
         };
-        
+
         // Function close modal window without request.
         $scope.cancel = function () {
             $uibModalInstance.close($state.go('search.simpleQuery', searchStorage.params));
         };
-        
+
         $scope.data = config.tplRow;
-        $scope.rows = config.baseRows;
-        $scope.query = config.baseQuery;
+        $scope.rows = [];
+
+        // First row in modal window
+        $scope.rows.push(angular.copy(config.tplRow));
+        // First <select> is always delete 
+        $scope.rows[0].selectFields.splice(0,1);
+
+        // First element in array query
+        $scope.query = [];
+        $scope.query.push(angular.copy(config.baseQuery));
+        // First <select> is always has the option NONE
+        $scope.query[0].condition_op = 'NONE';
         
+        // Function add row for modal window
         $scope.addNewRow = function(index) {
-            prevId += 1;
-            var tmp = angular.copy($scope.data),
-                id = prevId,  //$scope.rows.length,
-                tmpResult = angular.copy(config.baseQuery[0]);
-            console.log(index, prevId);
-            tmp.id = id;
-            tmpResult.id = id;
-            $scope.rows.push(tmp);
-            $scope.query.push(tmpResult); 
-            $scope.rows[index].buttonFields[0].value = false;
+            var rowObj = angular.copy(config.tplRow),
+                rowObjResult = angular.copy(config.baseQuery);
+            $scope.rows.push(rowObj);
+            $scope.query.push(rowObjResult);
         };
         
-        $scope.changeAdvanced = function(index, val, param) {
-            $scope.query[index][param] = val.value;
-        }
+        // Function change all fields
+        $scope.changeAdvanced = function(ids, val, param) {
+            param == 'query' ? $scope.query[ids][param] = val : $scope.query[ids][param] = val.value;
+        };
         
-        $scope.deleteRow = function(id, index) {
-            $scope.rows.splice(id, 1);
-            $scope.query.splice(id, 1);
-            $scope.rows[index-1].buttonFields[0].value = true; 
+        // Function delete row for modal window
+        $scope.deleteRow = function(index) {
+            $scope.rows.splice(index, 1);
+            $scope.query.splice(index, 1);
         };
         
     });

@@ -224,3 +224,21 @@ hr {
     font-weight: 100;
 }
 
+.types-result {
+    padding: 10px 0px 45px 0px;
+}
+
+.types-result a {
+    cursor: pointer;
+    font-size: 14px;
+    padding: 10px;
+    margin-right: 20px;
+    color: #0367cc;
+    font-weight: 700;
+}
+
+.types-result a.active, .types-result a:hover {
+    background: #cccccc;
+    color: #000;
+    text-decoration: none;
+}
