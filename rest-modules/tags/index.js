@@ -82,7 +82,7 @@ module.exports = function (app, mongoose, api) {
         var operationName = 'get tag by article id';
         var articleId = request.params.articleId;
 
-        return articleTagAssignmentModel.findOne({ articleId: articleId }, function (error, data) {
+        return articleTagAssignmentModel.find({ articleId: articleId }, function (error, data) {
             if (!error) {
                 return response.send(api.generateResponseObject(operationName, 'ok', null, data));
             }

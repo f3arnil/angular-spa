@@ -6,7 +6,7 @@ module.exports = function($http, $q) {
     function getTags() {
         var request = $http({
             method: 'GET',
-            url: '/service/tags'
+            url: '/service/tags/'
         });
         return request.then(handleSuccess, handleError);
     }
@@ -24,13 +24,65 @@ module.exports = function($http, $q) {
     function createTag(tagName) {
         var request = $http({
             method: "POST",
-            url: '/service/tag/create',
+            url: '/service/tag/create/',
             data: {
                 name: tagName
             }
         });
         return request.then(handleSuccess, handleError);
     }
+
+    // Service get tag by article #id (GET)
+    function getTagByArticleId(articleId) {
+        var request = $http({
+            method: 'GET',
+            url: '/service/tag/get-by-article/' + articleId
+        });
+        return request.then(handleSuccess, handleError);
+    }
+
+    // Service get tag by #id (GET)
+    function getTagById(tagId) {
+        var request = $http({
+            method: 'GET',
+            url: '/service/tag/get-by-id/' + tagId
+        });
+        return request.then(handleSuccess, handleError);
+    }
+
+
+
+    //app.get('/service/tag/get-by-name/:tagName', getTagByNameRequest);
+    // Service get tag by name (GET)
+    // function getTagByName(tagName) {
+    //     var request = $http({
+    //         method: 'GET',
+    //         url: '/service/tag/get-by-name' + tagName
+    //     });
+    //     return request.then(handleSuccess, handleError);
+    // }
+
+    // app.get('/service/tag/autocomplete/:arg', autocompleteTagRequest);
+    // Service get autocomplete tag (GET)
+    // function autocompleteTag(arg) {
+    //     var request = $http({
+    //         method: 'GET',
+    //         url: '/service/tag/autocomplete' + arg
+    //     });
+    //     return request.then(handleSuccess, handleError);
+    // }
+
+    //app.get('/service/assign-article-tag/:articleId/:tagId', assignArticleTagRequest);
+    // function assignArticleTag(articleId, tagId) {
+    //     var request = $http({
+    //         method: "GET",
+    //         url: '/service/tag/update/' + articleId + '/' + tagId,
+    //         data: {
+    //             name: tagName
+    //         }
+    //     });
+    //     return request.then(handleSuccess, handleError);
+    // }
 
     // Service update item tag (PUT)
     function editTag(tagId, tagName) {
@@ -59,12 +111,16 @@ module.exports = function($http, $q) {
 
     return {
         titlePage: 'Manage tags',
+        // labelTag: 'Tags',
         titleCreateTag: 'Create tag',
         getTags: getTags,
         removeTagItem: removeTagItem,
         createTag: createTag,
-        editTag: editTag
+        editTag: editTag,
+        getTagByArticleId: getTagByArticleId,
+        getTagById: getTagById
     }
 
-
 };
+
+// <list-tags page="tags-by-article"/>

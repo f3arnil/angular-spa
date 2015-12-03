@@ -2,28 +2,37 @@
 
 module.exports = function(angular) {
 
-    // Dependency
+    // Dependency module tags
     var configCb = require('./tags-cfg');
     var tagModule = angular.module('app.tags', []);
     var tagCtrl = require('./tags-ctrl');
+    var tagSrv = require('./tags-srv');
+    //var tagFact = require('./tags-fact');
+
+    // Additional controllers
+    var listTagsCtrl = require('./list-tags-ctrl');
     var createTagCtrl = require('./create-tag-ctrl');
     var editTagCtrl = require('./edit-tag-ctrl');
-    var tagsListCtrl = require('./tags-list-ctrl');
-    var tagSrv = require('./tags-srv');
-    var tagsListDir = require('./tags-list-dir');
+
+    // Additional directives
+    var listTagsDir = require('./list-tags-dir');
     var createTagDir = require('./create-tag-dir');
     var editTagDir = require('./edit-tag-dir');
 
     // Implementation dependency of module Tags
-    tagModule.controller('tagController', tagCtrl);
-    tagModule.controller('createTagContrller', createTagCtrl);
-    tagModule.controller('tagsListContrller', tagsListCtrl);
+    // Initialize code
     tagModule.service('tagService', tagSrv);
-    tagModule.directive('tagsList', tagsListDir); // use <tags-list/>
+    //tagModule.factory('getTagAttrFactory', tagFact);
+
+    tagModule.controller('tagController', tagCtrl);
+    tagModule.controller('listTagsContrller', listTagsCtrl);
+    tagModule.controller('createTagContrller', createTagCtrl);
+    tagModule.controller('editTagContrller', editTagCtrl);
+    tagModule.directive('listTags', listTagsDir); // use <list-tags/>
 
     // Prepared by the functional
     tagModule.directive('createTag', createTagDir); // use <create-tag/>
-    tagModule.directive('editTag', editTagDir); // use <tag-edit/>
+    tagModule.directive('editTag', editTagDir); // use <edit-tag/>
 
     configCb(tagModule);
 
