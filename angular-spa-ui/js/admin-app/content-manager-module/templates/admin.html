@@ -1,0 +1,32 @@
+<script type="text/ng-template" id="/admin.html">
+        <div class="search-panel">
+            <div class="wrapper">
+                <div class="return-results"> 
+                    <div ng-click="back()"> > Return to results</div>
+            </div>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="article-details">
+                <h2>ADMIN PORTAL</h2>
+                <uib-tabset>
+                    <uib-tab ng-repeat='tab in tabs'
+                             heading='{{tab.title}}'
+                             select='changeTab(tab.value)'
+                             active='tab.active'
+                             disable="tab.disabled">
+                    <records-list
+                                  section='tab.value'
+                                  pgcurrentpage='1'
+                                  name='name'
+                                  itemslist='queryResults.items'
+                                  ng-model='showResults'>
+                    </records-list>
+                    </uib-tab>
+                </uib-tabset>
+            </div>
+        </div>
+<!--
+
+-->
+</script>

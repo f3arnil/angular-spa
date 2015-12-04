@@ -6,14 +6,14 @@ var uiRouter = require('angular-ui-router');
 var uiBs = require('angular-ui-bootstrap');
 
 var adminApp = angular.module('app', [
-    uiRouter, 
+    uiRouter,
     uiBs,
-    'app.records'
+    'app.contentManager'
 ]);
 
 require('../common')(adminApp);
 require('./admin-app-srv')(adminApp);
-require('./records-module')(angular);
+require('./content-manager-module')(angular);
 
 adminApp
     .config(configCb)
@@ -23,5 +23,5 @@ angular.bootstrap(document, [adminApp.name]);
 
 function configCb($stateProvider, $urlRouterProvider) {
     $urlRouterProvider
-        .otherwise('records/publications');
+        .otherwise('content/publication/');
 };

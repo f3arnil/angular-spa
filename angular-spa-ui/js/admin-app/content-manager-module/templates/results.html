@@ -1,37 +1,13 @@
-<script type="text/ng-template" id="/search.html">
-    <div class="search-panel">
-        <div class="wrapper">
-            <div class="colLeftPanel">
-                <label>SEARCH:</label>
-                <div ng-model="searchIn">
-                    <a ng-repeat="searchplace in searchInList"
-                       ng-click="setSearchIn(searchplace.value)"
-                       ng-model="searchIn.value"
-                       ng-class="{active : searchplace.value==searchIn.value }">
-                        {{searchplace.title}}
-                    </a>
-                </div>
-            </div>
-            <div class="colRightPanel">
-                <div class="search">
-                    <input type="text" value="" ng-model='query'/>
-                    <a class="searchButton"
-                       ng-click="find()">
-                        <img ng-src="/img/search-button.png" >
-                    </a>
-                </div>
-                <div class="advancedSearch">
-                    <button type="button" class="btn btn-primary" ng-click="modal()">Advanced</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="result">
+<script type="text/ng-template" id="/results.html">
+    <pre>
+      {{name}}
+    </pre>
+<div class="result">
         <div class="wrapper" ng-show="showResults">
             <div class="result-panel">
                 <div class="result-header">
                     <div class="col-md-3">
-                   <h4 ng-model="resMetrics">
+                   <h4 ng-model="resMetrics" ng-click="query()">
                        Results: {{resultsFrom}} - {{resultsTo}} of {{resultsCount}}</h4>
                        </div>
                     <div class="col-md-9">
@@ -73,5 +49,4 @@
                 </div>
             </div>
         </div>
-
 </script>
