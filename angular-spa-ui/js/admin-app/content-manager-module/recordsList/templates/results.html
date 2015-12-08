@@ -1,14 +1,17 @@
 <script type="text/ng-template" id="/results.html">
-    <pre>
-      {{name}}
-    </pre>
-<div class="result">
-        <div class="wrapper" ng-show="showResults">
+<div style="display:none">
+    <pre>{{items}}</pre>
+    <pre>{{header}}</pre>
+    <pre>{{itemsConfig}}</pre>
+</div>
+<div class="result" ng-show='header.visibility'>
+        <div class="wrapper">
             <div class="result-panel">
                 <div class="result-header">
                     <div class="col-md-3">
-                   <h4 ng-model="resMetrics" ng-click="query()">
-                       Results: {{resultsFrom}} - {{resultsTo}} of {{resultsCount}}</h4>
+                   <h4 ng-model="resMetrics"
+                       ng-click='query()'>
+                       Results: {{header.params.resultsCount.params.from}} - {{header.params.resultsCount.params.to}} of {{header.params.resultsCount.params.count}}</h4>
                        </div>
                     <div class="col-md-9">
                         
@@ -38,7 +41,7 @@
                 </div>
                     <div class="result-list">
                         <div class="result-row" 
-                             ng-repeat="result in queryResult">
+                             ng-repeat="result in items">
                             <h3 class="title" ng-click="goToDetails(result)">
                                 {{result.title}}
                             </h3>

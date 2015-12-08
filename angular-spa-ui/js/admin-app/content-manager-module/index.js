@@ -9,6 +9,7 @@ module.exports = function (angular) {
     var cmCtrl = require('./cm-ctrl')(contentManager);
     var cmSrv = require('./cm-srv')(contentManager);
     var cmDir = require('./cm-dir')(contentManager);
+    var recordsList = require('./recordsList')(contentManager)
     
     function configCb($stateProvider, $urlRouterProvider) {
         $stateProvider
