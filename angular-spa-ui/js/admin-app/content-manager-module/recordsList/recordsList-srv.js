@@ -1,36 +1,38 @@
 "use strict";
 
 module.exports = function (app) {
-    
+
     app.service('recodrsListConfig', function () {
-        
+
         var config = require('./recordsList-config');
-        
-        function getHeaderConfig() {
+
+        var getHeaderConfig = function () {
             return angular.copy(config.header)
         };
-        
-        function getSortParams() {
+
+        var getSortParams = function () {
             return angular.copy(config.sortParams)
         };
-        
-        function getResultsPerPage() {
+
+        var getResultsPerPage = function () {
             return angular.copy(config.resultsPerPage)
         };
-        
-        function getSortParams() {
+
+        var getSortParams = function () {
             return angular.copy(config.sortParams)
         };
-                
-        function getItemConfig() {
+
+        var getItemConfig = function () {
             return angular.copy(config.itemConfig)
         };
-        
+
         return {
-            headerConfig : getHeaderConfig(),
-            sortParams : getSortParams(),
-            resultsPerPage : getResultsPerPage(),
-            itemConfig : getItemConfig()
+            headerConfig: getHeaderConfig(),
+            sortParams: getSortParams(),
+            resultsPerPage: getResultsPerPage(),
+            itemConfig: getItemConfig()
         }
-    })
+    });
+
+
 };

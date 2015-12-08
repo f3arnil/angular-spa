@@ -1,55 +1,38 @@
 <script type="text/ng-template" id="/results.html">
-<div style="display:none">
-    <pre>{{items}}</pre>
-    <pre>{{header}}</pre>
-    <pre>{{itemsConfig}}</pre>
-</div>
-<div class="result" ng-show='header.visibility'>
+    <div style="display:none">
+        <pre>{{items}}</pre>
+        <pre>{{header}}</pre>
+        <pre>{{itemsConfig}}</pre>
+    </div>
+    <div class="result" ng-show='header.visibility'>
         <div class="wrapper">
             <div class="result-panel">
                 <div class="result-header">
                     <div class="col-md-3">
-                   <h4 ng-model="resMetrics"
-                       ng-click='query()'>
+                        <h4 ng-model="resMetrics" ng-click='query()'>
                        Results: {{header.params.resultsCount.params.from}} - {{header.params.resultsCount.params.to}} of {{header.params.resultsCount.params.count}}</h4>
-                       </div>
+                    </div>
                     <div class="col-md-9">
-                        
-                        <select class="select-sort" 
-                                ng-model="sortBy" 
-                                ng-options="sortParam.title for sortParam in sortParams"
-                                ng-change="sortChange()">
+
+                        <select class="select-sort" ng-model="sortBy" ng-options="sortParam.title for sortParam in sortParams" ng-change="sortChange()">
                         </select>
-                        
-                        <select class="select-result" 
-                                ng-model="limit" 
-                                ng-options="resultsPerPage.title for resultsPerPage in resultsPerPages"
-                                ng-change="limitChange()">
+
+                        <select class="select-result" ng-model="limit" ng-options="resultsPerPage.title for resultsPerPage in resultsPerPages" ng-change="limitChange()">
                         </select>
-                        <uib-pagination total-items="resultsCount" 
-                                        ng-model="currentPage" 
-                                        max-size="5" 
-                                        class="pagination-sm" 
-                                        boundary-links="true" 
-                                        rotate="false" 
-                                        num-pages="numPages"
-                                        items-per-page="limit.value"
-                                        ng-change = "goToPage()"
-                                        style = "float:right">
+                        <uib-pagination total-items="resultsCount" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="limit.value" ng-change="goToPage()" style="float:right">
                         </uib-pagination>
                     </div>
                 </div>
-                    <div class="result-list">
-                        <div class="result-row" 
-                             ng-repeat="result in items">
-                            <h3 class="title" ng-click="goToDetails(result)">
+                <div class="result-list">
+                    <div class="result-row" ng-repeat="result in items">
+                        <h3 class="title" ng-click="goToDetails(result)">
                                 {{result.title}}
                             </h3>
-                            <p> {{result.publisher}}</p>
-                            <p>{{result.updated}}</p>
-                        </div>
+                        <p> {{result.publisher}}</p>
+                        <p>{{result.updated}}</p>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </script>
