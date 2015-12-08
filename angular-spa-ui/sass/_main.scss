@@ -125,17 +125,21 @@ body{
 .pagination {float: left; padding-top: 10px; padding-bottom: 10px; margin: 0px;}
 .result-list {
     background: #fff;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
 }
 .result-list h3 {
     font-size: 18px;
     font-family: sans-serif;
     font-weight: 100;
     color: #0066d5;
+    cursor: pointer;
 }
 
 .result-row {
     padding: 20px 50px;
     line-height: 1.0;
+    border-bottom: 1px solid #ccc;
 }
 
 .page {

@@ -2,7 +2,7 @@ module.exports =
     {
         paths: {
             simpleSearchPath : '/service/search/?',
-            advancedSearchPath : '/service/search/',
+            advancedSearchPath : '/service/advanced-search/',
             publicationDetail : '/service/publication/',
             articleDetail : '/service/article/'
         },

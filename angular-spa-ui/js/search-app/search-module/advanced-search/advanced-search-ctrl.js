@@ -2,31 +2,40 @@
 
 module.exports = function (advancedSearch) {
     
-    advancedSearch.controller('advancedSearchCtrl', function ($http, $scope, $uibModalInstance, $state, $uibModal, $controller, searchStorage, advancedSearchConfig) {
+    advancedSearch.controller('advancedSearchCtrl', function ($stateParams, searchService, $http, $scope, $uibModalInstance, $state, $uibModal, $controller, searchStorage, advancedSearchConfig) {
 
         var config = advancedSearchConfig.config;
-        var result = config.tplQuery;
         var prevId = 1;
+        searchStorage.objQuery = config.tplQuery;
         
-        // The search function with parameters SearchAdvanced
-        $scope.find = function () {
-            
-            // Formation of the array objects to the request
-            result.context.publication.conditions = $scope.query;
-            
-            $http({method: 'POST', url: '/service/advanced-search', data: result}).
-                success(function(data, status, headers, config) {
-                    console.log(data);  
-                }).
-                error(function(data, status, headers, config) {
-                    console.log(data);
-                });
-            console.log(result);
+        $controller('searchCtrl', { $scope: $scope });
+        $scope.queryParams = $stateParams;
+
+        $scope.find = function() {
+            searchStorage.searchState = 'search.advancedQuery';
+            searchStorage.searchType = 'POST';
+            searchStorage
+                .objQuery
+                    .context
+                        .publication
+                            .conditions = $scope.query;
+            if ($scope.hasQuery()){
+                $scope.showResults = false;
+                $uibModalInstance.close();
+                $state.go(
+                    searchStorage.searchState,
+                    $scope.queryParams,
+                    {
+                        inherit : false,
+                        reload: true
+                    }
+                );
+            }
         };
 
         // Function close modal window without request.
         $scope.cancel = function () {
-            $uibModalInstance.close($state.go('search.simpleQuery', searchStorage.params));
+            //$uibModalInstance.close($state.go('search.simpleQuery', searchStorage.params));
         };
 
         $scope.data = config.tplRow;
@@ -63,7 +72,7 @@ module.exports = function (advancedSearch) {
             $scope.rows.splice(index, 1);
             $scope.query.splice(index, 1);
         };
-        
+
     });
     
 }

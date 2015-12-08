@@ -4,14 +4,14 @@ module.exports = function (app) {
     
     app.service('promises', function ($q, $http) {
 
-        function getAsyncData(method, url) {
+        function getAsyncData(method, url, params) {
             
             var deferred = $q.defer();
-            
             $http(
                 {
                     method: method,
-                    url: url
+                    url: url,
+                    data: params
                 })
                 .success(function (data) {
                     data.url = url;

@@ -24,7 +24,7 @@ module.exports = function (search) {
             $scope.queryParams.offset = 0;
             if ($scope.hasQuery()){
                 $state.go(
-                    'search.simpleQuery',
+                    searchStorage.searchState,
                     $scope.queryParams,
                     {
                         reload : true
@@ -36,11 +36,13 @@ module.exports = function (search) {
         
         // Function to find smth
         $scope.find = function () {
+            searchStorage.searchState = 'search.simpleQuery';
+            searchStorage.searchType = 'GET';
             if ($scope.hasQuery()){
                 $scope.queryParams.query = $scope.query;
                 $scope.showResults = false;
                 $state.go(
-                    'search.simpleQuery',
+                    searchStorage.searchState,
                     $scope.queryParams,
                     {
                         inherit : false,
@@ -53,9 +55,17 @@ module.exports = function (search) {
         
         //Action when sortBy changed
         $scope.sortChange = function () {
+            if (!_.isEmpty(searchStorage.objQuery))
+                searchStorage
+                    .objQuery
+                        .context
+                            .publication
+                                .sortingOrder = $scope.sortBy.value;
+            
             $scope.queryParams.sortBy = $scope.sortBy.value;
             $state.go(
-                'search.simpleQuery',
+                searchStorage.searchState,
+                //'search.simpleQuery',
                 $scope.queryParams,
                 {
                     reload : true
@@ -65,9 +75,17 @@ module.exports = function (search) {
         
         //Action when limit changed
         $scope.limitChange = function () {
+            if (!_.isEmpty(searchStorage.objQuery))
+                searchStorage
+                    .objQuery
+                        .limits
+                            .limit = $scope.limit.value;
+            
             $scope.queryParams.limit = $scope.limit.value;
+            
             $state.go(
-                'search.simpleQuery',
+                searchStorage.searchState,
+                //'search.simpleQuery',
                 $scope.queryParams,
                 {
                     reload : true
@@ -77,9 +95,15 @@ module.exports = function (search) {
 
         //Pagination change page
         $scope.goToPage = function () {
-            $scope.queryParams.offset = $scope.currentPage * $scope.limit.value - $scope.limit.value;
+            
+            if ( !_.isEmpty( searchStorage.objQuery ) )
+                searchStorage.objQuery.limits.offset = $scope.currentPage * searchStorage.objQuery.limits.limit - searchStorage.objQuery.limits.limit;
+                
+            $scope.queryParams.offset = $scope.currentPage * $scope.limit.value - $scope.limit.value;    
+            
             $state.go(
-                'search.simpleQuery',
+                searchStorage.searchState,
+                //'search.simpleQuery',
                 $scope.queryParams,
                 {
                     inherit : true,
@@ -97,7 +121,7 @@ module.exports = function (search) {
         };
         
         //Set results data to controllers values
-        function setCtrlData(publications) {
+        $scope.setCtrlData = function(publications) {
             $scope.sortBy = $scope.sortParams[searchService.findValueId($scope.queryParams.sortBy, $scope.sortParams)];
             $scope.limit = $scope.resultsPerPages[searchService.findValueId($scope.queryParams.limit, $scope.resultsPerPages)];
             $scope.query = $scope.queryParams.query;
@@ -105,16 +129,15 @@ module.exports = function (search) {
             $scope.currentPage = publications.page;
             $scope.resultsFrom = ($scope.currentPage * $scope.limit.value) - $scope.limit.value + 1;
             $scope.resultsCount = publications.count;
-            $scope.resultsTo = setResultsTo($scope.currentPage, $scope.limit.value, $scope.resultsCount);
+            $scope.resultsTo = $scope.setResultsTo($scope.currentPage, $scope.limit.value, $scope.resultsCount);
             $scope.pagesCount = Math.ceil($scope.resultsCount / $scope.limit.value);
             $scope.showResults = true;
             searchStorage.data = publications;
             searchStorage.params = $scope.queryParams;
-            searchStorage.searchType = { type : 'simple' };
         }
         
         //Generate fount results "to" (RESULTS $from - $to )
-        function setResultsTo(currentPage, pubPerPage, resultsCount) {
+        $scope.setResultsTo = function(currentPage, pubPerPage, resultsCount) {
             var resultsTo = currentPage * pubPerPage;
             if (resultsTo > resultsCount){
                 resultsTo = resultsCount;
@@ -123,7 +146,7 @@ module.exports = function (search) {
         }
 
         //If query params is empty set it to default
-        function setDefaultParams() {
+        $scope.setDefaultParams = function() {
             var params = {};
             params.searchIn = $scope.searchInList[0].value;
             params.limit = $scope.resultsPerPages[0].value;
@@ -131,9 +154,12 @@ module.exports = function (search) {
             params.offset = '0';
             params.orderBy = 'title';
             params.query = '';
+            params.objQuery = {};
             return params;
         };
         
+           
+        //searchStorage.searchState = 'search.simpleQuery';
         var config = searchConfig.config;
         $scope.queryResult = '';
         $scope.showResults = false;
@@ -141,24 +167,32 @@ module.exports = function (search) {
         $scope.sortParams = config.sortParams;
         $scope.resultsPerPages = config.resultsPerPage;
         $scope.searchInList = config.searchIn;
-        
+
         if (searchService.isEmptyObject($scope.queryParams) || $scope.queryParams.query === undefined) {
-            $scope.queryParams = setDefaultParams();
+            $scope.queryParams = $scope.setDefaultParams();
             $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
             if (!searchService.isEmptyObject(searchStorage.data) && !searchService.isEmptyObject(searchStorage.params)) {
                 $scope.queryParams = searchStorage.params;
                 $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
-                setCtrlData(searchStorage.data);
+                $scope.setCtrlData(searchStorage.data);
             }
         } else {
             //Do when we have params in $stateParams - means that it is search action
-            var queryUrl = queryParams.generateQueryParams(config.paths.simpleSearchPath, $scope.queryParams);
+            if (searchStorage.searchType === 'GET') {
+                var queryUrl = queryParams
+                                    .generateQueryParams(
+                                        config.paths.simpleSearchPath, 
+                                        $scope.queryParams
+                                    );
+            } else {
+                var queryUrl = config.paths.advancedSearchPath;
+            }
             $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
-            
-            promises.getAsyncData('GET', queryUrl)
+
+            promises.getAsyncData(searchStorage.searchType, queryUrl, searchStorage.objQuery)
             .then(function (result) {
                 var publications = result.data[$scope.searchIn.value];
-                setCtrlData(publications);
+                $scope.setCtrlData(publications);
             })
             .catch(function (err) {
                 console.log('Error - cant get data!' + err);
@@ -170,7 +204,7 @@ module.exports = function (search) {
                 // prevent the events onStart and onSuccess from firing
                 notify:false,
                 // prevent reload of the current state
-                reload:false, 
+                reload:true, 
                 // replace the last record when changing the params so you don't hit the back button and get old params
                 location:'replace', 
                 // inherit the current params on the url
@@ -180,6 +214,8 @@ module.exports = function (search) {
     });
     
     search.controller('searchDetailsCtrl', function($scope, searchConfig, searchStorage, $stateParams, $state, promises, searchService) {
+        
+        var params = {};
         
         // Convert details data for ng-repeat
         function convertDetails(details) {
@@ -213,7 +249,7 @@ module.exports = function (search) {
         } else {
             var path = $stateParams.type + 'Detail';
             var queryUrl = config.paths[path] + $stateParams.id;
-            promises.getAsyncData('GET', queryUrl)
+            promises.getAsyncData('GET', queryUrl, params)
             .then(
                 function (result) {
                     $scope.title = result.data.title;
@@ -226,5 +262,6 @@ module.exports = function (search) {
                 }
             )
         }
+
     });
 };

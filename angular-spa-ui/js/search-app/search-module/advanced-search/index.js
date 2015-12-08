@@ -18,18 +18,21 @@ module.exports = function (angular) {
                 views:{
                     "content": {
                         templateUrl: '/search.html',
+                        controller: 'searchCtrl'
                     }
                 }
+            
             })
             .state('search.advancedQuery', {
-                url: '/advanced/?query&limit&searchIn&sortBy&offset&orderBy&test',
+                url: '/advanced/?limit&searchIn&sortBy&offset&orderBy',
                 params: {
+                    query: '',
                     searchIn : {squash: true , value: 'publication'},
                     limit : {squash: true , value: '15'},
                     sortBy : {squash: true , value: 'ASC'},
                     offset : {squash: true , value: '0'},
                     orderBy : {squash: true , value: 'title'},
-                    test : {squash: true , value: 'testvalue'}
+                    //objQuery : []
                 },
                 views:{
                     "content": {
@@ -47,7 +50,6 @@ module.exports = function (angular) {
             controller: 'advancedSearchCtrl',
             size: 'lg'
         });
-
     };
-
+    
 }
