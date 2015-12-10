@@ -1,15 +1,14 @@
 "use strict";
 
 module.exports = function (app) {
-    
+
     app.service('promises', function ($q, $http) {
 
         function getAsyncData(method, url) {
-            
+
             var deferred = $q.defer();
-            
-            $http(
-                {
+
+            $http({
                     method: method,
                     url: url
                 })
@@ -18,11 +17,10 @@ module.exports = function (app) {
                     deferred.resolve(data);
                 })
                 .error(function (data, status) {
-                    deferred.reject(
-                        {
-                            data: data,
-                            status: status
-                        });
+                    deferred.reject({
+                        data: data,
+                        status: status
+                    });
                 });
 
             return deferred.promise;
@@ -44,16 +42,16 @@ module.exports = function (app) {
                         deferred.reject(values);
                     }
                 );
-            
+
             return deferred.promise;
         };
 
         return {
             getAsyncData: getAsyncData,
-            getAll : getALL
+            getAll: getALL
         };
     });
-    
+
     // app service for templates
     app.service('getTemplate', function ($sce, $compile, $templateRequest, $q) {
 
@@ -74,18 +72,66 @@ module.exports = function (app) {
         };
 
         return {
-            getByTrustedUrl : getByTrustedUrl
+            getByTrustedUrl: getByTrustedUrl
         }
 
     });
-    
+
     //app config service - can be used with all changes anywhere
     app.service('appConfig', function () {
-        
+
         var config = require('./app-config');
-        
+
         return {
-            config : config
+            config: config
         }
     });
+
+    app.service('theconfig', function ($injector) {
+
+        var getConfig = function (configName) {
+            
+            try {
+                return $injector.get(configName);
+            }
+            catch (err) {
+                throw Error('Can not get config ' + configName);
+            }
+            
+        };
+        
+        var getData = function (keysPath, configName) {
+
+            var config = getConfig(configName),
+                keysPathArray = keysPath.split('.'),
+                lastKeyIndex = keysPathArray.length - 1;
+                if (!keysPathArray.length && !_.isEmpty(config)) {
+                    return false;
+                }
+            
+                var obj = config;
+            
+            for (var index in keysPathArray) {
+                var data = keysPathArray[index];
+                if (!_.has(obj, data)) {
+                    console.warn('Element \'' + keysPath + '\' not found');
+                    obj = false;
+                
+                    return false;
+                }
+                obj = obj[data];
+                
+                if (index == lastKeyIndex) {
+                    return obj;
+                }
+            }
+            
+            return obj;
+    };
+
+        return {
+            getData: getData,
+            getConfig : getConfig
+        }
+    })
 }
