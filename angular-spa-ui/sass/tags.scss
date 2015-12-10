@@ -1,104 +1,80 @@
-.result-module-tags {
-    .tags {
-        margin: 10px 0;
-        padding: 30px 15px 20px 15px;
-        background: #fff;
+.tags {
+    margin: 20px 0;
+    padding: 30px 15px 20px 15px;
+    background: #fff;
 
-        li {
-            position: relative;
-            display: inline-block;
-            margin: 5px 15px 15px 0;
+    li {
+        position: relative;
+        display: inline-block;
+        margin: 5px 15px 15px 0;
 
-            .tag {
-                border-radius: 6px;
-                background-color: #EFEFEF;
-                border: 1px solid #DDD;
-                padding: 5px 10px 5px 10px;
+        .tag {
+            border-radius: 6px;
+            background-color: #EFEFEF;
+            border: 1px solid #DDD;
+            padding: 5px 10px 5px 10px;
+
+            .remove-tag {
+                display: none;
+                position: absolute;
+                top: -10px;
+                right: -6px;
+                cursor: pointer;
+                background: #ccc;
+                padding: 3px 6px;
+                border-radius: 50%;
+            }
+
+            .edit-tag {
+            
+            }
+
+            &:hover {
+                box-shadow: 2px 2px 2px #ccc;
 
                 .remove-tag {
-                    display: none;
-                    position: absolute;
-                    top: -10px;
-                    right: -6px;
-                    cursor: pointer;
-                    background: #ccc;
-                    padding: 3px 6px;
-                    border-radius: 50%;
+                    display: block;
                 }
-
-                .edit-tag {
-                
-                }
-
-                &:hover {
-                    box-shadow: 2px 2px 2px #ccc;
-
-                    .remove-tag {
-                        display: block;
-                    }
-                }
-            }
-
-            .form-edit {
-                display: none;
             }
         }
 
-        &.empty {
-            display: none !important;
+        .form-edit {
+            display: none;
         }
+
+        .add-tag {
+            background: url("/img/add_tag_icon.png") no-repeat center center;
+            padding: 0;
+            height: 20px;
+            width: 22px;
+            margin: 0;
+            line-height: 21px;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        form {
+            padding: 5px 12px;
+            display: inline-block;
+            
+            input {
+                padding: 2px 4px;
+                margin: 0 4px;
+            }
+            span {
+                cursor: pointer;
+                margin: 0 4px;
+            }
+        }
+    }
+
+    &.empty {
+        display: none !important;
     }
 }
 
-
-.result-module-search {
-    .tags {
-        margin: 20px 0;
-        padding: 0;
-        background: #fff;
-
-        li {
-            position: relative;
-            display: inline-block;
-            margin: 5px 15px 15px 0;
-
-            .tag {
-                border-radius: 6px;
-                background-color: #EFEFEF;
-                border: 1px solid #DDD;
-                padding: 5px 10px 5px 10px;
-
-                .remove-tag {
-                    display: none;
-                    position: absolute;
-                    top: -10px;
-                    right: -6px;
-                    cursor: pointer;
-                    background: #ccc;
-                    padding: 3px 6px;
-                    border-radius: 50%;
-                }
-
-                .edit-tag {
-                
-                }
-
-                &:hover {
-                    box-shadow: 2px 2px 2px #ccc;
-
-                    .remove-tag {
-                        display: block;
-                    }
-                }
-            }
-
-            .form-edit {
-                display: none;
-            }
-        }
-
-        &.empty {
-            display: none !important;
-        }
+.result-module-tags {
+    .add-tag {
+        display: none !important;
     }
 }

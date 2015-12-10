@@ -2,8 +2,7 @@
 
 module.exports = function($scope, tagService) {
 
-    // Implementation main controller of 'module tags'
-    // Get property of current scope
+    // Implementation controller of 'module tags'
     $scope.titlePage = tagService.titlePage;
 
 };

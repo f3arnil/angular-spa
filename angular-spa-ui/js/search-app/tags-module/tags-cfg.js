@@ -1,22 +1,17 @@
 "use strict";
 
-module.exports = function(tagModule) {
+module.exports = function($stateProvider) {
 
     // Configuration API
-    function configCb($stateProvider) {
-        $stateProvider
-            .state('tags', {
-                url: '/tags',
-                views:{
-                    "module-content": {
-                        templateUrl: '/tagModuleTemplate.html',
-                        controller : 'tagController'
-                    }
+    $stateProvider
+        .state('tags', {
+            url: '/tags',
+            views:{
+                "module-content": {
+                    templateUrl: '/tagModulePageTemplate.html',
+                    controller : 'tagController'
                 }
-            });
-    };
+            }
+        });
 
-    // Implementation config of module Tags
-    tagModule.config(configCb);
-
-}
+};

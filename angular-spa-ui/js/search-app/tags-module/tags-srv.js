@@ -12,7 +12,7 @@ module.exports = function($http, $q) {
     }
 
     // Service delete item tag (DELETE)
-    function removeTagItem(tagId) {
+    function deleteTagItem(tagId) {
         var request = $http({
             method: "DELETE",
             url: "/service/tag/delete/" + tagId
@@ -50,39 +50,23 @@ module.exports = function($http, $q) {
         return request.then(handleSuccess, handleError);
     }
 
-
-
-    //app.get('/service/tag/get-by-name/:tagName', getTagByNameRequest);
-    // Service get tag by name (GET)
-    // function getTagByName(tagName) {
-    //     var request = $http({
-    //         method: 'GET',
-    //         url: '/service/tag/get-by-name' + tagName
-    //     });
-    //     return request.then(handleSuccess, handleError);
-    // }
-
-    // app.get('/service/tag/autocomplete/:arg', autocompleteTagRequest);
-    // Service get autocomplete tag (GET)
-    // function autocompleteTag(arg) {
-    //     var request = $http({
-    //         method: 'GET',
-    //         url: '/service/tag/autocomplete' + arg
-    //     });
-    //     return request.then(handleSuccess, handleError);
-    // }
+    // Service get tag by #id (GET)
+    function detachTagFromArticleReq(articleId, tagId) {
+        var request = $http({
+            method: 'DELETE',
+            url: '/service/remove-article-tag/' + articleId + '/' + tagId
+        });
+        return request.then(handleSuccess, handleError);
+    }
 
     //app.get('/service/assign-article-tag/:articleId/:tagId', assignArticleTagRequest);
-    // function assignArticleTag(articleId, tagId) {
-    //     var request = $http({
-    //         method: "GET",
-    //         url: '/service/tag/update/' + articleId + '/' + tagId,
-    //         data: {
-    //             name: tagName
-    //         }
-    //     });
-    //     return request.then(handleSuccess, handleError);
-    // }
+    function assignArticleTag(articleId, tagId) {
+        var request = $http({
+            method: "GET",
+            url: '/service/assign-article-tag/' + articleId + '/' + tagId,
+        });
+        return request.then(handleSuccess, handleError);
+    }
 
     // Service update item tag (PUT)
     function editTag(tagId, tagName) {
@@ -111,16 +95,15 @@ module.exports = function($http, $q) {
 
     return {
         titlePage: 'Manage tags',
-        // labelTag: 'Tags',
         titleCreateTag: 'Create tag',
         getTags: getTags,
-        removeTagItem: removeTagItem,
+        deleteTagItem: deleteTagItem,
+        detachTagFromArticleReq: detachTagFromArticleReq,
         createTag: createTag,
         editTag: editTag,
         getTagByArticleId: getTagByArticleId,
-        getTagById: getTagById
+        getTagById: getTagById,
+        assignArticleTag: assignArticleTag
     }
 
 };
-
-// <list-tags page="tags-by-article"/>

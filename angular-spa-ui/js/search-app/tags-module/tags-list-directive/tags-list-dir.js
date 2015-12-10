@@ -2,20 +2,21 @@
 
 module.exports = function() {
 
-    var listTags = {
+    var tagsList = {
         restrict: 'E',
         transclude: true,
-        // scope: {
-
-        // },
-        link: function(scope, element, attrs) {
-            scope.getAttrDirective(attrs.page, scope);
+        scope: {
+            inputParam: '=inputParam',
+            msgWorning: '=msgWorning'
         },
-        controller: 'listTagsContrller',
+        link: function(scope, element, attrs) {
+            scope.getCurrentScope();
+        },
+        controller: 'tagsListController',
         templateUrl: '/listTagsTemplate.html',
         replace: true
     };
 
-    return listTags;
+    return tagsList;
 
 };

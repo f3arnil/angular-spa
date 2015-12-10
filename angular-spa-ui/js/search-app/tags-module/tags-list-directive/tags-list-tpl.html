@@ -1,0 +1,21 @@
+<script type="text/ng-template" id="/listTagsTemplate.html">
+    <ul class="tags" ng-show="tags.length >= 0">
+        <li ng-repeat="tag in tags">
+            <span class="tag" style="color: {{ tag.textColor }}; background-color:{{ tag.backgroundColor }};">
+                <span>{{ tag.name }}</span>
+                <a class="remove-tag" ng-click="removeTagItem(tag)">x</a>
+            </span>
+        </li>
+        <li ng-show="true">
+            <span class="add-tag" ng-show="!showFormAddTag" ng-click="showFormAddTag = !showFormAddTag"></span>
+            <form ng-show="showFormAddTag" ng-submit="addTag()">
+                <input type="text" ng-model="form.tagName" size="20" />
+                <span ng-click="addTag()">save</span>
+                <span ng-show="showFormAddTag" ng-click="showFormAddTag = !showFormAddTag">cancel</span>
+            </form>
+        </li>
+        <div class="alert alert-danger" role="alert" ng-show="msgWorning">
+            <span>{{msgWorning}}</span>
+        </div>
+    </ul>
+</script>
