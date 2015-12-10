@@ -26,13 +26,12 @@ module.exports =
                 pagination : {
                     visibility : false,
                     params : {
-                        totalItems : '50',
+                        totalItems : '0',
                         currentPage : '0',
-                        maxSize : '5',
+                        maxSize : '0',
                         class : 'pagination-sm',
                         rotate : false,
-                        itemsPerPage : '10',
-                        ngChange : 'changeFunc'
+                        itemsPerPage : '0',
                     }
                 }
             }
@@ -42,6 +41,8 @@ module.exports =
             { title : 'sort by Z-A', value : 'DESC' }
         ],
         resultsPerPage: [
+            { title : '5 Results/page', value :'5' },
+            { title : '10 Results/page', value :'10' },
             { title : '15 Results/page', value :'15' },
             { title : '20 Results/page', value : '20' },
             { title : '25 Results/page', value :'25' },

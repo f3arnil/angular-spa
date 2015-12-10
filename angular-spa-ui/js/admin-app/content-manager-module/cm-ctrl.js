@@ -2,8 +2,8 @@
 
 module.exports = function (cm) {
 
-    cm.controller('cmCtrl', function ($scope, cmConfig, appConfig, $state, promises, $stateParams, recodrsListConfig, cmService) {
-
+    cm.controller('cmCtrl', function ($scope, cmConfig, appConfig, $state, promises, $stateParams, $injector, cmService, recordsListConfig) {
+        
         $scope.$on('goToPage', function (event, data) {
             console.log(event.name + ' Data catched!' + data);
         });
@@ -24,7 +24,7 @@ module.exports = function (cm) {
 
         // Set active tab
         $scope.isActive = function (tabs) {
-            return service.isActiveTab(tabs, $scope.currentSection);
+            return cmService.isActiveTab(tabs, $scope.currentSection);
         };
 
         // Tab click go to state
@@ -37,18 +37,22 @@ module.exports = function (cm) {
 
         var config = cmConfig.config;
         var appConfig = appConfig.config;
-        var service = cmService;
+        
 
         $scope.currentSection = $stateParams.searchIn;
         $scope.tabs = $scope.isActive(config.sections);
-        var url = service.generateQueryParams(appConfig.paths.simpleSearchPath, $stateParams);
+        var url = cmService.generateQueryParams(appConfig.paths.simpleSearchPath, $stateParams);
         promises.getAsyncData('GET', url)
             .then(
                 function (responce) {
-                    console.log(responce)
-                    $scope.headerConfig = service.setHeaderConfig(responce.data[$scope.currentSection], recodrsListConfig.headerConfig, $stateParams);
-                    $scope.headerConfig.visibility = true;
-                    $scope.itemConfig = recodrsListConfig.itemConfig;
+                    console.log(responce);
+                    var service = $injector.get('rlService');
+                    $scope.headerConfig = service.setHeaderConfig(
+                        responce.data[$scope.currentSection],
+                        recordsListConfig.header, $stateParams);
+                    console.log($scope.headerConfig);
+                    //$scope.headerConfig.visibility = true;
+                    $scope.itemConfig = recordsListConfig.itemConfig;
                     $scope.itemsList = responce.data[$scope.currentSection].items;
                 }
             )

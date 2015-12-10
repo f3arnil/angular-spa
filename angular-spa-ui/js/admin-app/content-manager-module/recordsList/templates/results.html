@@ -17,9 +17,18 @@
                         <select class="select-sort" ng-model="sortBy" ng-options="sortParam.title for sortParam in sortParams" ng-change="sortChange()">
                         </select>
 
-                        <select class="select-result" ng-model="limit" ng-options="resultsPerPage.title for resultsPerPage in resultsPerPages" ng-change="limitChange()">
+                        <select class="select-result" ng-show="showLimit" ng-model="limit" ng-options="resultsPerPage.title for resultsPerPage in resultsPerPages" ng-change="limitChange()">
                         </select>
-                        <uib-pagination total-items="resultsCount" ng-model="currentPage" max-size="5" class="pagination-sm" boundary-links="true" rotate="false" num-pages="numPages" items-per-page="limit.value" ng-change="goToPage()" style="float:right">
+                        <uib-pagination total-items="resultsCount" 
+                                        ng-model="currentPage" 
+                                        max-size="5" 
+                                        class="pagination-sm" 
+                                        boundary-links="true" 
+                                        rotate="false" 
+                                        num-pages="numPages" 
+                                        items-per-page="limit.value" 
+                                        ng-change="goToPage()"
+                                        style="float:right">
                         </uib-pagination>
                     </div>
                 </div>
