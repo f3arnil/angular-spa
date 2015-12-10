@@ -1,26 +1,37 @@
-module.exports =
-{
+module.exports = {
     tplRow: {
         id: 0,
-        selectFields : [
-            {   
-                name : 'condition_op',
-                options: [{id:1, value: 'AND'}, {id:2, value: 'OR'}],
+        selectFields: [
+            {
+                name: 'condition_op',
+                options: [{
+                    id: 1,
+                    value: 'AND'
+                }, {
+                    id: 2,
+                    value: 'OR'
+                }],
                 default: 1
             },
-            {   
-                name:'field',
-                options: [{id:1, value: 'all fields'}, {id:2, value: 'title'}],
+            {
+                name: 'field',
+                options: [{
+                    id: 1,
+                    value: 'all fields'
+                }, {
+                    id: 2,
+                    value: 'title'
+                }],
                 default: 1
             }
         ],
-        textsFields : [
+        textsFields: [
             {
                 name: 'query',
                 value: ''
             }
         ],
-        buttonFields : [
+        buttonFields: [
             {
                 name: 'plus',
                 value: true
@@ -41,7 +52,7 @@ module.exports =
         'context': {
             'publication': {
                 'conditions': [
-                
+
                 ],
                 'sortingOrder': "ASC",
                 'sortingField': "title"

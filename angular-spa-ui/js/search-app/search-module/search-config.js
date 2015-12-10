@@ -1,26 +1,49 @@
-module.exports =
-    {
-        paths: {
-            simpleSearchPath : '/service/search/?',
-            advancedSearchPath : '/service/advanced-search/',
-            publicationDetail : '/service/publication/',
-            articleDetail : '/service/article/'
+module.exports = {
+    paths: {
+        simpleSearchPath: '/service/search/?',
+        advancedSearchPath: '/service/advanced-search/',
+        publicationDetail: '/service/publication/',
+        articleDetail: '/service/article/'
+    },
+    sortParams: [
+        {
+            title: 'sort by A-Z',
+            value: 'ASC'
         },
-        sortParams: [
-            { title : 'sort by A-Z', value : 'ASC' },
-            { title : 'sort by Z-A', value : 'DESC' }
+        {
+            title: 'sort by Z-A',
+            value: 'DESC'
+        }
         ],
-        resultsPerPage: [
-            { title : '15 Results/page', value :'15' },
-            { title : '20 Results/page', value : '20' },
-            { title : '25 Results/page', value :'25' },
-            { title : '30 Results/page', value : '30' }
+    resultsPerPage: [
+        {
+            title: '15 Results/page',
+            value: '15'
+        },
+        {
+            title: '20 Results/page',
+            value: '20'
+        },
+        {
+            title: '25 Results/page',
+            value: '25'
+        },
+        {
+            title: '30 Results/page',
+            value: '30'
+        }
         ],
-        searchIn: [
-                { title :'Publications', value : 'publication' },
-                { title :'Articles/Chapters', value : 'article' }
+    searchIn: [
+        {
+            title: 'Publications',
+            value: 'publication'
+        },
+        {
+            title: 'Articles/Chapters',
+            value: 'article'
+        }
             ],
-        detailsAcceptedFields : [
+    detailsAcceptedFields: [
             'title',
             'description',
             'content',
@@ -34,4 +57,4 @@ module.exports =
             'publishingCountry',
             'isbn13'
         ]
-    }
+}

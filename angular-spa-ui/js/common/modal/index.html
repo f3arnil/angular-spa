@@ -7,8 +7,12 @@
         <div class="col-md-12">
             
             <div class="types-result">
-                <a class="active">Publications</a>
-                <a>Articles</a>
+                <a ng-repeat="searchplace in searchInList"
+                    ng-click="setTypeData(searchplace.value)"
+                    ng-model="searchIn.value"
+                    ng-class="{active : searchplace.value==searchIn.value }">
+                    {{searchplace.title}}
+                </a>
             </div>
             
             <div ng-repeat="row in rows track by $index" class="row">
