@@ -4,14 +4,14 @@ module.exports = function (app) {
     
     app.service('promises', function ($q, $http) {
 
-        function getAsyncData(method, url) {
-            
+        function getAsyncData(method, url, params) {
+            params = params || {};
             var deferred = $q.defer();
-            
             $http(
                 {
                     method: method,
-                    url: url
+                    url: url,
+                    data: params
                 })
                 .success(function (data) {
                     data.url = url;
@@ -53,6 +53,16 @@ module.exports = function (app) {
             getAll : getALL
         };
     });
+
+    //app config service - can be used with all changes anywhere
+    app.service('appConfig', function () {
+        
+        var config = require('./app-config');
+        
+        return {
+            config : config
+        }
+    });
     
     // app service for templates
     app.service('getTemplate', function ($sce, $compile, $templateRequest, $q) {
@@ -77,15 +87,5 @@ module.exports = function (app) {
             getByTrustedUrl : getByTrustedUrl
         }
 
-    });
-    
-    //app config service - can be used with all changes anywhere
-    app.service('appConfig', function () {
-        
-        var config = require('./app-config');
-        
-        return {
-            config : config
-        }
     });
 }
