@@ -13,7 +13,8 @@ var searchApp = angular.module('app', [
     'app.tags'
 ]);
 
-require('./bootstrap')(searchApp);
+require('../common')(searchApp);
+require('./search-app-srv')(searchApp);
 require('./cart-module')(angular);
 require('./search-module')(angular);
 require('./tags-module')(angular);
