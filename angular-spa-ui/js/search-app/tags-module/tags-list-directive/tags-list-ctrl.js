@@ -15,28 +15,28 @@ module.exports = function($scope, tagService) {
     // Define scope directive
     //-------------------------
 
-    $scope.getCurrentScopeParam = function() {
-        if ($scope.inputParam === undefined) {
-            return 'tagsListForTagsPage';
-        } else
-        if ($scope.inputParam !== undefined) {
-            return 'tagsListByArticleId';
-        }
-    };
-
     $scope.getCurrentScope = function() {
         $scope.currentScope = $scope.getCurrentScopeParam();
         $scope.getTagsList();
+    };
+
+    $scope.getCurrentScopeParam = function() {
+        if ($scope.inputParam === undefined) {
+            return 'pageModuleTags';
+        } else
+        if ($scope.inputParam !== undefined) {
+            return 'pageArticleList';
+        }
     };
 
     // Show tgs list
     //-------------------------
 
     $scope.getTagsList = function() {
-        if ($scope.currentScope === 'tagsListForTagsPage') {
+        if ($scope.currentScope === 'pageModuleTags') {
             return $scope.getTagsListData();
         } else
-        if ($scope.currentScope === 'tagsListByArticleId') {
+        if ($scope.currentScope === 'pageArticleList') {
             return $scope.getArticleItem($scope.inputParam);
         }
     };
@@ -64,8 +64,6 @@ module.exports = function($scope, tagService) {
 
     // Get item article
     $scope.getArticleItem = function(articleItem) {
-        console.log($scope);
-        console.log(articleItem);
         $scope.getTagByArticleId(articleItem._id);
     };
 
@@ -109,10 +107,10 @@ module.exports = function($scope, tagService) {
 
     // Remove tag
     $scope.removeTagItem = function(itemTag) {
-        if ($scope.currentScope === 'tagsListForTagsPage') {
+        if ($scope.currentScope === 'pageModuleTags') {
             return $scope.deleteTagItem(itemTag);
         } else
-        if ($scope.currentScope === 'tagsListByArticleId') {
+        if ($scope.currentScope === 'pageArticleList') {
             return $scope.detachTagFromArticle(itemTag, $scope.inputParam);
         }
     };
@@ -153,10 +151,10 @@ module.exports = function($scope, tagService) {
         var tagName = $scope.form.tagName;
 
         if (tagName.length !== 0) {
-            if ($scope.currentScope === 'tagsListForTagsPage') {
+            if ($scope.currentScope === 'pageModuleTags') {
                 return false
             } else
-            if ($scope.currentScope === 'tagsListByArticleId') {
+            if ($scope.currentScope === 'pageArticleList') {
                 return $scope.createTag(tagName, $scope.inputParam);
             }
         }
@@ -202,10 +200,6 @@ module.exports = function($scope, tagService) {
 
     // Update list tag of scope
     $scope.applyTagsListData = function(tagsList) {
-        // !_.isEmpty(tagsList.data) ? 
-        //     $scope.tags.push(tagsList.data) :
-        //     $scope.tags;
-        
         if (_.isEmpty(tagsList.data) === false ) {
             return $scope.tags.push(tagsList.data);
         }

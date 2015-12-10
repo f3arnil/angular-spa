@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function($http, $q) {
 
@@ -14,8 +14,8 @@ module.exports = function($http, $q) {
     // Service delete item tag (DELETE)
     function deleteTagItem(tagId) {
         var request = $http({
-            method: "DELETE",
-            url: "/service/tag/delete/" + tagId
+            method: 'DELETE',
+            url: '/service/tag/delete/' + tagId
         });
         return request.then(handleSuccess, handleError);
     }
@@ -23,7 +23,7 @@ module.exports = function($http, $q) {
     // Service create new tag (POST)
     function createTag(tagName) {
         var request = $http({
-            method: "POST",
+            method: 'POST',
             url: '/service/tag/create/',
             data: {
                 name: tagName
@@ -62,7 +62,7 @@ module.exports = function($http, $q) {
     //app.get('/service/assign-article-tag/:articleId/:tagId', assignArticleTagRequest);
     function assignArticleTag(articleId, tagId) {
         var request = $http({
-            method: "GET",
+            method: 'GET',
             url: '/service/assign-article-tag/' + articleId + '/' + tagId,
         });
         return request.then(handleSuccess, handleError);
@@ -71,7 +71,7 @@ module.exports = function($http, $q) {
     // Service update item tag (PUT)
     function editTag(tagId, tagName) {
         var request = $http({
-            method: "PUT",
+            method: 'PUT',
             url: '/service/tag/update/' + tagId,
             data: {
                 name: tagName
@@ -83,7 +83,7 @@ module.exports = function($http, $q) {
     // Request ERROR
     function handleError(response) {
         if ( !angular.isObject(response.data) || !response.data.message ) {
-            return $q.reject("An unknown error occurred.");
+            return $q.reject('An unknown error occurred.');
         }
         return $q.reject(response.data.message);
     }

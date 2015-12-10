@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function($stateProvider) {
 
@@ -7,7 +7,7 @@ module.exports = function($stateProvider) {
         .state('tags', {
             url: '/tags',
             views:{
-                "module-content": {
+                'module-content': {
                     templateUrl: '/tagModulePageTemplate.html',
                     controller : 'tagController'
                 }
