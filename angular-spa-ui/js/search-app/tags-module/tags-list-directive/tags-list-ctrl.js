@@ -27,12 +27,17 @@ module.exports = function($scope, tagService, $state, $rootScope) {
                 break;
             case
                 'search.simpleQuery':
-                $scope.getArticleItem($scope.inputParam);
+                $scope.getArticleItemByList($scope.inputParam);
                 break;
-            case
-                '':
-                $scope.errorMessage('Warning! Current scope name - empty!');
-                break;
+            // Prepare case for implementation of next task
+            // case
+            //     'search.details':
+            //     $scope.getArticleItem($scope.inputParam);
+            //     break;
+            // case
+            //     '':
+            //     $scope.errorMessage('Warning! Current scope name - empty!');
+            //     break;
         }
     };
 
@@ -114,8 +119,8 @@ module.exports = function($scope, tagService, $state, $rootScope) {
     // Directive of module article
     //----------------------------
 
-    // Get item article
-    $scope.getArticleItem = function(articleItem) {
+    // Get article item by list article
+    $scope.getArticleItemByList = function(articleItem) {
         $scope.getTagByArticleId(articleItem._id);
     };
 
@@ -166,12 +171,20 @@ module.exports = function($scope, tagService, $state, $rootScope) {
     //----------------------------
 
     $scope.detechTagsRemoving = function() {
-        $scope.unbindHandler();
-        //unbindHandler = null;
+        $scope.unbindHandler(); // or unbindHandler = null;
         $scope.isWatchingEventDelete = false;
     };
 
 
+
+    // Directive of module article
+    //----------------------------
+
+    // Get article item 
+    // Prepare case for implementation of next task
+    // $scope.getArticleItem = function(articleItem) {
+
+    // };
 
     // Add new tag
     //----------------------------
@@ -235,7 +248,6 @@ module.exports = function($scope, tagService, $state, $rootScope) {
         if (_.isEmpty(tagsList.data) === false ) {
             return $scope.tags.push(tagsList.data);
         }
-        
     };
 
     // Get message message Attention. If warning

@@ -8,7 +8,6 @@ module.exports = function() {
         scope: {
             inputParam: '=inputParam',
             msgWorning: '=msgWorning'
-            //tags: '=tags'
         },
         link: function(scope, element, attrs) {
             scope.getStateName();

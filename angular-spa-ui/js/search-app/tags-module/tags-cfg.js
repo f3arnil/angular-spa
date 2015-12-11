@@ -15,7 +15,6 @@ module.exports = function($stateProvider) {
             data: {
                 pageTitle: 'Manage tags'
             }
-
         });
 
 };
