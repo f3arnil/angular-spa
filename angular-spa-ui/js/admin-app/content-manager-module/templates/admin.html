@@ -13,13 +13,13 @@
                         <p ng-repeat='tab in tabs'
                            ng-click="changeTab(tab.value)"
                            style="float:left;margin:20px"
+                           ng-hide="tab.disabled"
                            >{{tab.title}}</p>
                     </div>
                     <records-list
                                   header-settings = 'headerConfig'
                                   items-settings = 'itemConfig'
                                   itemslist = 'itemsList'
-                                  ng-model = 'showResults'
                                   >
                     </records-list>
             </div>

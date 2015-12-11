@@ -5,11 +5,12 @@ module.exports = function (angular) {
     var contentManager = angular.module('app.contentManager', []);
 
     contentManager.config(configCb);
+    contentManager.constant('contentManagerConfig', require('./cm-config'));
 
     var cmCtrl = require('./cm-ctrl')(contentManager);
     var cmSrv = require('./cm-srv')(contentManager);
     var cmDir = require('./cm-dir')(contentManager);
-    var recordsList = require('./recordsList')(contentManager)
+    var recordsList = require('./recordsListDir')(contentManager)
 
     function configCb($stateProvider, $urlRouterProvider) {
         $stateProvider

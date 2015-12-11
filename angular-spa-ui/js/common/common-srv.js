@@ -77,61 +77,56 @@ module.exports = function (app) {
 
     });
 
-    //app config service - can be used with all changes anywhere
-    app.service('appConfig', function () {
-
-        var config = require('./app-config');
-
-        return {
-            config: config
-        }
-    });
-
-    app.service('theconfig', function ($injector) {
+    app.service('configService', function ($injector) {
 
         var getConfig = function (configName) {
-            
+
             try {
-                return $injector.get(configName);
-            }
-            catch (err) {
+                return angular.copy($injector.get(configName));
+            } catch (err) {
                 throw Error('Can not get config ' + configName);
             }
-            
+
         };
-        
-        var getData = function (keysPath, configName) {
+
+        var getData = function (configName, keysPath) {
 
             var config = getConfig(configName),
                 keysPathArray = keysPath.split('.'),
                 lastKeyIndex = keysPathArray.length - 1;
-                if (!keysPathArray.length && !_.isEmpty(config)) {
-                    return false;
-                }
-            
-                var obj = config;
-            
+            if (!keysPathArray.length && !_.isEmpty(config)) {
+                return false;
+            }
+
+            var obj = config;
+
             for (var index in keysPathArray) {
                 var data = keysPathArray[index];
                 if (!_.has(obj, data)) {
                     console.warn('Element \'' + keysPath + '\' not found');
                     obj = false;
-                
+
                     return false;
                 }
                 obj = obj[data];
-                
+
                 if (index == lastKeyIndex) {
-                    return obj;
+                    return angular.copy(obj);
                 }
             }
-            
-            return obj;
-    };
+
+            return angular.copy(obj);
+        };
 
         return {
             getData: getData,
-            getConfig : getConfig
+            getConfig: getConfig
         }
-    })
+    });
+
+    app.service('appStorage', function () {
+        return {
+            data: {}
+        }
+    });
 }

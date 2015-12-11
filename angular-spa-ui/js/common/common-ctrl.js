@@ -2,9 +2,9 @@
 
 module.exports = function (app) {
     
-    app.controller('mainCtrl', function ($scope, promises, getTemplate, appConfig) {
+    app.controller('mainCtrl', function ($scope, promises, getTemplate, configService, appStorage) {
         
-        var config = appConfig.config;
+        var config = configService.getConfig('appConfig');
         var paths = config.paths;
         var methods = config.methods;
         var userData = config.userData;
@@ -50,6 +50,7 @@ module.exports = function (app) {
             .then(
                 function (data) {
                     userData.userValidateResult = data.data.result;
+                    appStorage.data['userData'] = userData;
                     var element = angular.element(document.getElementsByTagName('header'));
                     getTemplate.getByTrustedUrl('/header.html', element, $scope)
                     .then(

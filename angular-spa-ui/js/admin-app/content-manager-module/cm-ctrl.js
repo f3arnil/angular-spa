@@ -2,8 +2,8 @@
 
 module.exports = function (cm) {
 
-    cm.controller('cmCtrl', function ($scope, cmConfig, appConfig, $state, promises, $stateParams, $injector, cmService, recordsListConfig) {
-        
+    cm.controller('cmCtrl', function ($scope, $state, promises, $stateParams, cmService, configService, contentStorage, appStorage, rlService) {
+
         $scope.$on('goToPage', function (event, data) {
             console.log(event.name + ' Data catched!' + data);
         });
@@ -32,27 +32,22 @@ module.exports = function (cm) {
             $state.go('content', {
                 searchIn: place
             });
-            //$state.go('query', { limit : '20' });
         };
 
-        var config = cmConfig.config;
-        var appConfig = appConfig.config;
-        
+        var sections = configService.getData('contentManagerConfig', 'sections'),
+            simpleSearchPath = configService.getData('appConfig', 'paths.simpleSearchPath'),
+            recordsListHeaderConfig = configService.getData('recordsListConfig', 'header'),
+            recordsListItemConfig = configService.getData('recordsListConfig', 'itemConfig');
 
         $scope.currentSection = $stateParams.searchIn;
-        $scope.tabs = $scope.isActive(config.sections);
-        var url = cmService.generateQueryParams(appConfig.paths.simpleSearchPath, $stateParams);
+        $scope.tabs = $scope.isActive(sections);
+        var url = cmService.generateQueryParams(simpleSearchPath, $stateParams);
         promises.getAsyncData('GET', url)
             .then(
                 function (responce) {
                     console.log(responce);
-                    var service = $injector.get('rlService');
-                    $scope.headerConfig = service.setHeaderConfig(
-                        responce.data[$scope.currentSection],
-                        recordsListConfig.header, $stateParams);
-                    console.log($scope.headerConfig);
-                    //$scope.headerConfig.visibility = true;
-                    $scope.itemConfig = recordsListConfig.itemConfig;
+                    $scope.headerConfig = rlService.setHeaderConfig(responce.data[$scope.currentSection], recordsListHeaderConfig, $stateParams);
+                    $scope.itemConfig = recordsListItemConfig;
                     $scope.itemsList = responce.data[$scope.currentSection].items;
                 }
             )

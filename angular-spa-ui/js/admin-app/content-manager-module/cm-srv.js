@@ -2,15 +2,6 @@
 
 module.exports = function (cm) {
 
-    cm.service('cmConfig', function () {
-
-        var config = require('./cm-config');
-
-        return {
-            config: config
-        }
-    });
-
     cm.service('contentStorage', function () {
         return {
             data: {},
@@ -20,7 +11,7 @@ module.exports = function (cm) {
         }
     });
 
-    cm.service('cmService', function (recordsListConfig, rlService) {
+    cm.service('cmService', function () {
 
         var generateQueryParams = function (path, stateParams) {
             var url = path;
@@ -42,7 +33,7 @@ module.exports = function (cm) {
             });
             return tabs;
         };
-        
+
         return {
             generateQueryParams: generateQueryParams,
             isActiveTab: isActiveTab

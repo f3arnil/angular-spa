@@ -14,13 +14,13 @@ module.exports =
                 sortBy : {
                     visibility : false,
                     params : {
-                        value : 'ASC'
+                        value : 0
                     }
                 },
                 resultsPerPage : {
                     visibility : false,
                     params : {
-                        value : '15'
+                        value : 0
                     }
                 },
                 pagination : {
