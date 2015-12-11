@@ -11,5 +11,4 @@ module.exports = function(tagModule) {
         .controller('tagsListController', tagsListCtrl)
         .directive('tagsList', tagsListDir); // <tags-list/>
 
-
 };

@@ -6,12 +6,16 @@ module.exports = function($stateProvider) {
     $stateProvider
         .state('tags', {
             url: '/tags',
-            views:{
+            views: {
                 'module-content': {
                     templateUrl: '/tagModulePageTemplate.html',
                     controller : 'tagController'
                 }
+            },
+            data: {
+                pageTitle: 'Manage tags'
             }
+
         });
 
 };

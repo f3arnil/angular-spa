@@ -50,8 +50,17 @@ module.exports = function($http, $q) {
         return request.then(handleSuccess, handleError);
     }
 
-    // Service get tag by #id (GET)
-    function detachTagFromArticleReq(articleId, tagId) {
+    // Service get tag name (GET)
+    function getTagByName(tagName) {
+        var request = $http({
+            method: 'GET',
+            url: '/service/tag/get-by-name/' + tagName
+        });
+        return request.then(handleSuccess, handleError);
+    }
+
+    // Service delete assign article tag (DELETE)
+    function deleteAssignArticleTag(articleId, tagId) {
         var request = $http({
             method: 'DELETE',
             url: '/service/remove-article-tag/' + articleId + '/' + tagId
@@ -59,7 +68,7 @@ module.exports = function($http, $q) {
         return request.then(handleSuccess, handleError);
     }
 
-    //app.get('/service/assign-article-tag/:articleId/:tagId', assignArticleTagRequest);
+    // Service assign article tag (GET)
     function assignArticleTag(articleId, tagId) {
         var request = $http({
             method: 'GET',
@@ -94,15 +103,14 @@ module.exports = function($http, $q) {
     }
 
     return {
-        titlePage: 'Manage tags',
-        titleCreateTag: 'Create tag',
         getTags: getTags,
         deleteTagItem: deleteTagItem,
-        detachTagFromArticleReq: detachTagFromArticleReq,
+        deleteAssignArticleTag: deleteAssignArticleTag,
         createTag: createTag,
         editTag: editTag,
         getTagByArticleId: getTagByArticleId,
         getTagById: getTagById,
+        getTagByName: getTagByName,
         assignArticleTag: assignArticleTag
     }
 

@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function($scope, tagService) {
+module.exports = function($scope, tagService, $state, $rootScope) {
 
     // Property of tag list
     $scope.tags = [];
@@ -10,38 +10,40 @@ module.exports = function($scope, tagService) {
         tagName: ''
     };
 
+    // Worning text for message error
     $scope.msgWorning = '';
 
-    // Define scope directive
+    $scope.isWatchingEventDelete = false;
+    $scope.unbindHandler = null;
+
+    // Get current state name Provider for directive
     //-------------------------
 
-    $scope.getCurrentScope = function() {
-        $scope.currentScope = $scope.getCurrentScopeParam();
-        $scope.getTagsList();
-    };
-
-    $scope.getCurrentScopeParam = function() {
-        if ($scope.inputParam === undefined) {
-            return 'pageModuleTags';
-        } else
-        if ($scope.inputParam !== undefined) {
-            return 'pageArticleList';
+    $scope.getStateName = function() {
+        switch ($state.current.name) {
+            case
+                'tags':
+                $scope.getTagsListData();
+                break;
+            case
+                'search.simpleQuery':
+                $scope.getArticleItem($scope.inputParam);
+                break;
+            case
+                '':
+                $scope.errorMessage('Warning! Current scope name - empty!');
+                break;
         }
     };
 
-    // Show tgs list
-    //-------------------------
 
-    $scope.getTagsList = function() {
-        if ($scope.currentScope === 'pageModuleTags') {
-            return $scope.getTagsListData();
-        } else
-        if ($scope.currentScope === 'pageArticleList') {
-            return $scope.getArticleItem($scope.inputParam);
-        }
+    // Remove tag (button delete tag)
+    $scope.removeTagItem = function(tagItem) {
+        $scope.eventDeleteTag(tagItem);
     };
 
-    // Directive of module tags
+
+    // Implementation code of page Manage tags
     //-------------------------
 
     // Get list tags
@@ -51,11 +53,61 @@ module.exports = function($scope, tagService) {
                 // Implementation in the case of success
                 function(tagsList) {
                     $scope.tags = tagsList.data;
+                    $scope.eventDeleteTag = $scope.onTagRemoving;
+                    $scope.addNewTag = $scope.isDoing;
                 },
                 function(errorMessage) {
-                    console.warn(errorMessage);
+                    $scope.errorMessage(errorMessage);
                 }
             );
+    };
+
+    // Get list tag of one article
+    $scope.getTagById = function(tagItem) {
+        tagService.getTagById(tagItem.tagId)
+            .then(
+                // Implementation in the case of success
+                function(tagsList) {
+                    $scope.applyTagsListData(tagsList);
+                },
+                function(errorMessage) {
+                    $scope.errorMessage(errorMessage);
+                }
+            );
+    };
+
+    // Get tag by name
+    $scope.getTagByName = function() {
+        tagService.getTagByName()
+            .then(
+                // Implementation in the case of success
+                function() {
+                    $scope.errorMessage('This function is prepared, without functionality')
+                },
+                function(errorMessage) {
+                    $scope.errorMessage(errorMessage);
+                }
+            );
+    };
+
+    // Delete item tag
+    $scope.deleteTagItem = function(tagItem) {
+        tagService.deleteTagItem(tagItem._id)
+            .then(
+                // Implementation in the case of success
+                function() {
+                    $scope.tags = _.without($scope.tags, tagItem);
+                    $scope.detechTagsRemoving();
+                },
+                function(errorMessage) {
+                    $scope.errorMessage(errorMessage);
+                }
+            );
+    };
+
+    $scope.onTagRemoving = function(tagItem) {
+        $scope.unbindHandler = $scope.$on('deleteTagItem', $scope.deleteTagItem(tagItem));
+        $scope.isWatchingEventDelete = true;
     };
 
 
@@ -73,106 +125,85 @@ module.exports = function($scope, tagService) {
             .then(
                 // Implementation in the case of success
                 function(itemArticleData) {
-                    $scope.getTagsListByArticleId(itemArticleData.data);
+                    $scope.getListLinksTagsIdAndArticleId(itemArticleData.data);
+                    $scope.eventDeleteTag = $scope.onTagsByArticleRemoving;
+                    $scope.addNewTag = $scope.prepareCreateTag;
                 },
                 function(errorMessage) {
-                    console.warn(errorMessage);
+                    $scope.errorMessage(errorMessage);
                 }
             );
     };
 
     // Get tag by article
-    $scope.getTagsListByArticleId = function(listTags) {
-        _.each(listTags, function(itemTag){
-            $scope.getTagById(itemTag);
+    $scope.getListLinksTagsIdAndArticleId = function(listLinks) {
+        _.each(listLinks, function(itemLink) {
+            $scope.getTagById(itemLink);
         });
     };
 
-    // Get list tag of one article
-    $scope.getTagById = function(itemTag) {
-        tagService.getTagById(itemTag.tagId)
-            .then(
-                // Implementation in the case of success
-                function(tagsList) {
-                    $scope.applyTagsListData(tagsList);
-                },
-                function(errorMessage) {
-                    console.warn(errorMessage);
-                }
-            );
-    };
-
-    // Remove or detach the current tag of current scope
-    //----------------------------
-
-    // Remove tag
-    $scope.removeTagItem = function(itemTag) {
-        if ($scope.currentScope === 'pageModuleTags') {
-            return $scope.deleteTagItem(itemTag);
-        } else
-        if ($scope.currentScope === 'pageArticleList') {
-            return $scope.detachTagFromArticle(itemTag, $scope.inputParam);
-        }
-    };
-
-    // Delete item tag
-    $scope.deleteTagItem = function(itemTag) {
-        tagService.deleteTagItem(itemTag._id)
+    // Delete assign item tag from article
+    $scope.deleteAssignArticleTag = function(tagItem, articleItem) {
+        tagService.deleteAssignArticleTag(articleItem._id, tagItem._id)
             .then(
                 // Implementation in the case of success
                 function() {
-                    $scope.tags = _.without($scope.tags, itemTag);
+                    $scope.tags = _.without($scope.tags, tagItem);
+                    $scope.detechTagsRemoving();
                 },
                 function(errorMessage) {
-                    console.warn(errorMessage);
+                    $scope.errorMessage(errorMessage);
                 }
             );
     };
 
-    // Detach item tag from article
-    $scope.detachTagFromArticle = function(itemTag, articleItem) {
-        tagService.detachTagFromArticleReq(articleItem._id, itemTag._id)
-            .then(
-                // Implementation in the case of success
-                function() {
-                    $scope.tags = _.without($scope.tags, itemTag);
-                },
-                function(errorMessage) {
-                    console.warn(errorMessage);
-                }
-            );
+    $scope.onTagsByArticleRemoving = function(tagItem) {
+        $scope.unbindHandler = $scope.$on('deleteAssignArticleTag', $scope.deleteAssignArticleTag(tagItem, $scope.inputParam));
+        $scope.isWatchingEventDelete = true;
     };
 
-    // Create or add new tag of current scope
+    // Off event delete tag listener
     //----------------------------
+
+    $scope.detechTagsRemoving = function() {
+        $scope.unbindHandler();
+        //unbindHandler = null;
+        $scope.isWatchingEventDelete = false;
+    };
+
+
 
     // Add new tag
-    $scope.addTag = function() {
-        var tagName = $scope.form.tagName;
+    //----------------------------
 
-        if (tagName.length !== 0) {
-            if ($scope.currentScope === 'pageModuleTags') {
-                return false
-            } else
-            if ($scope.currentScope === 'pageArticleList') {
-                return $scope.createTag(tagName, $scope.inputParam);
-            }
-        }
+    $scope.addTag = function() {
+        $scope.addNewTag();
     };
 
-    // Create new tag
+    $scope.prepareCreateTag = function() {
+        var tagName = $scope.form.tagName;
+
+        !_.isEmpty(tagName) ?
+            $scope.createTag(tagName, $scope.inputParam) :
+            $scope.isDoing();
+    };
+
+    $scope.isDoing = function() {
+        $scope.errorMessage('Is not provided to the user!');
+        return false;
+    };
+
+    // Create new tag from article
     $scope.createTag = function(tagName, articleItem) {
         tagService.createTag(tagName)
             .then(
                 // Implementation in the case of success
                 function(tagItem) {
-                    if ( articleItem !== undefined ) {
-                        $scope.bindTagItem(articleItem, tagItem.data);
-                    }
+                    $scope.bindTagItem(articleItem, tagItem.data);
                     $scope.form.tagName = '';
                 },
-                function( errorMessage ) {
-                    console.warn(errorMessage);
+                function(errorMessage) {
+                    $scope.errorMessage(errorMessage);
                 }
             );
     };
@@ -184,26 +215,38 @@ module.exports = function($scope, tagService) {
                 // Implementation in the case of success
                 function() {
                     if (_.some($scope.tags, tagItem)) {
-                        $scope.msgWorning = 'Such tag already exists';
+                        $scope.warningMessageForView('Such tag already exists');
                     } else {
                         $scope.msgWorning = '';
                         $scope.tags.push(tagItem);
                     }
                 },
-                function( errorMessage ) {
-                    console.warn(errorMessage);
+                function(errorMessage) {
+                    $scope.errorMessage(errorMessage);
                 }
             );
     };
 
-    //----------------------------
 
     // Update list tag of scope
+    //----------------------------
+
     $scope.applyTagsListData = function(tagsList) {
         if (_.isEmpty(tagsList.data) === false ) {
             return $scope.tags.push(tagsList.data);
         }
         
+    };
+
+    // Get message message Attention. If warning
+    //----------------------------
+
+    $scope.errorMessage = function(errorMessage) {
+        console.warn(errorMessage);
+    };
+
+    $scope.warningMessageForView = function(errorMessage) {
+        $scope.msgWorning = errorMessage;
     };
 
 };

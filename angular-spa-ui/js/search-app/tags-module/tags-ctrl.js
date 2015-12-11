@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = function($scope, tagService) {
+module.exports = function($scope, $state) {
 
     // Implementation controller of 'module tags'
-    $scope.titlePage = tagService.titlePage;
+    $scope.pageTitle = $state.current.data.pageTitle;
 
 };

@@ -8,9 +8,10 @@ module.exports = function() {
         scope: {
             inputParam: '=inputParam',
             msgWorning: '=msgWorning'
+            //tags: '=tags'
         },
         link: function(scope, element, attrs) {
-            scope.getCurrentScope();
+            scope.getStateName();
         },
         controller: 'tagsListController',
         templateUrl: '/listTagsTemplate.html',
