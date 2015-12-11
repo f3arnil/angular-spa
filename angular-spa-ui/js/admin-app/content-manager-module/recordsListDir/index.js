@@ -1,13 +1,13 @@
 "use strict";
 
-module.exports = function (app) {
-    
-    require('./recordsList-dir')(app);
-    require('./recordsList-srv')(app);
-    require('./recordsList-ctrl')(app);
-    
-    app.constant(
-        'recordsListConfig',
-        require('./recordsList-config')
-    );
+module.exports = function (parentModule) {
+
+    var recordsListDir = require('./recordsList-dir'),
+        recordsListSrv = require('./recordsList-srv'),
+        recordsListCtrl = require('./recordsList-ctrl');
+
+    parentModule
+        .constant('recordsListConfig', require('./recordsList-config'))
+        .directive('recordsList', recordsListDir)
+        .service('rlService', recordsListSrv)
 };

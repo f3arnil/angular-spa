@@ -4,13 +4,18 @@ module.exports = function (angular) {
 
     var contentManager = angular.module('app.contentManager', []);
 
-    contentManager.config(configCb);
-    contentManager.constant('contentManagerConfig', require('./cm-config'));
 
-    var cmCtrl = require('./cm-ctrl')(contentManager);
-    var cmSrv = require('./cm-srv')(contentManager);
-    var cmDir = require('./cm-dir')(contentManager);
-    var recordsList = require('./recordsListDir')(contentManager)
+    var cmCtrl = require('./contentManager-ctrl'),
+        contentStorageSrv = require('./contentStorage-srv'),
+        contentManagerSrv = require('./contentManager-srv'),
+        recordsList = require('./recordsListDir')(contentManager)
+
+    contentManager
+        .config(configCb)
+        .constant('contentManagerConfig', require('./contentManager-config'))
+        .controller('cmCtrl', cmCtrl)
+        .service('contentStorage', contentStorageSrv)
+        .service('cmService', contentManagerSrv);
 
     function configCb($stateProvider, $urlRouterProvider) {
         $stateProvider
