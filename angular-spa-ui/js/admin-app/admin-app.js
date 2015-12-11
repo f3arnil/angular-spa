@@ -3,11 +3,11 @@
 // Dependency
 var angular = require('angular');
 var uiRouter = require('angular-ui-router');
-var uiBs = require('angular-ui-bootstrap');
+var uiBootsrap = require('angular-ui-bootstrap');
 
 var adminApp = angular.module('app', [
     uiRouter,
-    uiBs,
+    uiBootsrap,
     'app.contentManager'
 ]);
 

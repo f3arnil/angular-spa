@@ -141,7 +141,7 @@ module.exports = function (search) {
         $scope.sortParams = config.sortParams;
         $scope.resultsPerPages = config.resultsPerPage;
         $scope.searchInList = config.searchIn;
-        console.log(searchStorage.params);
+        
         if (searchService.isEmptyObject($scope.queryParams) || $scope.queryParams.query === undefined) {
             $scope.queryParams = setDefaultParams();
             $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
