@@ -2,7 +2,7 @@
 
 module.exports = function (advancedSearch) {
 
-    advancedSearch.controller('advancedSearchCtrl', function ($stateParams, searchService, $http, $scope, $uibModalInstance, $state, $uibModal, $controller, searchStorage, advancedSearchConfig) {
+    advancedSearch.controller('advancedSearchCtrl', function ($state, searchService, $stateParams, $scope, $uibModalInstance, $controller, searchStorage, advancedSearchConfig) {
 
         var config = advancedSearchConfig.config;
         var prevId = 1;
@@ -14,7 +14,6 @@ module.exports = function (advancedSearch) {
         $scope.queryParams = $stateParams;
 
         $scope.setTypeData = function (val) {
-            $scope.setObjectQuery($scope.searchIn.value, val);
             $scope.searchIn = $scope.searchInList[
                 searchService.findValueId(val, $scope.searchInList)
                 ];
@@ -22,15 +21,14 @@ module.exports = function (advancedSearch) {
         }
 
         $scope.find = function () {
-
             searchStorage.searchState = 'search.advancedQuery';
             searchStorage.searchType = 'POST';
-            
-            searchStorage
-                .objQuery
-                .context[$scope.queryParams.searchIn]
-                .conditions = $scope.query;
-            
+
+            _.extend(
+                searchStorage.objQuery, 
+                $scope.buildRequest($scope.searchIn.value)
+            );
+
             if ($scope.hasQuery()) {
                 $scope.showResults = false;
                 $uibModalInstance.close();
@@ -77,7 +75,7 @@ module.exports = function (advancedSearch) {
         $scope.changeAdvanced = function (ids, val, param) {
             param == 'query' ? $scope.query[ids][param] = val : $scope.query[ids][param] = val.value;
         };
-
+        
         // Function delete row for modal window
         $scope.deleteRow = function (index) {
             $scope.rows.splice(index, 1);

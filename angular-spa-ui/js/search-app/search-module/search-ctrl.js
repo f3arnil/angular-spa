@@ -22,21 +22,34 @@ module.exports = function (search) {
             );
         };
 
-
-        $scope.setObjectQuery = function (source, dest) {
-            var obj = searchStorage.objQuery.context[source];
-            delete(searchStorage.objQuery.context[source]);
-            searchStorage.objQuery.context[dest] = obj;
+        $scope.getCurrentRequestContext = function () {
+            var obj = {};
+            obj = {
+                conditions : $scope.query,
+                sortingOrder: "ASC",
+                sortingField: "title"
+            };
+            return obj;
         }
-
+        
+        $scope.buildRequest = function (dest) {
+            var obj = {};
+            obj[dest] = $scope.getCurrentRequestContext();
+            return {
+                context : obj
+            }
+        }
+        
         //Change current searchIn
         $scope.setSearchIn = function (val) {
 
             $scope.searchIn = $scope.searchInList[searchService.findValueId(val, $scope.searchInList)];
-            $scope.setObjectQuery($scope.queryParams.searchIn, $scope.searchIn.value);
             $scope.queryParams.searchIn = $scope.searchIn.value;
             $scope.queryParams.offset = 0;
-
+            _.extend(
+                searchStorage.objQuery,
+                $scope.buildRequest($scope.queryParams.searchIn)
+            );
             if ($scope.hasQuery()) {
                 $state.go(
                     searchStorage.searchState,
@@ -203,7 +216,7 @@ module.exports = function (search) {
                     console.log('Error - cant get data!' + err);
                 });
         };
-
+        
         $scope.modal = function () {
             $state.go('search.advanced', searchStorage.params, {
                 // prevent the events onStart and onSuccess from firing
