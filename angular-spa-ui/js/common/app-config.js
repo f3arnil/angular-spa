@@ -9,12 +9,6 @@ module.exports = {
         publicationDetail: '/service/publication/',
         articleDetail: '/service/article/'
     },
-    methods: {
-        GET: 'GET',
-        POST: 'POST',
-        PUT: 'PUT',
-        DELETE: 'DELETE'
-    },
     userData: {
         userId: '',
         userToken: '',

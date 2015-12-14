@@ -53,7 +53,6 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
         contentStorage.data = data;
         contentStorage.data.searchIn = contentStorage.params.searchIn;
         $scope.headerConfig = cmService.setHeaderConfig(data, recordsListHeaderConfig, $stateParams);
-        console.log($scope.headerConfig);
         $scope.itemConfig = recordsListItemConfig;
         $scope.itemsList = data.items;
     };
