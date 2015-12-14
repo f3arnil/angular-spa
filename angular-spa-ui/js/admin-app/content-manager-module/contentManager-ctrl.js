@@ -1,17 +1,17 @@
 "use strict";
 
-module.exports = function ($scope, $state, promises, $stateParams, cmService, configService, contentStorage, rlService) {
+module.exports = function ($scope, $state, promises, $stateParams, cmService, configService, contentStorage) {
 
     $scope.$on('goToPage', function (event, data) {
         data = data * contentStorage.params.limit - contentStorage.params.limit;
         $scope.updateFilter('offset', data);
     });
 
-    $scope.$on('SetSortBy', function (event, data) {
+    $scope.$on('setSortBy', function (event, data) {
         $scope.updateFilter('sortBy', data);
     });
 
-    $scope.$on('SetLimit', function (event, data) {
+    $scope.$on('setLimit', function (event, data) {
         $scope.updateFilter('limit', data);
     });
 
@@ -52,7 +52,8 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
         data.perPage = contentStorage.params.limit;
         contentStorage.data = data;
         contentStorage.data.searchIn = contentStorage.params.searchIn;
-        $scope.headerConfig = rlService.setHeaderConfig(data, recordsListHeaderConfig, $stateParams);
+        $scope.headerConfig = cmService.setHeaderConfig(data, recordsListHeaderConfig, $stateParams);
+        console.log($scope.headerConfig);
         $scope.itemConfig = recordsListItemConfig;
         $scope.itemsList = data.items;
     };

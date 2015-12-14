@@ -103,7 +103,7 @@ module.exports = function (app) {
             for (var index in keysPathArray) {
                 var data = keysPathArray[index];
                 if (!_.has(obj, data)) {
-                    console.warn('Element \'' + keysPath + '\' not found');
+                    console.warn('Element \'' + keysPath + '\' not found in ' + configName);
                     obj = false;
 
                     return false;
