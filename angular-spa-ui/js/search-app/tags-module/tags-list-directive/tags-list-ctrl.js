@@ -26,18 +26,13 @@ module.exports = function($scope, tagService, $state, $rootScope) {
                 $scope.getTagsListData();
                 break;
             case
+                'search.simple':
+                $scope.getArticleItemByList($scope.inputParam);
+                break;
+            case
                 'search.simpleQuery':
                 $scope.getArticleItemByList($scope.inputParam);
                 break;
-            // Prepare case for implementation of next task
-            // case
-            //     'search.details':
-            //     $scope.getArticleItem($scope.inputParam);
-            //     break;
-            // case
-            //     '':
-            //     $scope.errorMessage('Warning! Current scope name - empty!');
-            //     break;
         }
     };
 

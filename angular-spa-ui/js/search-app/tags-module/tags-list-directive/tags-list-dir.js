@@ -11,6 +11,22 @@ module.exports = function() {
         },
         link: function(scope, element, attrs) {
             scope.getStateName();
+
+            /** 
+            Produced by another solution implementation tasks
+
+            Start downloading data for a directive
+            scope.$emit('tagsDirLoad');
+            scope.$on('tagsListLoadOfSearchPage', function(event, elem) {
+                scope.getArticleItemByList(scope.inputParam);
+            });
+
+            Case for controller search
+            $scope.$on('tagsDirLoad', function(event, elem) {
+                $scope.$broadcast('tagsListLoadOfSearchPage');
+            });
+
+            */
         },
         controller: 'tagsListController',
         templateUrl: '/listTagsTemplate.html',
