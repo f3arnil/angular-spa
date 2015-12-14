@@ -169,7 +169,7 @@ module.exports = function (search) {
             params.searchIn = $scope.searchInList[0].value;
             params.limit = $scope.resultsPerPages[0].value;
             params.sortBy = $scope.sortParams[0].value;
-            params.offset = '0';
+            params.offset = 0;
             params.orderBy = 'title';
             params.query = '';
             params.objQuery = {};
@@ -190,6 +190,7 @@ module.exports = function (search) {
             $scope.queryParams = $scope.setDefaultParams();
             $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
             if (!searchService.isEmptyObject(searchStorage.data) && !searchService.isEmptyObject(searchStorage.params)) {
+                
                 $scope.queryParams = searchStorage.params;
                 $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
                 $scope.setCtrlData(searchStorage.data);

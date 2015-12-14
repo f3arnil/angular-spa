@@ -14,6 +14,9 @@ module.exports = function (angular) {
         $stateProvider
             .state('search.advanced', {
                 url: '/advanced',
+                params: {
+                    searchIn : {squash: true , value: 'publication'}
+                },
                 onEnter: showModal,
                 views:{
                     "content": {
@@ -32,7 +35,6 @@ module.exports = function (angular) {
                     sortBy : {squash: true , value: 'ASC'},
                     offset : {squash: true , value: '0'},
                     orderBy : {squash: true , value: 'title'},
-                    //objQuery : []
                 },
                 views:{
                     "content": {
