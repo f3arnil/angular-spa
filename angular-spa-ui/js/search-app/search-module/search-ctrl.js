@@ -146,6 +146,7 @@ module.exports = function (search) {
             $scope.queryParams = setDefaultParams();
             $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
             if (!searchService.isEmptyObject(searchStorage.data) && !searchService.isEmptyObject(searchStorage.params)) {
+                
                 $scope.queryParams = searchStorage.params;
                 $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
                 setCtrlData(searchStorage.data);
