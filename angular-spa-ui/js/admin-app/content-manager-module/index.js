@@ -11,11 +11,11 @@ module.exports = function (angular) {
         recordsList = require('./recordsListDir')(contentManager)
 
     contentManager
-        .config(configCb)
         .constant('contentManagerConfig', require('./contentManager-config'))
         .controller('cmCtrl', cmCtrl)
         .service('contentStorage', contentStorageSrv)
-        .service('cmService', contentManagerSrv);
+        .service('cmService', contentManagerSrv)
+        .config(configCb);
 
     function configCb($stateProvider, $urlRouterProvider) {
         $stateProvider

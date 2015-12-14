@@ -11,7 +11,6 @@ module.exports = function (configService) {
         return false;
     };
 
-    // Check if object
     var objHasKeys = function (obj, keys) {
         return keys.every(checkKey);
 
@@ -58,7 +57,10 @@ module.exports = function (configService) {
     var setSortBy = function (config, value) {
         var sortByValue = value || configService.getData('recordsListConfig', 'header.params.sortBy.params.value');
 
-        if (!findValueId(sortByValue, configService.getData('recordsListConfig', 'sortParams'))) return config;
+        if (!findValueId(sortByValue, configService.getData('recordsListConfig', 'sortParams'))) {
+            console.warn('Unknown sortBy param!');
+            return config;
+        }
 
         var params = {
                 value: sortByValue
@@ -74,7 +76,10 @@ module.exports = function (configService) {
     var setResultsPerPage = function (config, value) {
         var resultsPerPageValue = value || configService.getData('recordsListConfig', 'header.params.resultsPerPage.params.value');
 
-        if (!findValueId(resultsPerPageValue, configService.getData('recordsListConfig', 'resultsPerPage'))) return config;
+        if (!findValueId(resultsPerPageValue, configService.getData('recordsListConfig', 'resultsPerPage'))) {
+            console.warn('Unknown limit param!');
+            return config;
+        }
         var params = {
                 value: resultsPerPageValue
             },
@@ -96,7 +101,7 @@ module.exports = function (configService) {
             },
             defaultParams = configService.getData('recordsListConfig', 'header.params.pagination.params');
 
-        if (params.totalItems < params.itemsPerPage)
+        if (params.totalItems <= params.itemsPerPage)
             return config;
         _.extend(config.params, params);
 
@@ -120,7 +125,6 @@ module.exports = function (configService) {
 
         if (_.isEmpty(model))
             model = setDefaultModel();
-
         model.showHeader = data.visibility;
         model.resultsCountConfig = data.params.resultsCount;
         model.sortByConfig = data.params.sortBy;

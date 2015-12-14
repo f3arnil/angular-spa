@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function (rlService, configService) {
+module.exports = function (rlService) {
     return {
         restrict: "E",
         scope: {
@@ -30,8 +30,11 @@ module.exports = function (rlService, configService) {
         link: function (scope, element, attrs) {
 
             scope.$watchCollection('header', function (newValue, oldValue) {
-                if (!_.isEqual(oldValue, newValue))
+
+                //console.log(scope.model);
+                if (newValue !== undefined) {
                     scope.model = rlService.setModelValues(newValue, scope.model);
+                }
             })
 
         }
