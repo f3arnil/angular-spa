@@ -26,7 +26,7 @@
             </div>
         </div>
     </div>
-    <div class="result">
+    <div class="result result-module-search">
         <div class="wrapper" ng-show="showResults">
             <div class="result-panel">
                 <div class="result-header">
@@ -68,6 +68,8 @@
                             </h3>
                             <p> {{result.publisher}}</p>
                             <p>{{result.updated}}</p>
+                            <tags-list
+                                input-param="result"/>
                         </div>
                     </div>
                 </div>

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 module.exports = function($http, $q) {
 
@@ -6,16 +6,16 @@ module.exports = function($http, $q) {
     function getTags() {
         var request = $http({
             method: 'GET',
-            url: '/service/tags'
+            url: '/service/tags/'
         });
         return request.then(handleSuccess, handleError);
     }
 
     // Service delete item tag (DELETE)
-    function removeTagItem(tagId) {
+    function deleteTagItem(tagId) {
         var request = $http({
-            method: "DELETE",
-            url: "/service/tag/delete/" + tagId
+            method: 'DELETE',
+            url: '/service/tag/delete/' + tagId
         });
         return request.then(handleSuccess, handleError);
     }
@@ -23,8 +23,8 @@ module.exports = function($http, $q) {
     // Service create new tag (POST)
     function createTag(tagName) {
         var request = $http({
-            method: "POST",
-            url: '/service/tag/create',
+            method: 'POST',
+            url: '/service/tag/create/',
             data: {
                 name: tagName
             }
@@ -32,10 +32,55 @@ module.exports = function($http, $q) {
         return request.then(handleSuccess, handleError);
     }
 
+    // Service get tag by article #id (GET)
+    function getTagByArticleId(articleId) {
+        var request = $http({
+            method: 'GET',
+            url: '/service/tag/get-by-article/' + articleId
+        });
+        return request.then(handleSuccess, handleError);
+    }
+
+    // Service get tag by #id (GET)
+    function getTagById(tagId) {
+        var request = $http({
+            method: 'GET',
+            url: '/service/tag/get-by-id/' + tagId
+        });
+        return request.then(handleSuccess, handleError);
+    }
+
+    // Service get tag name (GET)
+    function getTagByName(tagName) {
+        var request = $http({
+            method: 'GET',
+            url: '/service/tag/get-by-name/' + tagName
+        });
+        return request.then(handleSuccess, handleError);
+    }
+
+    // Service delete assign article tag (DELETE)
+    function deleteAssignArticleTag(articleId, tagId) {
+        var request = $http({
+            method: 'DELETE',
+            url: '/service/remove-article-tag/' + articleId + '/' + tagId
+        });
+        return request.then(handleSuccess, handleError);
+    }
+
+    // Service assign article tag (GET)
+    function assignArticleTag(articleId, tagId) {
+        var request = $http({
+            method: 'GET',
+            url: '/service/assign-article-tag/' + articleId + '/' + tagId,
+        });
+        return request.then(handleSuccess, handleError);
+    }
+
     // Service update item tag (PUT)
     function editTag(tagId, tagName) {
         var request = $http({
-            method: "PUT",
+            method: 'PUT',
             url: '/service/tag/update/' + tagId,
             data: {
                 name: tagName
@@ -47,7 +92,7 @@ module.exports = function($http, $q) {
     // Request ERROR
     function handleError(response) {
         if ( !angular.isObject(response.data) || !response.data.message ) {
-            return $q.reject("An unknown error occurred.");
+            return $q.reject('An unknown error occurred.');
         }
         return $q.reject(response.data.message);
     }
@@ -58,13 +103,15 @@ module.exports = function($http, $q) {
     }
 
     return {
-        titlePage: 'Manage tags',
-        titleCreateTag: 'Create tag',
         getTags: getTags,
-        removeTagItem: removeTagItem,
+        deleteTagItem: deleteTagItem,
+        deleteAssignArticleTag: deleteAssignArticleTag,
         createTag: createTag,
-        editTag: editTag
+        editTag: editTag,
+        getTagByArticleId: getTagByArticleId,
+        getTagById: getTagById,
+        getTagByName: getTagByName,
+        assignArticleTag: assignArticleTag
     }
-
 
 };
