@@ -27,7 +27,7 @@ module.exports = function ($q, $http) {
         for (var url in urlList) {
             promiseList.push(getAsyncData(method, urlList[url]))
         }
-
+        console.log(promiseList);
         var deferred = $q.defer();
         $q.all(promiseList)
             .then(
