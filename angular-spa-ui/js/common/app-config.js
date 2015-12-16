@@ -8,11 +8,5 @@ module.exports = {
         advancedSearchPath: '/service/search/',
         publicationDetail: '/service/publication/',
         articleDetail: '/service/article/'
-    },
-    userData: {
-        userId: '',
-        userToken: '',
-        userValidateResult: '',
-        responsePromises: []
     }
 }
