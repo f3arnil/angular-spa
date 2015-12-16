@@ -1,21 +1,29 @@
 script(type="text/ng-template" id="/header.html")
-    .header
-        .top-header
-            .wrapper
-                p Angular + webpack + commanJS Application
 
-        .lang
+    .header
+        .header-top
+            .wrapper
+                .header-elem.logo
+                    a(href="/")
+                        img(src="../img/logotip.png")
+                .header-elem.app-name
+                    h3 Application name..
+
+                .header-elem.link-help
+                    a(href="/") Help
+                .header-elem.link-admin
+                    a(href="/admin-app") Admin
+                .header-elem.link-cart
+                    a(ui-sref="cart") Cart
+                .header-elem.link-account
+                    a(href="/") User name
+
+        .header-bottom
             .wrapper
                 .container-fluid
                     .row.col-md-12
-                        ul.navbar-nav.nav
-                            li
-                                a(ui-sref="search.simple") Module: 'Search'
-                            li
-                                a(ui-sref="search.advanced") Module: 'advancedSearch'
-                            li
-                                a(ui-sref="cart") Module: 'Cart'
-                            li
-                                a(ui-sref="tags") Module: 'Tags'
+                        a.tags(ui-sref="tags" href="/") 
+                            span.icon-tags
+                            span Manage Your Tags
 
                     .row.col-md-12.ui-view
