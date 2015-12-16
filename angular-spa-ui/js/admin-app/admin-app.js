@@ -4,10 +4,12 @@
 var angular = require('angular');
 var uiRouter = require('angular-ui-router');
 var uiBootsrap = require('angular-ui-bootstrap');
+var ngStorage = require('ngstorage');
 
 var adminApp = angular.module('app', [
     uiRouter,
     uiBootsrap,
+    'ngStorage',
     'app.contentManager'
 ]);
 

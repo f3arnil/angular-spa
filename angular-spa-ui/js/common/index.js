@@ -5,11 +5,24 @@ module.exports = function (app) {
     require('./common-srv')(app);
 
     // Page preload actions realized in mainCtrl
-    require('./common-ctrl')(app);
+    var mainCtrl = require('./main-ctrl');
+    var promisesSrv = require('./promises-srv');
+    var getTemplateSrv = require('./getTemplate-srv');
+    var configServiceSrv = require('./configService-srv');
+    var appStorageSrv = require('./appStorage-srv');
 
-    app.constant(
-        'appConfig',
-        require('./app-config')
-    );
+    require('./recordsListDir')(app);
+
+    var appLocalStorage = require('./localStorage-srv');
+
+    app
+        .service('appLocalStorage', appLocalStorage)
+        .service('promises', promisesSrv)
+        .service('getTemplate', getTemplateSrv)
+        .service('configService', configServiceSrv)
+        .service('appStorage', appStorageSrv)
+        .constant('appConfig', require('./app-config'))
+        .controller('mainCtrl', mainCtrl);
+
 
 };
