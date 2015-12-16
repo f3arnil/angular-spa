@@ -21,7 +21,7 @@ module.exports = function (configService) {
         });
         return tabs;
     };
-    
+
     var setVisibility = function (defaultParams, params, config) {
 
         if (!_.isEqual(defaultParams, params)) {
@@ -30,7 +30,7 @@ module.exports = function (configService) {
 
         return config;
     }
-    
+
     var findValueId = function (val, array) {
         for (var x in array) {
             if (array[x].value === val) {
@@ -39,18 +39,12 @@ module.exports = function (configService) {
         }
         return false;
     };
-    
+
     var setResultsCount = function (config, data) {
 
-        var from = (data.page * data.perPage) - data.perPage + 1 || configService.getData('recordsListConfig', 'header.params.resultsCount.params.from'),
+        var from = ((data.page * data.perPage) - data.perPage + 1) || configService.getData('recordsListConfig', 'header.params.resultsCount.params.from'),
             count = data.count || configService.getData('recordsListConfig', 'header.params.resultsCount.params.to'),
-            to = (function () {
-                var resultsTo = data.page * data.perPage;
-                if (resultsTo > data.count) {
-                    resultsTo = data.count;
-                }
-                return resultsTo;
-            })() || configService.getData('recordsListConfig', 'header.params.resultsCount.params.count'),
+            to = setTo() || configService.getData('recordsListConfig', 'header.params.resultsCount.params.count'),
             params = {
                 from: from,
                 to: to,
@@ -64,6 +58,13 @@ module.exports = function (configService) {
 
         return setVisibility(defaultParams, config.params, config);
 
+        function setTo() {
+            var resultsTo = data.page * data.perPage;
+            if (resultsTo > data.count) {
+                resultsTo = data.count;
+            }
+            return resultsTo;
+        }
     };
 
     var setSortBy = function (config, value) {
@@ -132,7 +133,7 @@ module.exports = function (configService) {
 
         return setVisibility(defaultHeaderParams, config.params, config);
     };
-    
+
     return {
         generateQueryParams: generateQueryParams,
         isActiveTab: isActiveTab,
