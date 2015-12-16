@@ -95,8 +95,10 @@ module.exports = function (configService) {
             );
 
         _.extend(config.params, params);
-
-        return setVisibility(defaultParams, config.params, config);
+        
+        config = setVisibility(defaultParams, config.params, config);
+        
+        return config;
 
     };
 
@@ -122,8 +124,10 @@ module.exports = function (configService) {
             );
 
         _.extend(config.params, params);
-
-        return setVisibility(defaultParams, config.params, config);
+        
+        config = setVisibility(defaultParams, config.params, config);
+        
+        return config;
     };
 
     var setPagination = function (config, data) {
@@ -157,7 +161,9 @@ module.exports = function (configService) {
             return config;
         _.extend(config.params, params);
 
-        return setVisibility(defaultParams, config.params, config);
+        config = setVisibility(defaultParams, config.params, config);
+        
+        return config;
     };
 
     var setHeaderConfig = function (data, config, stateParams) {
@@ -170,7 +176,9 @@ module.exports = function (configService) {
         }
         _.extend(config.params, params);
 
-        return setVisibility(defaultHeaderParams, config.params, config);
+        config = setVisibility(defaultHeaderParams, config.params, config);
+        
+        return config;
     };
 
     return {
