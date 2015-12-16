@@ -35,7 +35,7 @@ module.exports = function (configService) {
 
         var from = ((data.page * data.perPage) - data.perPage + 1) || configService.getData('recordsListConfig', 'header.params.resultsCount.params.from'),
             count = data.count || configService.getData('recordsListConfig', 'header.params.resultsCount.params.to'),
-            to = setTo() || configService.getData('recordsListConfig', 'header.params.resultsCount.params.count'),
+            to = setTo(),
             params = {
                 from: from,
                 to: to,
@@ -50,7 +50,7 @@ module.exports = function (configService) {
         return setVisibility(defaultParams, config.params, config);
 
         function setTo() {
-            var resultsTo = data.page * data.perPage;
+            var resultsTo = data.page * data.perPage || configService.getData('recordsListConfig', 'header.params.resultsCount.params.count');
             if (resultsTo > data.count) {
                 resultsTo = data.count;
             }
