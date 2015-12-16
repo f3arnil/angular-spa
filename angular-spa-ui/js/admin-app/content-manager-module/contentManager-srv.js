@@ -33,15 +33,26 @@ module.exports = function (configService) {
 
     var setResultsCount = function (config, data) {
 
-        var from = ((data.page * data.perPage) - data.perPage + 1) || configService.getData('recordsListConfig', 'header.params.resultsCount.params.from'),
-            count = data.count || configService.getData('recordsListConfig', 'header.params.resultsCount.params.to'),
+        var from = ((data.page * data.perPage) - data.perPage + 1) || configService.getData(
+            'recordsListConfig',
+            'header.params.resultsCount.params.from'
+        ),
+            count = data.count
+                ? data.count
+                : configService.getData(
+                    'recordsListConfig',
+                    'header.params.resultsCount.params.to'
+                ),
             to = setTo(),
             params = {
                 from: from,
                 to: to,
                 count: count
             },
-            defaultParams = configService.getData('recordsListConfig', 'header.params.resultsCount.params');
+            defaultParams = configService.getData(
+                'recordsListConfig',
+                'header.params.resultsCount.params'
+            );
         if (count < to || from >= to)
             return config;
 
@@ -50,7 +61,10 @@ module.exports = function (configService) {
         return setVisibility(defaultParams, config.params, config);
 
         function setTo() {
-            var resultsTo = data.page * data.perPage || configService.getData('recordsListConfig', 'header.params.resultsCount.params.count');
+            var resultsTo = data.page * data.perPage || configService.getData(
+                'recordsListConfig',
+                'header.params.resultsCount.params.count'
+            );
             if (resultsTo > data.count) {
                 resultsTo = data.count;
             }
@@ -59,9 +73,15 @@ module.exports = function (configService) {
     };
 
     var setSortBy = function (config, value) {
-        var sortByValue = value || configService.getData('recordsListConfig', 'header.params.sortBy.params.value');
+        var sortByValue = value
+            ? value
+            : configService.getData(
+                'recordsListConfig',
+                'header.params.sortBy.params.value'
+            );
 
-        if (!_.indexOf(configService.getData('recordsListConfig', 'sortParams'),sortByValue, true)) {
+        if (!_.indexOf(configService.getData('recordsListConfig', 'sortParams'),
+                       sortByValue, true)) {
             console.warn('Unknown sortBy param!');
             return config;
         }
@@ -69,7 +89,10 @@ module.exports = function (configService) {
         var params = {
                 value: sortByValue
             },
-            defaultParams = configService.getData('recordsListConfig', 'header.params.sortBy.params');
+            defaultParams = configService.getData(
+                'recordsListConfig',
+                'header.params.sortBy.params'
+            );
 
         _.extend(config.params, params);
 
@@ -78,16 +101,25 @@ module.exports = function (configService) {
     };
 
     var setResultsPerPage = function (config, value) {
-        var resultsPerPageValue = value || configService.getData('recordsListConfig', 'header.params.resultsPerPage.params.value');
+        var resultsPerPageValue = value
+            ? value
+            : configService.getData(
+                'recordsListConfig',
+                'header.params.resultsPerPage.params.value'
+            );
 
-        if (!_.indexOf(configService.getData('recordsListConfig', 'resultsPerPage'), resultsPerPageValue, true)) {
+        if (!_.indexOf(configService.getData('recordsListConfig', 'resultsPerPage'),
+                       resultsPerPageValue, true)) {
             console.warn('Unknown limit param!');
             return config;
         }
         var params = {
                 value: resultsPerPageValue
             },
-            defaultParams = configService.getData('recordsListConfig', 'header.params.resultsPerPage.params');
+            defaultParams = configService.getData(
+                'recordsListConfig',
+                'header.params.resultsPerPage.params'
+            );
 
         _.extend(config.params, params);
 
@@ -96,14 +128,30 @@ module.exports = function (configService) {
 
     var setPagination = function (config, data) {
         var params = {
-                totalItems: data.count || configService.getData('recordsListConfig', 'header.params.pagination.params.totalItems'),
-                currentPage: data.page || configService.getData('recordsListConfig', 'header.params.pagination.params.currentPage'),
-                maxSize: '5',
+                totalItems: data.count ? data.count : configService.getData(
+                    'recordsListConfig',
+                    'header.params.pagination.params.totalItems'
+                ),
+                currentPage: data.page
+                    ? data.page
+                    : configService.getData(
+                        'recordsListConfig',
+                        'header.params.pagination.params.currentPage'
+                    ),
+                maxSize: 5,
                 class: 'pagination-sm',
                 rotate: false,
-                itemsPerPage: data.perPage || configService.getData('recordsListConfig', 'header.params.pagination.params.itemsPerPage')
+                itemsPerPage: data.perPage
+                    ? data.perPage
+                    : configService.getData(
+                        'recordsListConfig',
+                        'header.params.pagination.params.itemsPerPage'
+                    )
             },
-            defaultParams = configService.getData('recordsListConfig', 'header.params.pagination.params');
+            defaultParams = configService.getData(
+                'recordsListConfig',
+                'header.params.pagination.params'
+            );
 
         if (params.totalItems <= params.itemsPerPage)
             return config;
