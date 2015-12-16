@@ -2,8 +2,6 @@
 
 module.exports = function (app) {
 
-    require('./common-srv')(app);
-
     // Page preload actions realized in mainCtrl
     var mainCtrl = require('./main-ctrl');
     var promisesSrv = require('./promises-srv');
@@ -23,6 +21,5 @@ module.exports = function (app) {
         .service('appStorage', appStorageSrv)
         .constant('appConfig', require('./app-config'))
         .controller('mainCtrl', mainCtrl);
-
 
 };
