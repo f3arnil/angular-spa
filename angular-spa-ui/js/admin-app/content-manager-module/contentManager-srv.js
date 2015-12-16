@@ -31,15 +31,6 @@ module.exports = function (configService) {
         return config;
     }
 
-    var findValueId = function (val, array) {
-        for (var x in array) {
-            if (array[x].value === val) {
-                return x;
-            }
-        }
-        return false;
-    };
-
     var setResultsCount = function (config, data) {
 
         var from = ((data.page * data.perPage) - data.perPage + 1) || configService.getData('recordsListConfig', 'header.params.resultsCount.params.from'),
@@ -70,7 +61,7 @@ module.exports = function (configService) {
     var setSortBy = function (config, value) {
         var sortByValue = value || configService.getData('recordsListConfig', 'header.params.sortBy.params.value');
 
-        if (!findValueId(sortByValue, configService.getData('recordsListConfig', 'sortParams'))) {
+        if (!_.indexOf(configService.getData('recordsListConfig', 'sortParams'),sortByValue, true)) {
             console.warn('Unknown sortBy param!');
             return config;
         }
@@ -89,7 +80,7 @@ module.exports = function (configService) {
     var setResultsPerPage = function (config, value) {
         var resultsPerPageValue = value || configService.getData('recordsListConfig', 'header.params.resultsPerPage.params.value');
 
-        if (!findValueId(resultsPerPageValue, configService.getData('recordsListConfig', 'resultsPerPage'))) {
+        if (!_.indexOf(configService.getData('recordsListConfig', 'resultsPerPage'), resultsPerPageValue, true)) {
             console.warn('Unknown limit param!');
             return config;
         }
@@ -141,7 +132,6 @@ module.exports = function (configService) {
         setSortBy: setSortBy,
         setResultsPerPage: setResultsPerPage,
         setPagination: setPagination,
-        setHeaderConfig: setHeaderConfig,
-        findValueId: findValueId,
+        setHeaderConfig: setHeaderConfig
     }
 };
