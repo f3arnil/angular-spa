@@ -2,14 +2,27 @@
 
 module.exports = function (app) {
 
-    require('./common-srv')(app);
-
     // Page preload actions realized in mainCtrl
-    require('./common-ctrl')(app);
+    var mainCtrl = require('./main-ctrl'),
+        promisesSrv = require('./promises-srv'),
+        getTemplateSrv = require('./getTemplate-srv'),
+        configServiceSrv = require('./configService-srv'),
+        appStorageSrv = require('./appStorage-srv'),
+        commonServiceSrv = require('./commonService-srv');
 
-    app.constant(
-        'appConfig',
-        require('./app-config')
-    );
+
+    require('./recordsListDir')(app);
+
+    var appLocalStorage = require('./localStorage-srv');
+
+    app
+        .service('appLocalStorage', appLocalStorage)
+        .service('promises', promisesSrv)
+        .service('getTemplate', getTemplateSrv)
+        .service('configService', configServiceSrv)
+        .service('appStorage', appStorageSrv)
+        .service('commonService', commonServiceSrv)
+        .constant('appConfig', require('./app-config'))
+        .controller('mainCtrl', mainCtrl);
 
 };
