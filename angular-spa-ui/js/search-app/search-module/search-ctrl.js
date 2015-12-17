@@ -3,10 +3,8 @@
 module.exports = function (search) {
 
     search.controller('searchCtrl', function ($scope, searchConfig, $uibModal, $stateParams, $state, promises, queryParams, searchStorage, searchService) {
-        //angular.extend($stateParams, _.omit(searchConfig.config.defaultSimpleParams, 'searchIn'))
         if (_.isEmpty($stateParams)) {
             angular.extend($stateParams, searchConfig.config.defaultSimpleParams);
-            console.log($stateParams);
         }
         $scope.goToDetails = function (data) {
             searchStorage.details = {
@@ -32,7 +30,7 @@ module.exports = function (search) {
                 sortingOrder: "ASC",
                 sortingField: "title"
             };
-            console.log(obj);
+
             return obj;
         }
 
@@ -48,8 +46,7 @@ module.exports = function (search) {
         //Change current searchIn
         $scope.setSearchIn = function (val) {
             $scope.searchIn = $scope.searchInList[searchService.findValueId(val, $scope.searchInList)];
-            $scope.queryParams.searchIn = $scope.searchIn.value;
-//            $stateParams.searchIn = val;
+            $stateParams.searchIn = val;
             $scope.queryParams.offset = 0;
             if (!_.isEmpty(searchStorage.objQuery)) {
                 angular.extend(
@@ -73,6 +70,7 @@ module.exports = function (search) {
         $scope.find = function () {
             searchStorage.searchState = 'search.simpleQuery';
             searchStorage.searchType = 'GET';
+            searchStorage.objQuery = {};
             if ($scope.hasQuery()) {
                 $scope.queryParams.query = $scope.query;
                 $scope.showResults = false;
@@ -185,7 +183,6 @@ module.exports = function (search) {
         };
 
 
-        //searchStorage.searchState = 'search.simpleQuery';
         var config = searchConfig.config;
         $scope.queryResult = '';
         $scope.showResults = false;
@@ -194,6 +191,7 @@ module.exports = function (search) {
         $scope.resultsPerPages = config.resultsPerPage;
         $scope.searchInList = config.searchIn;
         
+        var queryUrl;
         if (!_.has($scope.queryParams, 'query') && _.isEmpty($scope.queryParams.objQuery)) {
             $scope.queryParams = $scope.setDefaultParams();
             $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
@@ -206,17 +204,16 @@ module.exports = function (search) {
             //Do when we have params in $stateParams - means that it is search action
             if (_.isEmpty(searchStorage.objQuery)) {
                 searchStorage.searchType = 'GET';
-                var queryUrl = queryParams
+                queryUrl = queryParams
                     .generateQueryParams(
                         config.paths.simpleSearchPath,
                         $scope.queryParams
                     );
             } else {
-                var queryUrl = config.paths.advancedSearchPath;
+                queryUrl = config.paths.advancedSearchPath;
                 searchStorage.searchType = 'POST';
             }
             $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
-//            console.log(searchStorage.objQuery);
             promises.getAsyncData(searchStorage.searchType, queryUrl, searchStorage.objQuery)
                 .then(function (result) {
                     var publications = result.data[$scope.searchIn.value];

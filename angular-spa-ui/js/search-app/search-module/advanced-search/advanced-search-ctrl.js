@@ -17,8 +17,7 @@ module.exports = function (advancedSearch) {
             $scope.searchIn = $scope.searchInList[
                 searchService.findValueId(val, $scope.searchInList)
                 ];
-            $scope.queryParams.searchIn = $scope.searchIn.value;
-//            $stateParams.searchIn = $scope.searchIn.value;
+            $stateParams.searchIn = $scope.searchIn.value;
         }
 
         $scope.find = function () {
