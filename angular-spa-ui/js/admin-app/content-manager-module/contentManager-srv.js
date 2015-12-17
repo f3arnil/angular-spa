@@ -180,13 +180,13 @@ module.exports = function (configService) {
     }
 
     var generateQueryParams = function (path, stateParams) {
-        var url = path;
-        for (var x in stateParams) {
-            url += x + '=' + stateParams[x];
-            if (stateParams[x] != stateParams[Object.keys(stateParams)[Object.keys(stateParams).length - 1]]) {
-                url += '&';
-            }
-        };
+        var url = path,
+            data = _.pairs(stateParams);
+        
+        _.each(data, function (pair) {
+            url += pair[0] + '=' + pair[1] + '&';
+        });
+
         return url;
     };
 
