@@ -57,6 +57,21 @@ header {
             .link-account {
                 float: right;
                 border-right: 1px solid #ccc;
+
+                span {
+                    line-height: 26px;
+                    text-align: center;
+                    display: block;
+
+                    &.icon-account {
+                        background: url(/img/sprite.png) no-repeat -45px 5px;
+                        width: 20px;
+                        height: 23px;
+                        padding: 0;
+                        text-align: center;
+                        margin: 3px auto;
+                    }
+                }
             }
         }
 

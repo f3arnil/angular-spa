@@ -1,0 +1,47 @@
+.manage-account-wrap {
+    display: inline-table;
+    width: 100%;
+}
+
+.panele-ma {
+    position: relative;
+    border: 1px solid;
+    padding: 15px;
+}
+
+.top-panele-ma {
+    display: table-caption;
+}
+
+.left-panele-ma {
+    display: table-cell;
+    width: 30%;
+}
+
+.right-panele-ma {
+    display: table-cell;
+
+    .block-item {
+        position:relative;
+        margin: 2px 0 15px 0;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .block-item:last-child {
+        border: none;
+    }
+
+    .block-inline {
+        display: inline-block;
+        width: 49%;
+
+        .fright {
+            float: right;
+
+            a {
+                float: right;
+                margin: 0 5px;
+            }
+        }
+    }
+}

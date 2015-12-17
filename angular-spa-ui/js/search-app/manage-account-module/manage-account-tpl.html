@@ -1,0 +1,105 @@
+<script type="text/ng-template" id="/accountModulePageTemplate.html">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
+                <h2>{{ featuresManageAccount.pageTitle }}</h2>
+            </div>
+        </div>
+
+        <div class="row result">
+            <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
+                <div>
+                    <div class="manage-account-wrap">
+
+                        <div class="top-panele-ma panele-ma">Manage Account Setting</div>
+                        <div class="left-panele-ma panele-ma">
+                            <ul>
+                                <li>
+                                    <a>Name, email address & password</a>
+                                </li>
+                                <li>
+                                    <a>Email notification</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="right-panele-ma panele-ma">
+
+
+
+
+                            <div class="block-one block-item">
+
+                                <div class="block-inline">
+                                    <div>
+                                        <p>Your name:</p>
+                                        <p ng-hide="editFormUserName">
+                                            {{ featuresManageAccount.userName }}
+                                        </p>
+                                        <p ng-show="editFormUserName">
+                                            <input ng-model="editUserName" ng-show="editFormUserName">
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="block-inline">
+                                    <div class="fright" ng-hide="editFormUserName">
+                                        <a href="" ng-click="userNameEdit()">Edit</a>
+                                    </div>
+                                    <div class="fright" ng-show="editFormUserName">
+                                        <a href="" ng-click="editUserNameCancel()">Cancel</a>
+                                        <a href="" ng-click="editUserNameSave()">Save</a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+
+                            <div class="block-two block-item">
+
+                                <div class="block-inline">
+                                    <p>Your user name and primary email address:</p>
+                                    <p ng-hide="editFormUserEmailAddr">{{ userEmailAddress }}</p>
+                                    <p ng-show="editFormUserEmailAddr">
+                                        <input ng-model="editUserEmailAddr" ng-show="editFormUserEmailAddr">
+                                    </p>
+                                </div>
+
+                                <div class="block-inline">
+                                    <div class="fright" ng-hide="editFormUserEmailAddr">
+                                        <a class="edit" href="" ng-click="userUserEmailAddrEdit()">Edit</a>
+                                    </div>
+                                    <div class="fright" ng-show="editFormUserEmailAddr">
+                                        <a href="" ng-click="editUserEmailAddrCancel()">Cancel</a>
+                                        <a href="" ng-click="editUserEmailAddrSave()">Save</a>
+                                    </div>
+                                </div>
+
+                            </div>
+
+
+
+
+                            <div class="block-tree block-item">
+                                   <div class="block-inline">
+                                    <a>Reset password</a>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</script>
