@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function (rlService, configService) {
+module.exports = function (rlService) {
     return {
         restrict: "E",
         scope: {
@@ -19,19 +19,21 @@ module.exports = function (rlService, configService) {
             };
 
             $scope.sortChange = function () {
-                $scope.$emit('SetSortBy', $scope.model.sortBy.value);
+                $scope.$emit('setSortBy', $scope.model.sortBy.value);
             };
 
             $scope.limitChange = function () {
-                $scope.$emit('SetLimit', $scope.model.limit.value);
+                $scope.$emit('setLimit', $scope.model.limit.value);
             };
 
         },
         link: function (scope, element, attrs) {
 
             scope.$watchCollection('header', function (newValue, oldValue) {
-                if (!_.isEqual(oldValue, newValue))
+
+                if (newValue !== undefined) {
                     scope.model = rlService.setModelValues(newValue, scope.model);
+                }
             })
 
         }

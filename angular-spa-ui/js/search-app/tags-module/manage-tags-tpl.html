@@ -1,15 +1,16 @@
-<script type="text/ng-template" id="/tagModuleTemplate.html">
+<script type="text/ng-template" id="/tagModulePageTemplate.html">
     <div class="container">
 
         <div class="row">
             <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
-                <h2>{{ titlePage }}</h2>
+                <h2>{{ pageTitle }}</h2>
             </div>
         </div>
 
-        <div class="row result">
+        <div class="row result result-module-tags">
             <div class="col-xm-12 col-sm-12 col-md-12 col-lg-12">
-                <tags-list/>
+                <tags-list
+                    input-param=""/>
             </div>
         </div>
 

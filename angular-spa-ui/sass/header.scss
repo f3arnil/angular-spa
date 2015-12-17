@@ -15,7 +15,7 @@ header {
             }
         }
 
-        .top-header {
+        .header-top {
             text-align: center;
             padding: 14px 0;
             transition: all .5s;
@@ -24,24 +24,73 @@ header {
             line-height: 43px;
             background-color: #fff;
             border-top: 15px solid #184a89;
+
+            .header-elem {
+                position: relative;
+                display: inline-block;
+                padding: 0 15px;
+            }
+
+            .logo {
+                float: left;
+                border-right: 1px solid #ccc;
+                img {
+                    width: 70px;
+                    height: auto;
+                }
+            }
+            .app-name {
+                float: left;
+            }
+
+            .link-help {
+                float: right;
+            }
+            .link-admin {
+                float: right;
+                border-right: 1px solid #ccc;
+            }
+            .link-cart {
+                float: right;
+                border-right: 1px solid #ccc;
+            }
+            .link-account {
+                float: right;
+                border-right: 1px solid #ccc;
+            }
         }
 
-        .lang {
+        .header-bottom {
             border-top: 1px solid #e5e5e7;
             border-bottom: 1px solid #cccccc;
             min-height: 42px;
             background: #fbfcff;
 
-            .navbar-nav {
-                margin-bottom: 0;
-                margin-top: 0;
+            a.tags {
+                margin: 5px 0;
+                padding: 2px 15px;
+                background: #fff;
+                position: relative;
+                display: inline-block;
 
-                li {
+                span {
+                    position: relative;
                     display: inline-block;
+                    height: 20px;
+                    line-height: 20px;
 
-                    a {
-                        padding-top: 10px;
-                        padding-bottom: 10px;
+                    &.icon-tags {
+                        background: url(/img/sprite.png) no-repeat -14px 5px;
+                        width: 10px;
+                        height: 18px;
+                        margin: 0px 5px 0 0;
+                        padding: 0;
+                    }
+                }
+
+                &:hover {
+                    span {
+                        text-decoration: underline;
                     }
                 }
             }
