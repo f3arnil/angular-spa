@@ -15,7 +15,7 @@ module.exports = function (angular) {
             .state('search.advanced', {
                 url: '/advanced',
                 params: {
-                    searchIn : {squash: true , value: 'publication'}
+                    //searchIn : {squash: true , value: 'publication'}
                 },
                 onEnter: showModal,
                 views:{
@@ -30,11 +30,11 @@ module.exports = function (angular) {
                 url: '/advanced/?limit&searchIn&sortBy&offset&orderBy',
                 params: {
                     query: '',
-                    searchIn : {squash: true , value: 'publication'},
-                    limit : {squash: true , value: '15'},
-                    sortBy : {squash: true , value: 'ASC'},
-                    offset : {squash: true , value: '0'},
-                    orderBy : {squash: true , value: 'title'},
+                    searchIn : {squash: true},
+                    limit : {squash: true},
+                    sortBy : {squash: true},
+                    offset : {squash: true},
+                    orderBy : {squash: true},
                 },
                 views:{
                     "content": {

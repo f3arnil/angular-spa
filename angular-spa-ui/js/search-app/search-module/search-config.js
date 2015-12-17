@@ -5,6 +5,13 @@ module.exports = {
         publicationDetail: '/service/publication/',
         articleDetail: '/service/article/'
     },
+    defaultSimpleParams: {
+        searchIn : 'publication',
+        limit : 15,
+        sortBy : 'ASC',
+        offset : 0,
+        orderBy : 'title'
+    },
     sortParams: [
         {
             title: 'sort by A-Z',
@@ -18,19 +25,19 @@ module.exports = {
     resultsPerPage: [
         {
             title: '15 Results/page',
-            value: '15'
+            value: 15
         },
         {
             title: '20 Results/page',
-            value: '20'
+            value: 20
         },
         {
             title: '25 Results/page',
-            value: '25'
+            value: 25
         },
         {
             title: '30 Results/page',
-            value: '30'
+            value: 30
         }
         ],
     searchIn: [

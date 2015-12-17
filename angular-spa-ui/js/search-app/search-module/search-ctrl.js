@@ -3,7 +3,11 @@
 module.exports = function (search) {
 
     search.controller('searchCtrl', function ($scope, searchConfig, $uibModal, $stateParams, $state, promises, queryParams, searchStorage, searchService) {
-
+        //angular.extend($stateParams, _.omit(searchConfig.config.defaultSimpleParams, 'searchIn'))
+        if (_.isEmpty($stateParams)) {
+            angular.extend($stateParams, searchConfig.config.defaultSimpleParams);
+            console.log($stateParams);
+        }
         $scope.goToDetails = function (data) {
             searchStorage.details = {
                 type: $scope.searchIn.value,
@@ -23,33 +27,37 @@ module.exports = function (search) {
         };
 
         $scope.getCurrentRequestContext = function () {
-            var obj = {};
-            obj = {
-                conditions : $scope.query,
+            var obj = {
+                conditions: $scope.query,
                 sortingOrder: "ASC",
                 sortingField: "title"
             };
+            console.log(obj);
             return obj;
         }
-        
+
         $scope.buildRequest = function (dest) {
             var obj = {};
             obj[dest] = $scope.getCurrentRequestContext();
+            
             return {
-                context : obj
+                context: obj
             }
         }
-        
+
         //Change current searchIn
         $scope.setSearchIn = function (val) {
-
             $scope.searchIn = $scope.searchInList[searchService.findValueId(val, $scope.searchInList)];
             $scope.queryParams.searchIn = $scope.searchIn.value;
+//            $stateParams.searchIn = val;
             $scope.queryParams.offset = 0;
-            _.extend(
-                searchStorage.objQuery,
-                $scope.buildRequest($scope.queryParams.searchIn)
-            );
+            if (!_.isEmpty(searchStorage.objQuery)) {
+                angular.extend(
+                    searchStorage.objQuery,
+                    $scope.buildRequest($scope.queryParams.searchIn)
+                );
+            }
+
             if ($scope.hasQuery()) {
                 $state.go(
                     searchStorage.searchState,
@@ -145,7 +153,7 @@ module.exports = function (search) {
             $scope.query = $scope.queryParams.query;
             $scope.queryResult = publications.items;
             $scope.currentPage = publications.page;
-            $scope.resultsFrom = ($scope.currentPage * $scope.limit.value) - $scope.limit.value + 1;
+            $scope.resultsFrom = ($scope.currentPage * parseInt($scope.limit.value)) - $scope.limit.value + 1;
             $scope.resultsCount = publications.count;
             $scope.resultsTo = $scope.setResultsTo($scope.currentPage, $scope.limit.value, $scope.resultsCount);
             $scope.pagesCount = Math.ceil($scope.resultsCount / $scope.limit.value);
@@ -185,19 +193,19 @@ module.exports = function (search) {
         $scope.sortParams = config.sortParams;
         $scope.resultsPerPages = config.resultsPerPage;
         $scope.searchInList = config.searchIn;
-
-        if (searchService.isEmptyObject($scope.queryParams) || $scope.queryParams.query === undefined) {
+        
+        if (!_.has($scope.queryParams, 'query') && _.isEmpty($scope.queryParams.objQuery)) {
             $scope.queryParams = $scope.setDefaultParams();
             $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
             if (!searchService.isEmptyObject(searchStorage.data) && !searchService.isEmptyObject(searchStorage.params)) {
-                
                 $scope.queryParams = searchStorage.params;
                 $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
                 $scope.setCtrlData(searchStorage.data);
             }
         } else {
             //Do when we have params in $stateParams - means that it is search action
-            if (searchStorage.searchType === 'GET') {
+            if (_.isEmpty(searchStorage.objQuery)) {
+                searchStorage.searchType = 'GET';
                 var queryUrl = queryParams
                     .generateQueryParams(
                         config.paths.simpleSearchPath,
@@ -205,9 +213,10 @@ module.exports = function (search) {
                     );
             } else {
                 var queryUrl = config.paths.advancedSearchPath;
+                searchStorage.searchType = 'POST';
             }
             $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
-
+//            console.log(searchStorage.objQuery);
             promises.getAsyncData(searchStorage.searchType, queryUrl, searchStorage.objQuery)
                 .then(function (result) {
                     var publications = result.data[$scope.searchIn.value];
@@ -217,7 +226,7 @@ module.exports = function (search) {
                     console.log('Error - cant get data!' + err);
                 });
         };
-        
+
         $scope.modal = function () {
             $state.go('search.advanced', searchStorage.params, {
                 // prevent the events onStart and onSuccess from firing

@@ -18,13 +18,13 @@ module.exports = function (advancedSearch) {
                 searchService.findValueId(val, $scope.searchInList)
                 ];
             $scope.queryParams.searchIn = $scope.searchIn.value;
+//            $stateParams.searchIn = $scope.searchIn.value;
         }
 
         $scope.find = function () {
             searchStorage.searchState = 'search.advancedQuery';
-            searchStorage.searchType = 'POST';
 
-            _.extend(
+            angular.extend(
                 searchStorage.objQuery, 
                 $scope.buildRequest($scope.searchIn.value)
             );

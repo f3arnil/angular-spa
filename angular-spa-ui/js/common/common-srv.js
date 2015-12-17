@@ -6,13 +6,13 @@ module.exports = function (app) {
 
         function getAsyncData(method, url, params) {
             params = params || {};
+            var httpObj = {
+                method: method,
+                url: url
+            };
+            if (method === 'POST') httpObj.data = params;
             var deferred = $q.defer();
-            $http(
-                {
-                    method: method,
-                    url: url,
-                    data: params
-                })
+            $http(httpObj)
                 .success(function (data) {
                     data.url = url;
                     deferred.resolve(data);
