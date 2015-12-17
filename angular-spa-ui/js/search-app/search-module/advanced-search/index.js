@@ -14,22 +14,27 @@ module.exports = function (angular) {
         $stateProvider
             .state('search.advanced', {
                 url: '/advanced',
+                params: {
+                    //searchIn : {squash: true , value: 'publication'}
+                },
                 onEnter: showModal,
                 views:{
                     "content": {
                         templateUrl: '/search.html',
+                        controller: 'searchCtrl'
                     }
                 }
+            
             })
             .state('search.advancedQuery', {
-                url: '/advanced/?query&limit&searchIn&sortBy&offset&orderBy&test',
+                url: '/advanced/?limit&searchIn&sortBy&offset&orderBy',
                 params: {
-                    searchIn : {squash: true , value: 'publication'},
-                    limit : {squash: true , value: '15'},
-                    sortBy : {squash: true , value: 'ASC'},
-                    offset : {squash: true , value: '0'},
-                    orderBy : {squash: true , value: 'title'},
-                    test : {squash: true , value: 'testvalue'}
+                    query: '',
+                    searchIn : {squash: true},
+                    limit : {squash: true},
+                    sortBy : {squash: true},
+                    offset : {squash: true},
+                    orderBy : {squash: true},
                 },
                 views:{
                     "content": {
@@ -47,7 +52,6 @@ module.exports = function (angular) {
             controller: 'advancedSearchCtrl',
             size: 'lg'
         });
-
     };
-
+    
 }
