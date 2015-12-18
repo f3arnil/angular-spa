@@ -14,9 +14,6 @@ module.exports = function (angular) {
         $stateProvider
             .state('search.advanced', {
                 url: '/advanced',
-                params: {
-                    //searchIn : {squash: true , value: 'publication'}
-                },
                 onEnter: showModal,
                 views:{
                     "content": {

@@ -43,7 +43,15 @@ module.exports = function (advancedSearch) {
 
         // Function close modal window without request.
         $scope.cancel = function () {
-            //$uibModalInstance.close($state.go('search.simpleQuery', searchStorage.params));
+            $uibModalInstance.close(
+                $state.go(
+                    searchStorage.searchState, 
+                    $scope.queryParams, {
+                        inherit: false,
+                        reload: true
+                    }
+                )
+            );
         };
 
         $scope.data = config.tplRow;
