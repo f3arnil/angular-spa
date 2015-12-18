@@ -1,66 +1,66 @@
-module.exports =
-    {
-        baseRows: [{   
-            id: 0, 
-            selectFields : [
-                {   
-                    name:'field',
-                    options: [{id:1, value: 'All fields'}, {id:2, value: 'Title'}]
-                }
-            ],
-            textsFields : [
-                {
-                    name: 'query',
-                    value: ''
-                }
-            ],
-            buttonFields : [
-                {
-                    name: 'plus',
-                    value: true
-                },
-                {
-                    name: 'minus',
-                    value: false
-                }
-            ]
-        }],
-        tplRow: {
-            id: 1,
-            selectFields : [
-                {   
-                    name : 'condition_op',
-                    options: [{id:1, value: 'NONE'}, {id:2, value: 'AND'}, {id:3, value: 'OR'}]
-                },
-                {   
-                    name:'field',
-                    options: [{id:1, value: 'All fields'}, {id:2, value: 'Title'}]
-                }
-            ],
-            textsFields : [
-                {
-                    name: 'query',
-                    value: ''
-                }
-            ],
-            buttonFields : [
-                {
-                    name: 'plus',
-                    value: true
-                },
-                {
-                    name: 'minus',
-                    value: true
-                }
-            ]
-        },
-        baseQuery: [
+module.exports = {
+    tplRow: {
+        id: 0,
+        selectFields: [
             {
-                'id': 0,
-                'field': '',
-                'query': '',
-                'match': 'STARTS_FROM',
-                'condition_op': ''
+                name: 'condition_op',
+                options: [{
+                    id: 1,
+                    value: 'AND'
+                }, {
+                    id: 2,
+                    value: 'OR'
+                }],
+                default: 1
+            },
+            {
+                name: 'field',
+                options: [{
+                    id: 1,
+                    value: 'all fields'
+                }, {
+                    id: 2,
+                    value: 'title'
+                }],
+                default: 1
+            }
+        ],
+        textsFields: [
+            {
+                name: 'query',
+                value: ''
+            }
+        ],
+        buttonFields: [
+            {
+                name: 'plus',
+                value: true
+            },
+            {
+                name: 'minus',
+                value: true
             }
         ]
+    },
+    baseQuery: {
+        'field': 'all fields',
+        'query': '',
+        'match': 'CONTAINS',
+        'condition_op': 'AND'
+    },
+    tplQuery: {
+        'context': {
+            'publication': {
+                'conditions': [
+
+                ],
+                'sortingOrder': "ASC",
+                'sortingField': "title"
+            }
+        },
+        'limits': {
+            "offset": 0,
+            "limit": 25,
+        }
     }
+}

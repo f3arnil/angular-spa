@@ -13,7 +13,7 @@ module.exports = function (app, mongoose, api) {
                 return response.send(api.generateResponseObject(operationName, 'error', error));
             }
 
-            return response.send(api.generateResponseObject(operationName, 'ok', null, data.permissions));
+            return response.send(api.generateResponseObject(operationName, 'ok', null, data));
         });
     });
 

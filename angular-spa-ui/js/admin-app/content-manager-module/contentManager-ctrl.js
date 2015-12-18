@@ -1,35 +1,60 @@
 "use strict";
 
-module.exports = function ($scope, $state, promises, $stateParams, cmService, configService, contentStorage, appStorage, rlService) {
+module.exports = function ($scope, $state, promises, $stateParams, cmService, configService, contentStorage) {
 
     $scope.$on('goToPage', function (event, data) {
-        console.log(event.name + ' Data catched!' + data);
+        data = data * contentStorage.params.limit - contentStorage.params.limit;
+        $scope.updateFilter('offset', data);
     });
 
-    $scope.$on('SetSortBy', function (event, data) {
-        console.log(event.name + ' Data catched!' + data);
+    $scope.$on('setSortBy', function (event, data) {
+        $scope.updateFilter('sortBy', data);
     });
 
-    $scope.$on('SetLimit', function (event, data) {
-        console.log(event.name + ' Data catched!' + data);
+    $scope.$on('setLimit', function (event, data) {
+        $scope.updateFilter('limit', data);
     });
-
-    $scope.goToPage = function () {};
-
-    $scope.setSortBy = function () {};
-
-    $scope.setLimit = function () {};
 
     // Set active tab
     $scope.isActive = function (tabs) {
-        return cmService.isActiveTab(tabs, $scope.currentSection);
+        return cmService.isActiveTab(tabs, contentStorage.params.searchIn);
     };
 
     // Tab click go to state
     $scope.changeTab = function (place) {
-        $state.go('content', {
-            searchIn: place
-        });
+        if (contentStorage.params.searchIn == place)
+            return false;
+        
+        $state.go(
+            'content', {
+                searchIn: place
+            }, {
+                reload: true,
+                inherit: false
+            }
+        );
+        
+    };
+
+    // to update sortBy, limit and currentPage
+    $scope.updateFilter = function (param, value) {
+        contentStorage.params[param] = value;
+        contentStorage.data = {};
+        $state.go(
+            'content',
+            contentStorage.params, {
+                reload: true
+            }
+        );
+    };
+
+    $scope.setData = function (data, section) {
+        data.perPage = contentStorage.params.limit;
+        contentStorage.data = data;
+        contentStorage.data.searchIn = contentStorage.params.searchIn;
+        $scope.headerConfig = cmService.setHeaderConfig(data, recordsListHeaderConfig, $stateParams);
+        $scope.itemConfig = recordsListItemConfig;
+        $scope.itemsList = data.items;
     };
 
     var sections = configService.getData('contentManagerConfig', 'sections'),
@@ -37,18 +62,26 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
         recordsListHeaderConfig = configService.getData('recordsListConfig', 'header'),
         recordsListItemConfig = configService.getData('recordsListConfig', 'itemConfig');
 
-    $scope.currentSection = $stateParams.searchIn;
+    if (_.isEmpty(contentStorage.params) || !_.isEqual(contentStorage.params, $stateParams)) {
+        contentStorage.params = $stateParams;
+    }
+    
+
+    $scope.currentSection = contentStorage.params.searchIn;
     $scope.tabs = $scope.isActive(sections);
 
-    var url = cmService.generateQueryParams(simpleSearchPath, $stateParams);
-    promises.getAsyncData('GET', url)
-        .then(
-            function (responce) {
-                console.log(responce);
-                $scope.headerConfig = rlService.setHeaderConfig(responce.data[$scope.currentSection], recordsListHeaderConfig, $stateParams);
-                $scope.itemConfig = recordsListItemConfig;
-                $scope.itemsList = responce.data[$scope.currentSection].items;
-            }
-        )
+    var url = cmService.generateQueryParams(simpleSearchPath, contentStorage.params);
+
+    if (!_.isEmpty(contentStorage.data) && contentStorage.params.searchIn === contentStorage.data.searchIn) {
+        $scope.setData(contentStorage.data, $scope.currentSection);
+    } else {
+        promises.getAsyncData('GET', url)
+            .then(
+                function (responce) {
+                    $scope.setData(responce.data[$scope.currentSection], $scope.currentSection);
+                }
+            )
+    }
+
 
 };
