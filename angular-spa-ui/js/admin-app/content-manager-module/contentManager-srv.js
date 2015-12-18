@@ -2,210 +2,195 @@
 
 module.exports = function (configService) {
 
-    var setHeaderConfig = function (data, config, stateParams) {
-        var defaultHeaderParams = configService.getData('recordsListConfig', 'header.params'),
-            params = {
-                resultsCount: setResultsCount(config.params.resultsCount, data),
-                sortBy: setSortBy(config.params.sortBy, stateParams.sortBy),
-                resultsPerPage: setResultsPerPage(config.params.resultsPerPage, stateParams.limit),
-                pagination: setPagination(config.params.pagination, data)
+    var defaultHeaderParams = configService.getData('recordsListConfig', 'header.params');
+    var resultsCount = 'header.params.resultsCount';
+    var sortBy = 'header.params.sortBy';
+    var resultsPerPage = 'header.params.resultsPerPage';
+    var pagination = 'header.params.pagination';
+    var defaultResultsCount = configService.getData(
+        'recordsListConfig',
+        resultsCount + '.params'
+    );
+    var defaultTo = configService.getData(
+        'recordsListConfig',
+        resultsCount + '.params.count'
+    );
+    var defaultFrom = configService.getData(
+        'recordsListConfig',
+        resultsCount + '.params.from'
+    );
+    var defaultCount = configService.getData(
+        'recordsListConfig',
+        resultsCount + '.params.count'
+    );
+    var defaultSortByValue = configService.getData(
+        'recordsListConfig',
+        sortBy + '.params.value'
+    );
+    var defaultSortBy = configService.getData(
+        'recordsListConfig',
+        sortBy + '.params'
+    );
+    var defaultLimitValue = configService.getData(
+        'recordsListConfig',
+        resultsPerPage + '.params.value'
+    );
+    var defaultLimit = configService.getData(
+        'recordsListConfig',
+        resultsPerPage + '.params'
+    );
+    var defaultPgConf = {
+        totalItems: configService.getData(
+            'recordsListConfig',
+            pagination + '.params.totalItems'
+        ),
+        currentPage: configService.getData(
+            'recordsListConfig',
+            pagination + '.params.currentPage'
+        ),
+        itemsPerPage: configService.getData(
+            'recordsListConfig',
+            pagination + '.params.itemsPerPage'
+        )
+    };
+
+    var defaultPagination = configService.getData(
+        'recordsListConfig',
+        pagination + '.params'
+    );
+
+    var contentManagerSrv = {
+        setHeaderConfig: function (data, config, stateParams) {
+            var params = {
+                resultsCount: this.setResultsCount(config.params.resultsCount, data),
+                sortBy: this.setSortBy(config.params.sortBy, stateParams.sortBy),
+                resultsPerPage: this.setResultsPerPage(config.params.resultsPerPage, stateParams.limit),
+                pagination: this.setPagination(config.params.pagination, data)
             }
 
-        _.extend(config.params, params);
+            _.extend(config.params, params);
 
-        config = setVisibility(defaultHeaderParams, config.params, config);
+            config = this.setVisibility(defaultHeaderParams, config.params, config);
 
-        return config;
-    };
+            return config;
+        },
+        setResultsCount: function (config, data) {
+            var params = {
+                from: this.setFrom(data),
+                to: this.setTo(data),
+                count: this.setCount(data)
+            };
+            if (params.count < params.to || params.from >= params.to)
+                return config;
 
-    var setResultsCount = function (config, data) {
-        var resultsCount = 'header.params.resultsCount',
-            setTo = function () {
-                var to = data.page * data.perPage,
-                    defaultTo = configService.getData(
-                        'recordsListConfig',
-                        resultsCount + '.params.count'
-                    );
+            _.extend(config.params, params);
 
-                var resultsTo = to || defaultTo;
-                if (resultsTo > data.count) {
-                    resultsTo = data.count;
-                }
-                return resultsTo;
-            },
-            setFrom = function () {
-                var from = (data.page * data.perPage) - data.perPage + 1,
-                    defaultFrom = configService.getData(
-                        'recordsListConfig',
-                        resultsCount + '.params.from'
-                    );
-                return from || defaultFrom;
-            },
-            setCount = function () {
-                var count = data.count,
-                    defaultCount = configService.getData(
-                        'recordsListConfig',
-                        resultsCount + '.params.count'
-                    );
-                return count || defaultCount;
-            },
-            params = {
-                from: setFrom(),
-                to: setTo(),
-                count: setCount()
-            },
-            defaultParams = configService.getData(
-                'recordsListConfig',
-                resultsCount + '.params'
-            );
+            config = this.setVisibility(defaultResultsCount, config.params, config);
 
-        if (params.count < params.to || params.from >= params.to)
             return config;
 
-        _.extend(config.params, params);
+        },
+        setTo: function (data) {
+            var to = data.page * data.perPage;
 
-        config = setVisibility(defaultParams, config.params, config);
+            var resultsTo = to || defaultTo;
+            if (resultsTo > data.count) {
+                resultsTo = data.count;
+            }
+            return resultsTo;
+        },
+        setFrom: function (data) {
+            var from = (data.page * data.perPage) - data.perPage + 1;
 
-        return config;
+            return from || defaultFrom;
+        },
+        setCount: function (data) {
+            var count = data.count;
 
-    };
+            return count || defaultCount;
+        },
+        setSortBy: function (config, value) {
+            var sortByValue = value || defaultSortByValue;
 
-    var setSortBy = function (config, value) {
-        var sortBy = 'header.params.sortBy',
-            defaultValue = configService.getData(
-                'recordsListConfig',
-                sortBy + '.params.value'
-            );
-
-        var sortByValue = value || defaultValue;
-
-        if (!_.indexOf(
-                configService.getData(
-                    'recordsListConfig',
-                    'sortParams'),
-                sortByValue, true)) {
-            console.warn('Unknown sortBy param!');
-            return config;
-        }
-
-        var params = {
+            if (!_.indexOf(
+                    configService.getData(
+                        'recordsListConfig',
+                        'sortParams'),
+                    sortByValue, true)) {
+                console.warn('Unknown sortBy param!');
+                return config;
+            }
+            var params = {
                 value: sortByValue
-            },
-            defaultParams = configService.getData(
-                'recordsListConfig',
-                'header.params.sortBy.params'
-            );
+            };
 
-        _.extend(config.params, params);
+            _.extend(config.params, params);
+            config = this.setVisibility(defaultSortBy, config.params, config);
 
-        config = setVisibility(defaultParams, config.params, config);
-
-        return config;
-
-    };
-
-    var setResultsPerPage = function (config, value) {
-        var resultsPerPage = 'header.params.resultsPerPage',
-            defaultValue = configService.getData(
-                'recordsListConfig',
-                resultsPerPage + '.params.value'
-            ),
-            resultsPerPageValue = value || defaultValue;
-
-        if (!_.indexOf(configService.getData('recordsListConfig', 'resultsPerPage'),
-                resultsPerPageValue, true)) {
-            console.warn('Unknown limit param!');
             return config;
-        }
-        var params = {
+
+        },
+        setResultsPerPage: function (config, value) {
+            var resultsPerPageValue = value || defaultLimitValue;
+
+            if (!_.indexOf(configService.getData('recordsListConfig', 'resultsPerPage'),
+                    resultsPerPageValue, true)) {
+                console.warn('Unknown limit param!');
+                return config;
+            }
+
+            var params = {
                 value: resultsPerPageValue
-            },
-            defaultParams = configService.getData(
-                'recordsListConfig',
-                resultsPerPage + '.params'
-            );
+            };
 
-        _.extend(config.params, params);
+            _.extend(config.params, params);
+            config = this.setVisibility(defaultLimit, config.params, config);
 
-        config = setVisibility(defaultParams, config.params, config);
-
-        return config;
-    };
-
-    var setPagination = function (config, data) {
-        var pagination = 'header.params.pagination',
-            configParams = {
-                totalItems: configService.getData(
-                    'recordsListConfig',
-                    pagination + '.params.totalItems'
-                ),
-                currentPage: configService.getData(
-                    'recordsListConfig',
-                    pagination + '.params.currentPage'
-                ),
-                itemsPerPage: configService.getData(
-                    'recordsListConfig',
-                    pagination + '.params.itemsPerPage'
-                )
-            },
-            params = {
-                totalItems: data.count || configParams.totalItems,
-                currentPage: data.page || configParams.currentPage,
+            return config;
+        },
+        setPagination: function (config, data) {
+            var params = {
+                totalItems: data.count || defaultPgConf.totalItems,
+                currentPage: data.page || defaultPgConf.currentPage,
                 maxSize: 5,
                 class: 'pagination-sm',
                 rotate: false,
-                itemsPerPage: data.perPage || configParams.itemsPerPage
-            },
-            defaultParams = configService.getData(
-                'recordsListConfig',
-                pagination + '.params'
-            );
+                itemsPerPage: data.perPage || defaultPgConf.itemsPerPage
+            };
 
-        if (params.totalItems <= params.itemsPerPage)
+            if (params.totalItems <= params.itemsPerPage) return config;
+            _.extend(config.params, params);
+
+            config = this.setVisibility(defaultPagination, config.params, config);
+
             return config;
-        _.extend(config.params, params);
+        },
+        setVisibility: function (defaultParams, params, config) {
 
-        config = setVisibility(defaultParams, config.params, config);
-
-        return config;
-    };
-
-    var setVisibility = function (defaultParams, params, config) {
-
-        if (!_.isEqual(defaultParams, params)) {
-            config.visibility = true;
-        }
-
-        return config;
-    }
-
-    var generateQueryParams = function (path, stateParams) {
-        var url = path;
-        for (var x in stateParams) {
-            url += x + '=' + stateParams[x];
-            if (stateParams[x] != stateParams[Object.keys(stateParams)[Object.keys(stateParams).length - 1]]) {
-                url += '&';
+            if (!_.isEqual(defaultParams, params)) {
+                config.visibility = true;
             }
-        };
-        return url;
+
+            return config;
+        },
+        generateQueryParams: function (path, stateParams) {
+            var url = path,
+                data = _.pairs(stateParams);
+
+            _.each(data, function (pair) {
+                url += pair[0] + '=' + pair[1] + '&';
+            });
+
+            return url;
+        },
+        isActiveTab: function (tabs, currentSection) {
+            angular.forEach(tabs, function (tab) {
+                if (tab.value === currentSection)
+                    tab.active = true;
+            });
+            return tabs;
+        }
     };
 
-    // Set active tab
-    var isActiveTab = function (tabs, currentSection) {
-        angular.forEach(tabs, function (tab) {
-            if (tab.value === currentSection)
-                tab.active = true;
-        });
-        return tabs;
-    };
-
-    return {
-        setHeaderConfig: setHeaderConfig,
-        setResultsCount: setResultsCount,
-        setSortBy: setSortBy,
-        setResultsPerPage: setResultsPerPage,
-        setPagination: setPagination,
-        generateQueryParams: generateQueryParams,
-        isActiveTab: isActiveTab
-    }
+    return contentManagerSrv;
 };
