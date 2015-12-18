@@ -412,40 +412,12 @@ module.exports = function (app, mongoose, api) {
         return model;
     }
 
-    function getArticleTagAssignmentModel() {
-        return articleTagAssignmentModel;
-    }
-
-    function generateRandomTag() {
-        var tag = new model({
-            name: 'Random tag [' + Math.floor(Math.random() * 100000) + ']',
-            textColor: '#0' + Math.floor((Math.random() + 1) * 10),
-            backgroundColor: '#E' + Math.floor((Math.random() + 1) * 4) + '' + Math.floor((Math.random() + 1) * 4),
-            glyph: 'none',
-            published: true
-        });
-
-        return tag;
-    }
-
-    function isTagNameExists(tagName) {
-        model.findOne({
-            name: tagName
-        }, function (error, data) {
-            if (!error) {
-                return data;
-            }
-
-            return null;
-        });
-
-        return null;
+    function getContentTagAssignmentModel() {
+        return contentTagAssignmentModel;
     }
 
     return {
         getModel: getModel,
-        getArticleTagAssignmentModel: getArticleTagAssignmentModel,
-        generateRandomTag: generateRandomTag,
-        isTagNameExists: isTagNameExists
+        getContentTagAssignmentModel: getContentTagAssignmentModel
     };
 }
