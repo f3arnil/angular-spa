@@ -25,7 +25,10 @@ module.exports = function (rlService) {
             $scope.limitChange = function () {
                 $scope.$emit('setLimit', $scope.model.limit.value);
             };
-
+            
+            $scope.goToDetails = function (data) {
+                $scope.$emit('goToDetails', data);
+            }
         },
         link: function (scope, element, attrs) {
 
