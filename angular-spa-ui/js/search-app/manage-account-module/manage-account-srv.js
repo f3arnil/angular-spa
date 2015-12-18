@@ -2,31 +2,29 @@
 
 module.exports = function($http, $q) {
 
-    // // Service get user by id (GET request)
-    // function getUserById(id) {
-    //     var request = $http({
-    //         method: 'GET',
-    //         url: '/user/' + id
-    //     });
-    //     return request.then(handleSuccess, handleError);
-    // };
-
-
-    // // Request ERROR
-    // function handleError(response) {
-    //     if ( !angular.isObject(response.data) || !response.data.message ) {
-    //         return $q.reject('An unknown error occurred.');
-    //     }
-    //     return $q.reject(response.data.message);
-    // }
-
-    // // Request Success
-    // function handleSuccess(response) {
-    //     return response.data;
-    // }
-
-
     return {
+
+        updateUserName: function(id, userName) {
+            var request = $http({
+                method: 'PUT',
+                url: '/user/' + id +'/update',
+                data: {
+                    name: userName
+                }
+            });
+            return request.then(this.handleSuccess, this.handleError);
+        },
+
+        updateUserEmail: function(id, userEmail) {
+            var request = $http({
+                method: 'PUT',
+                url: '/user/' + id +'/update',
+                data: {
+                    email: userEmail
+                }
+            });
+            return request.then(this.handleSuccess, this.handleError);
+        },
 
         getUserById: function(id) {
             var request = $http({
@@ -47,36 +45,6 @@ module.exports = function($http, $q) {
             return response.data;
         }
 
-
     };
 
 };
-
-
-
-
-/*
-
-    // Returns user by unique identifier
-    app.get('/user/:id', getUserRequest);
-
-    // Returns a list of users
-    app.get('/users', getUsersRequest);
-
-    // Creates a new user
-    app.put('/user/create', createUserRequest);
-
-    // Updating existing user
-    app.put('/user/:id/update', updateUserRequest);
-
-    // Deleting existing user
-    app.delete('/user/:id/delete', deleteUserRequest);
-
-    // That is a JUNK function for training JS Promices
-    app.get('/user-token/:id', getUserTokenRequest);
-
-    // That is a JUNK function for training JS Promices
-    app.get('/user-validate/:id/:token', validateUserTokenRequest);
-
-
-*/

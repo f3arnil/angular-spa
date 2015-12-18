@@ -1,231 +1,136 @@
 'use strict';
 
-module.exports = function($scope, $state, accountService) {
+module.exports = function($scope, $state, accountService, appLocalStorage) {
 
-    $scope.featuresManageAccount = {
-        pageTitle: $state.current.data.pageTitle,
-        userId: '',
-        userName: '',
-        editFormUserName: false,
-        //editUserName: $scope.userName,
-        //$scope.featuresManageAccount.userName = ''
+    var _optionsAPI = {
 
-        init: function() {
-            this.pageTitle;
-            this.userId = this.getUserId();
-            this.userName = this.getUserName(this.userId);
-        },
+        isShowForm: true,
+        isHideForm: false,
 
-        getUserId: function() {
-            var userId = GLOBAL_USER_ID;
-            return userId;
-        },
-        getUserName: function(userId) {
-            var userName = this.getUserById(userId);
-            return userName;
+        getUserNameParam: function(userData) {
+            var splitData = userData.split(' ');
+            splitData = _.without(splitData, '');
+
+            if (splitData.length === 2) {
+                model.userNameParam.firstName = splitData[0];
+                model.userNameParam.lastName = splitData[1];
+            } else {
+                model.userNameParam.firstName = userData;
+                model.userNameParam.lastName = '';
+            }
         },
 
         getUserById: function(userId) {
             accountService.getUserById(userId)
                 .then(
-                    function(userObj) {
-                        // TODO
-                        $scope.featuresManageAccount.userName = userObj.data.name;
-                },
-                function(errorMessage) {
-                    $scope.errorMessage(errorMessage);
-                }
-            );
+                    function(userData) {
+                        _optionsAPI.updateUserData(userData.data);
+                    },
+                    function(errorMessage) {
+                        this.errorMessage(errorMessage);
+                    }
+                );
         },
 
-        editUserName: function() {
-            this.editFormUserName = true;
-            $scope.editUserName = $scope.userName;
+        updateUserData: function(userData) {
+            // Prepare functionality for update localstorage...
         },
 
-        cancelUserName: function() {
-            this.editFormUserName = false;
+        updateUserName: function(userId, userName) {
+            accountService.updateUserName(userId, userName)
+                .then(
+                    function(result) {
+                        var userData = appLocalStorage.getItem('userData');
+                        userData.userName = userName;
+                        appLocalStorage.setItem('userData', userData);
+                    },
+                    function(errorMessage) {
+                        this.errorMessage(errorMessage);
+                    }
+                );
         },
 
-        saveUserName: function() {
-            $scope.userName = $scope.editUserName;
-            $scope.editUserNameCancel();
+        updateUserEmail: function(userId, userEmail) {
+            accountService.updateUserEmail(userId, userEmail)
+                .then(
+                    function(result) {
+                        var userData = appLocalStorage.getItem('userData');
+                        userData.userEmail = userEmail;
+                        appLocalStorage.setItem('userData', userData);
+                    },
+                    function(errorMessage) {
+                        this.errorMessage(errorMessage);
+                    }
+                );
         },
 
-        showBlock: function() {
-
-        },
-
-        hideBlock: function() {
-            
+        errorMessage: function(errorMsg) {
+            console.warn(errorMsg);
         }
 
     };
 
-    $scope.featuresManageAccount.init();
-
-    console.log($scope);
-
-/*
-    //console.log($scope.globalUserId);
-
-    $scope.userName = "Default user name!";
-    $scope.editFormUserName = false;
-
-    $scope.userNameEdit = function() {
-        $scope.editFormUserName = true;
-        $scope.editUserName = $scope.userName;
+    var initialize = function() {
+        $scope.model = model;
+        $scope.viewAPI = viewAPI;
     };
 
-    $scope.editUserNameCancel = function() {
-        $scope.editFormUserName = false;
+    // The model of the current scope
+    var model = {
+        pageTitle: $state.current.data.pageTitle,
+        userData: appLocalStorage.getItem('userData'),
+        userNameParam: {
+            firstName: '',
+            lastName: ''
+        },
+        userEmailNew: '',
+        isVisibilityFormUserName: true,
+        isVisibilityFormUserEmail: true,
     };
 
-    $scope.editUserNameSave = function() {
-        $scope.userName = $scope.editUserName;
-        $scope.editUserNameCancel();
+    // Action on the view (Events)
+    var viewAPI = {
+
+        editUserName: function() {
+            _optionsAPI.getUserNameParam(model.userData.userName);
+            return model.isVisibilityFormUserName = _optionsAPI.isHideForm;
+        },
+        btnCancelUserName: function() {
+            return model.isVisibilityFormUserName = _optionsAPI.isShowForm;
+        },
+        btnSaveUserName: function() {
+            if (!_.isEmpty(model.userNameParam.firstName) || !_.isEmpty(model.userNameParam.lastName)) {
+                model.userData.userName = _.values(model.userNameParam).join(' ');
+                _optionsAPI.updateUserName(model.userData.userId, model.userData.userName);
+                this.btnCancelUserName();
+            } else {
+                _optionsAPI.errorMessage('is not allowed');
+            }
+        },
+
+        editUserEmail: function() {
+            model.userEmailNew = model.userData.userEmail;
+            return model.isVisibilityFormUserEmail = _optionsAPI.isHideForm;
+        },
+        btnCancelUserEmail: function() {
+            return model.isVisibilityFormUserEmail = _optionsAPI.isShowForm;
+        },
+        btnSaveUserEmail: function() {
+            if (!_.isEmpty(model.userEmailNew)) {
+                model.userData.userEmail = model.userEmailNew;
+                _optionsAPI.updateUserEmail(model.userData.userId, model.userData.userEmail);
+                this.btnCancelUserEmail();
+            } else {
+                _optionsAPI.errorMessage('is not allowed');
+            }
+        },
+
+        resetPassword: function() {
+            _optionsAPI.errorMessage('is not allowed');
+        }
+
     };
 
-
-
-    
-
-
-
-
-    $scope.userEmailAddress = "hi@dsadsh.com";
-    $scope.editFormUserEmailAddr = false;
-
-    $scope.userUserEmailAddrEdit = function() {
-        $scope.editFormUserEmailAddr = true;
-        $scope.editUserEmailAddr = $scope.userEmailAddress;
-    };
-
-    $scope.editUserEmailAddrCancel = function() {
-        $scope.editFormUserEmailAddr = false;
-    };
-
-    $scope.editUserEmailAddrSave = function() {
-        $scope.userEmailAddress = $scope.editUserEmailAddr;
-        $scope.editUserEmailAddrCancel();
-    };
-
-*/
-
-
-
-/*
-
-    
-
-    $scope.getUserById($scope.globalUserId);
-
-    console.log($scope.userParam)
-*/
-
-
-//   console.log($scope.getUserById($scope.globalUserId))
-
-/*
-
-
-
-<div>
-
-<h1>{{account.Name}}</h1>
-
-<span ng-show="mode == 'display'">
-
-  <table class="table" style="width:50%">
-    <tbody>
-    <tr>
-      <td width="20%">Type:</td>
-      <td>{{account.Type}}</td>
-    </tr>
-    <tr>
-      <td>State:</td>
-      <td>{{account.BillingState}}</td>
-    </tr>    
-    <tr>
-      <td></td>
-      <td></td>
-    </tr>      
-    </tbody>
-  </table>
-
-  <button type="button" class="btn btn-primary" ng-click="edit(account)">Edit Account</button>
-</span>
-
-<span ng-show="mode == 'edit'">
-
-  <form  name="editForm" ng-submit="update()">
-    <fieldset>
-    <legend>Edit Account</legend>
-
-    <label>Account name</label>
-    <input type="text" ng-model="account.Name" required><br/>
-
-    <label>Type</label>
-    <input type="text" ng-model="account.Type" required><br/>
-
-    <button type="submit" class="btn btn-primary">Submit</button> 
-    <button type="button" class="btn"  ng-click="cancel()">Cancel</button>
-
-    </fieldset>
-  </form>
-
-</span>
-
-</div>
-
-
-
-
-
-*/
-
-
-/*
-
-<div>
-    <div ng-hide="editFormEnabled">
-        
-        <a href="" ng-click="userNameEdit()">Edit</a>
-    </div>
-    <div ng-show="editFormEnabled">
-        <input ng-model="editUserName" ng-show="editFormEnabled">
-        <a href="" ng-click="userNameSave()">Save</a>
-        or
-        <a href="" ng-click="editFormCancel()">cancel</a>.
-    </div>
-</div>
-
-
-*/
-
-
-
-  //'AccountDetailCtrl', function($scope, $routeParams, Account) {
-/*
-  $scope.account = Account.get({id:$routeParams.id});
-  $scope.mode = 'display';
-
-  $scope.edit = function() {
-    $scope.mode = 'edit';
-  }
-
-  $scope.cancel = function() {
-    $scope.mode = 'display';
-  }
-
-  $scope.update = function() {
-    $scope.mode = 'display';
-    Account.update({id:$routeParams.id}, $scope.account, function() {
-      // performs some operation when the callback completes like error checking
-      console.log('Callback completed!');
-    });
-
-  }
-*/
+    initialize();
 
 };

@@ -35,6 +35,21 @@
         display: inline-block;
         width: 49%;
 
+        p {
+            span {
+                font-weight: bold;
+                
+                &.user-name {
+                    text-transform: capitalize;
+                }
+            }
+
+            input {
+                margin: 2px;
+                padding: 2px 4px;
+            }
+        }
+
         .fright {
             float: right;
 
