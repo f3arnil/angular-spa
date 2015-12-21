@@ -8,7 +8,7 @@ module.exports = function (angular) {
 
     var searchCtrl = require('./search-ctrl');
     var searchSrv = require('./search-srv')(search);
-    var searchFilter = require('./search-filter');
+    var validateDetailsRowsFilter = require('./validateDetails-filter');
     var searchDetailsCtrl = require('./searchDetails-ctrl');
     var searchService = require('./searchService-srv');
 
@@ -17,6 +17,7 @@ module.exports = function (angular) {
         .controller('searchCtrl', searchCtrl)
         .controller('searchDetailsCtrl', searchDetailsCtrl)
         .service('searchService', searchService)
+        .filter('validateDetailsRows', validateDetailsRowsFilter)
 
     function configCb($stateProvider, $urlRouterProvider) {
         $stateProvider
@@ -77,7 +78,8 @@ module.exports = function (angular) {
                 views: {
                     "content": {
                         templateUrl: '/details.html',
-                        controller: 'searchDetailsCtrl'
+                        controller: 'searchDetailsCtrl',
+                        controllerAs: 'details'
                     }
                 }
             });
