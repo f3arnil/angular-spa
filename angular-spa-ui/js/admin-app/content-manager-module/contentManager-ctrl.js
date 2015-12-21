@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function ($scope, $state, promises, $stateParams, cmService, configService, contentStorage) {
-
+    console.log('ctrl')
     $scope.$on('goToPage', function (event, data) {
         data = data * contentStorage.params.limit - contentStorage.params.limit;
         $scope.updateFilter('offset', data);
