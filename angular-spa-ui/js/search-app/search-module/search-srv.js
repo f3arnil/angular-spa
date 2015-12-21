@@ -34,7 +34,7 @@ module.exports = function (search) {
         //Find value in objects list (for limits and sortBy) and returns its id
         function findValueId(val, object) {
             for (var x in object) {
-                if (object[x].value === val ) {
+                if (object[x].value == val ) {
                     return x;
                 }
             }

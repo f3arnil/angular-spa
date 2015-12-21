@@ -1,15 +1,15 @@
 module.exports = function (app, mongoose) {
 
-    var ArticleTagAssignment = mongoose.Schema({
+    var ContentTagAssignment = mongoose.Schema({
         tagId: {
             type: String,
             mandatory: true
         },
-        articleId: {
+        contentId: {
             type: String,
             mandatory: true
         }
     });
 
-    return mongoose.model('ArticleTagAssignment', ArticleTagAssignment);
+    return mongoose.model('ContentTagAssignment', ContentTagAssignment);
 }

@@ -6,26 +6,36 @@
         
         <div class="col-md-12">
             
+            <div class="types-result">
+                <a ng-repeat="searchplace in searchInList"
+                    ng-click="setTypeData(searchplace.value)"
+                    ng-model="searchIn.value"
+                    ng-class="{active : searchplace.value==searchIn.value }">
+                    {{searchplace.title}}
+                </a>
+            </div>
+            
             <div ng-repeat="row in rows track by $index" class="row">
-                
-                <div ng-repeat="selectField in row.selectFields" class="col-md-2">
-                    <select class="form-control"
-                        ng-model="selectFieldMod[row.id]"
-                        ng-change="changeAdvanced(row.id, selectFieldMod[row.id], selectField.name)"
-                        ng-options="optionField.value for optionField in selectField.options">
-                    </select>
+                <div ng-repeat="selectField in row.selectFields track by $index" class="col-md-2">
+                    <div ng-show="($parent.$index == 0 && $last) || ($parent.$index > 0)">
+                        <select class="form-control"
+                            ng-model="selectField[row.id]"
+                            ng-change="changeAdvanced($parent.$index, selectField[$parent.$index], selectField.name)"
+                            ng-options="optionField.value for optionField in selectField.options"
+                            data-ng-init="selectField[row.id] = selectField.options[0]">
+                        </select>
+                    </div>
                 </div>
                 
                 <div class="col-md-6" ng-repeat="textField in row.textsFields">
                     <input type="text" 
                            class="form-control col-md-7" 
-                           ng-model="textFieldMod[row.id].value" 
-                           ng-change="changeAdvanced(row.id, textFieldMod[row.id], textField.name)"
-                           placeholder="Enter text">
+                           ng-model="textField[row.id]"
+                           ng-change="changeAdvanced($parent.$index, textField[row.id], textField.name)">
                 </div>
                 <div class="col-md-2">
-                    <div class="advanced-plus-button" ng-show="row.buttonFields[0].value"><button ng-click="addNewRow($index)">+</button></div>
-                    <div class="advanced-minus-button" ng-show="row.buttonFields[1].value"><button ng-click="deleteRow(row.id, $index)">-</button></div>
+                    <div class="advanced-plus-button" ng-show="$last"><button ng-click="addNewRow($index)">+</button></div>
+                    <div class="advanced-minus-button" ng-show="$index || !$last "><button ng-click="deleteRow($index)">-</button></div>
                 </div>
                 
             </div>
