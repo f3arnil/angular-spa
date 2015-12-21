@@ -14,6 +14,10 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
     $scope.$on('setLimit', function (event, data) {
         $scope.updateFilter('limit', data);
     });
+    
+    $scope.$on('goToDetails', function (event, data) {
+        console.log('Lets go to the details!', data);
+    })
 
     // Set active tab
     $scope.isActive = function (tabs) {
