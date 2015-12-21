@@ -39,6 +39,7 @@ module.exports = function (configService) {
         'recordsListConfig',
         resultsPerPage + '.params'
     );
+    //Default pagination config
     var defaultPgConf = {
         totalItems: configService.getData(
             'recordsListConfig',
@@ -59,7 +60,7 @@ module.exports = function (configService) {
         pagination + '.params'
     );
 
-    var contentManagerSrv = {
+    return {
         setHeaderConfig: function (data, config, stateParams) {
             var params = {
                 resultsCount: this.setResultsCount(config.params.resultsCount, data),
@@ -192,5 +193,4 @@ module.exports = function (configService) {
         }
     };
 
-    return contentManagerSrv;
 };

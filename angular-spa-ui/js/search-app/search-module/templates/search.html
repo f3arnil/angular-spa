@@ -3,20 +3,20 @@
         <div class="wrapper">
             <div class="colLeftPanel">
                 <label>SEARCH:</label>
-                <div ng-model="searchIn">
-                    <a ng-repeat="searchplace in searchInList"
-                       ng-click="setSearchIn(searchplace.value)"
-                       ng-model="searchIn.value"
-                       ng-class="{active : searchplace.value==searchIn.value }">
+                <div ng-model="search.model.searchIn">
+                    <a ng-repeat="searchplace in search.model.searchInList"
+                       ng-click="search.viewApi.setSearchIn(searchplace.value)"
+                       ng-model="search.model.searchIn.value"
+                       ng-class="{active : searchplace.value==search.model.searchIn.value }">
                         {{searchplace.title}}
                     </a>
                 </div>
             </div>
             <div class="colRightPanel">
                 <div class="search">
-                    <input type="text" value="" ng-model='query'/>
+                    <input type="text" value="" ng-model='search.model.query'/>
                     <a class="searchButton"
-                       ng-click="find()">
+                       ng-click="search.viewApi.find()">
                         <img ng-src="/img/search-button.png" >
                     </a>
                 </div>
@@ -27,43 +27,43 @@
         </div>
     </div>
     <div class="result result-module-search">
-        <div class="wrapper" ng-show="showResults">
+        <div class="wrapper" ng-show="search.model.showResults">
             <div class="result-panel">
                 <div class="result-header">
                     <div class="col-md-3">
-                   <h4 ng-model="resMetrics">
-                       Results: {{resultsFrom}} - {{resultsTo}} of {{resultsCount}}</h4>
+                   <h4 ng-model="search.model.resMetrics">
+                       Results: {{search.model.resultsFrom}} - {{search.model.resultsTo}} of {{search.model.resultsCount}}</h4>
                        </div>
                     <div class="col-md-9">
                         
                         <select class="select-sort" 
-                                ng-model="sortBy" 
-                                ng-options="sortParam.title for sortParam in sortParams"
-                                ng-change="sortChange()">
+                                ng-model="search.model.sortBy" 
+                                ng-options="sortParam.title for sortParam in search.model.sortParams"
+                                ng-change="search.viewApi.sortChange()">
                         </select>
                         
                         <select class="select-result" 
-                                ng-model="limit" 
-                                ng-options="resultsPerPage.title for resultsPerPage in resultsPerPages"
-                                ng-change="limitChange()">
+                                ng-model="search.model.limit" 
+                                ng-options="resultsPerPage.title for resultsPerPage in search.model.resultsPerPages"
+                                ng-change="search.viewApi.limitChange()">
                         </select>
-                        <uib-pagination total-items="resultsCount" 
-                                        ng-model="currentPage" 
+                        <uib-pagination total-items="search.model.resultsCount" 
+                                        ng-model="search.model.currentPage" 
                                         max-size="5" 
                                         class="pagination-sm" 
                                         boundary-links="true" 
                                         rotate="false" 
                                         num-pages="numPages"
-                                        items-per-page="limit.value"
-                                        ng-change = "goToPage()"
+                                        items-per-page="search.model.limit.value"
+                                        ng-change = "search.viewApi.goToPage()"
                                         style = "float:right">
                         </uib-pagination>
                     </div>
                 </div>
                     <div class="result-list">
                         <div class="result-row" 
-                             ng-repeat="result in queryResult">
-                            <h3 class="title" ng-click="goToDetails(result)">
+                             ng-repeat="result in search.model.queryResult">
+                            <h3 class="title" ng-click="search.viewApi.goToDetails(result)">
                                 {{result.title}}
                             </h3>
                             <p> {{result.publisher}}</p>
