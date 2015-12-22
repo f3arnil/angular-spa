@@ -10,7 +10,7 @@ module.exports = function($scope, $state, $rootScope, promises) {
         selectionFunction: function(state) {
             return {
                 'tags': this.getTagsListData(),
-                // 'search.simple': this.getArticleItemByList(),
+                //'search.simple': this.getTagsListByArticleItem($scope.inputParam)
                 'search.simpleQuery': this.getTagsListByArticleItem($scope.inputParam)
             }
         },
@@ -180,7 +180,7 @@ module.exports = function($scope, $state, $rootScope, promises) {
          */
         pullTagsByContentIds: function(result) {
             console.log(result)
-            // contentIds
+            var contentIds = result;
             promises.getAsyncData('GET', '/service/tags/get-by-content/' + contentIds)
                 .then(
                     function(result) {
@@ -210,14 +210,23 @@ module.exports = function($scope, $state, $rootScope, promises) {
         },
 
 
+
+
+
+
+
+
+
+
+
         /**
          * Get Article Id from list articles
          */
         getTagsListByArticleItem: function(articleItem) {
-            console.log(articleItem)
-            var articleId = articleItem._id;
-            console.log(articleId);
-            //this
+            //var articleId = articleItem._id;
+            //console.log( model.tags );
+            //console.log(articleId);
+           // this.pullTagsByContentIds(articleId);
             //$scope.getTagByArticleId(articleItem._id);
         },
 
@@ -261,10 +270,10 @@ module.exports = function($scope, $state, $rootScope, promises) {
         $scope.model = model;
         $scope.viewAPI = viewAPI;
 
-        console.log(this)
-        console.log( $scope );
-        console.log( $scope.model );
-        console.log( $scope.viewAPI );
+        // console.log(this)
+        // console.log( $scope );
+        // console.log( $scope.model );
+        // console.log( $scope.viewAPI );
     };
 
     var model = {
