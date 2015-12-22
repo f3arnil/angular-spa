@@ -10,9 +10,10 @@ module.exports = function() {
             msgWorning: '=msgWorning'
         },
         link: function(scope, element, attrs) {
-            scope.getStateName();
 
-            /** 
+            scope.viewAPI.getStateName();
+
+            /**
             Produced by another solution implementation tasks
 
             Start downloading data for a directive

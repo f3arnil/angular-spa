@@ -2,6 +2,10 @@
 
 module.exports = function($scope, $state, accountService, appLocalStorage) {
 
+    console.log(this);
+    console.log(arguments);
+
+
     var _optionsAPI = {
 
         isShowForm: true,
@@ -71,9 +75,12 @@ module.exports = function($scope, $state, accountService, appLocalStorage) {
     };
 
     var initialize = function() {
+        console.log(this)
+
         $scope.model = model;
         $scope.viewAPI = viewAPI;
     };
+
 
     // The model of the current scope
     var model = {
@@ -92,6 +99,10 @@ module.exports = function($scope, $state, accountService, appLocalStorage) {
     var viewAPI = {
 
         editUserName: function() {
+
+console.log(this)
+console.log($scope)
+
             _optionsAPI.getUserNameParam(model.userData.userName);
             return model.isVisibilityFormUserName = _optionsAPI.isHideForm;
         },
