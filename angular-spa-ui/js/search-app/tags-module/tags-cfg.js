@@ -9,7 +9,7 @@ module.exports = function($stateProvider) {
             views: {
                 'module-content': {
                     templateUrl: '/tagModulePageTemplate.html',
-                    controller : 'tagController'
+                    controller: 'tagController'
                 }
             },
             data: {

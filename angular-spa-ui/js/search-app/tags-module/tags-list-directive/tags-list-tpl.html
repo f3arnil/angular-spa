@@ -1,21 +1,24 @@
 <script type="text/ng-template" id="/listTagsTemplate.html">
-    <ul class="tags" ng-show="model.tags.length !== 0">
-        <li ng-repeat="tag in model.tags">
+    <ul class="tags" ng-show="tagsList.model.wrapContentDir">
+        <li ng-repeat="tag in tagsList.model.tags">
             <span class="tag" style="color: {{ tag.textColor }}; background-color:{{ tag.backgroundColor }};">
                 <span>{{ tag.name }}</span>
-                <a class="remove-tag" ng-click="viewAPI.removeTagItem(tag)">x</a>
+                <a class="remove-tag" ng-click="tagsList.viewAPI.removeTagItem(tag)">x</a>
             </span>
         </li>
         <li ng-show="true">
-            <span class="add-tag" ng-show="!viewAPI.showFormAddTag" ng-click="showFormAddTag = !viewAPI.showFormAddTag"></span>
-            <form ng-show="showFormAddTag" ng-submit="viewAPI.addTag()">
-                <input type="text" ng-model="model.form.tagName" size="20" />
-                <span ng-click="viewAPI.addTag()">save</span>
-                <span ng-show="viewAPI.showFormAddTag" ng-click="viewAPI.showFormAddTag = !showFormAddTag">cancel</span>
+            <span class="add-tag" ng-show="!tagsList.model.showFormAddTag" ng-click="tagsList.model.showFormAddTag = !tagsList.model.showFormAddTag"></span>
+            <form ng-show="tagsList.model.showFormAddTag" ng-submit="viewAPI.addTag()">
+                <input type="text" ng-model="tagsList.model.form.tagName" size="20" ng-change="viewAPI.updateList(tagsList.model.form.tagName)" />
+                <span ng-show="false" class="auto-suggest-list">{{ tagsList.model.autoSuggestWord }}</span>
+
+                <button ng-model="button" ng-disabled="tagsList.model.isDisabledBtn" ng-click="tagsList.viewAPI.addTag(tagsList.model.form.tagName)" class="btn btn-success">Save</button>
+
+                <span ng-click="tagsList.model.showFormAddTag = !tagsList.model.showFormAddTag" class="btn btn-danger">cancel</span>
             </form>
         </li>
-        <div class="alert alert-danger" role="alert" ng-show="viewAPI.msgWorning">
-            <span>{{ model.msgWorning }}</span>
+        <div class="alert alert-danger" role="alert" ng-show="tagsList.model.msgWorning">
+            <span>{{ tagsList.model.msgWorning }}</span>
         </div>
     </ul>
 </script>
