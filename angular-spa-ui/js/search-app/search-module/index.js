@@ -12,7 +12,6 @@ module.exports = function (angular) {
     //var searchDir = require('./search-dir')(search);
     
     search.config(configCb);
-    
     function configCb($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('search', {
@@ -37,11 +36,11 @@ module.exports = function (angular) {
             .state('search.simpleQuery', {
                 url: '/simple/?query&limit&searchIn&sortBy&offset&orderBy',
                 params: {
-                    searchIn : {squash: true , value: 'publication'},
-                    limit : {squash: true , value: '15'},
-                    sortBy : {squash: true , value: 'ASC'},
-                    offset : {squash: true , value: '0'},
-                    orderBy : {squash: true , value: 'title'}
+                    searchIn : {squash: true},
+                    limit : {squash: true},
+                    sortBy : {squash: true},
+                    offset : {squash: true },
+                    orderBy : {squash: true}
                 },
                 views:{
                     "content": {
