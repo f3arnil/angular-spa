@@ -5,9 +5,10 @@ module.exports = function (angular) {
     var contentManager = angular.module('app.contentManager', []);
 
 
-    var cmCtrl = require('./contentManager-ctrl'),
-        contentStorageSrv = require('./contentStorage-srv'),
-        contentManagerSrv = require('./contentManager-srv');
+    var cmCtrl = require('./contentManager-ctrl');
+    var contentStorageSrv = require('./contentStorage-srv');
+    var contentManagerSrv = require('./contentManager-srv');
+
 
     contentManager
         .constant('contentManagerConfig', require('./contentManager-config'))
