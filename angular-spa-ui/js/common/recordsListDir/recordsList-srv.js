@@ -123,9 +123,10 @@ module.exports = function (configService) {
                 to: this.setTo(data),
                 count: this.setCount(data)
             };
+            
             if (params.count < params.to || params.from >= params.to)
                 return config;
-
+            
             _.extend(config.params, params);
 
             config = this.setVisibility(defaultResultsCount, config.params, config);
@@ -154,7 +155,7 @@ module.exports = function (configService) {
         },
         setSortBy: function (config, value) {
             var sortByValue = value || defaultSortByValue;
-
+            
             if (!_.indexOf(
                     configService.getData(
                         'recordsListConfig',

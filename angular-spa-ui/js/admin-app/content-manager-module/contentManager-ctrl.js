@@ -70,7 +70,6 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
         contentStorage.params = $stateParams;
     }
 
-
     $scope.currentSection = contentStorage.params.searchIn;
     $scope.tabs = $scope.isActive(sections);
 

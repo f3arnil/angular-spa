@@ -1,8 +1,31 @@
 "use strict";
 
-module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, queryParams, searchStorage, searchService) {
+module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, queryParams, searchStorage, searchService, rlService) {
 
     var vm = this;
+
+
+    $scope.$on('goToPage', function (event, data) {
+        
+        vm.model.queryParams.offset = data * vm.model.queryParams.limit - vm.model.queryParams.limit;
+        if (vm.model.queryParams.offset > 0)
+            vm.model.queryParams.offset -= 1;
+        
+        privateApi.updateFilter('offset', vm.model.queryParams.offset);
+    });
+
+    $scope.$on('setSortBy', function (event, data) {
+        privateApi.updateFilter('sortBy', data);
+    });
+
+    $scope.$on('setLimit', function (event, data) {
+        vm.model.queryParams.offset = 0;
+        privateApi.updateFilter('limit', data);
+    });
+
+    $scope.$on('goToDetails', function (event, data) {
+        console.log('Lets go to the details!', data);
+    })
 
     var privateApi = {
         setDefaultParams: function () {
@@ -23,21 +46,24 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
             return resultsTo;
         },
         setCtrlData: function setCtrlData(publications) {
-            vm.model.sortBy = vm.model.sortParams[searchService.findValueId(vm.model.queryParams.sortBy, vm.model.sortParams)];
-            vm.model.limit = vm.model.resultsPerPages[searchService.findValueId(vm.model.queryParams.limit, vm.model.resultsPerPages)];
-            vm.model.query = vm.model.queryParams.query;
-            vm.model.queryResult = publications.items;
-            vm.model.currentPage = publications.page;
-            vm.model.resultsFrom = (vm.model.currentPage * vm.model.limit.value) - vm.model.limit.value + 1;
-            vm.model.resultsCount = publications.count;
-            $scope.resultsTo = privateApi.setResultsTo(vm.model.currentPage, vm.model.limit.value, vm.model.resultsCount);
-            vm.model.pagesCount = Math.ceil(vm.model.resultsCount / vm.model.limit.value);
-            vm.model.showResults = true;
-            searchStorage.data = publications;
+            searchStorage.params = publications;
+            vm.model.headerConfig = rlService.setHeaderConfig(publications, recordsListHeaderConfig, vm.model.queryParams);
+            vm.model.itemConfig = recordsListItemConfig;
+            vm.model.itemsList = publications.items;
+            searchStorage.data = vm.model;
             searchStorage.params = vm.model.queryParams;
-            searchStorage.searchType = {
-                type: 'simple'
-            };
+
+        },
+        updateFilter: function (param, value) {
+            vm.model.queryParams[param] = value;
+            searchStorage.data = {};
+            $state.go(
+                'search.simpleQuery',
+                vm.model.queryParams, {
+                    inherit: false,
+                    reload: true
+                }
+            );
         }
     };
 
@@ -67,6 +93,7 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
                 $state.go(
                     'search.simpleQuery',
                     vm.model.queryParams, {
+                        inherit: false,
                         reload: true
                     }
                 );
@@ -87,34 +114,36 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
             }
 
         },
-        sortChange: function () {
-            vm.model.queryParams.sortBy = vm.model.sortBy.value;
-            $state.go(
-                'search.simpleQuery',
-                vm.model.queryParams, {
-                    reload: true
-                }
-            );
-        },
-        limitChange: function () {
-            vm.model.queryParams.limit = vm.model.limit.value;
-            $state.go(
-                'search.simpleQuery',
-                vm.model.queryParams, {
-                    reload: true
-                }
-            );
-        },
-        goToPage: function () {
-            vm.model.queryParams.offset = vm.model.currentPage * vm.model.limit.value - vm.model.limit.value;
-            $state.go(
-                'search.simpleQuery',
-                vm.model.queryParams, {
-                    inherit: true,
-                    reload: true
-                }
-            );
-        },
+        //        sortChange: function () {
+        //            vm.model.queryParams.sortBy = vm.model.sortBy.value;
+        //            $state.go(
+        //                'search.simpleQuery',
+        //                vm.model.queryParams, 
+        //                {inherit: false,
+        //                    reload: true
+        //                }
+        //            );
+        //        },
+        //        limitChange: function () {
+        //            vm.model.queryParams.limit = vm.model.limit.value;
+        //            $state.go(
+        //                'search.simpleQuery',
+        //                vm.model.queryParams, 
+        //                {inherit: false,
+        //                    reload: true
+        //                }
+        //            );
+        //        },
+        //        goToPage: function () {
+        //            vm.model.queryParams.offset = vm.model.currentPage * vm.model.limit.value - vm.model.limit.value;
+        //            $state.go(
+        //                'search.simpleQuery',
+        //                vm.model.queryParams, {
+        //                    inherit: true,
+        //                    reload: true
+        //                }
+        //            );
+        //        },
         hasQuery: function () {
             if (vm.model.query) {
                 return true;
@@ -124,6 +153,8 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
     };
 
     var config = configService.getConfig('searchConfig');
+    var recordsListHeaderConfig = configService.getData('recordsListConfig', 'header');
+    var recordsListItemConfig = configService.getData('recordsListConfig', 'itemConfig');
 
     vm.model = {
         queryResult: '',
@@ -134,32 +165,32 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
         searchInList: config.searchIn
     }
 
-//    if (searchService.isEmptyObject(vm.model.queryParams) || vm.model.queryParams.query === undefined) {
-        if (_.isEmpty(vm.model.queryParams) || vm.model.queryParams.query === undefined) {
+    if (_.isEmpty(vm.model.queryParams) || vm.model.queryParams.query === undefined) {
         vm.model.queryParams = privateApi.setDefaultParams();
         vm.model.searchIn = vm.model.searchInList[searchService.findValueId(vm.model.queryParams.searchIn, vm.model.searchInList)];
-//        if (!searchService.isEmptyObject(searchStorage.data) && !searchService.isEmptyObject(searchStorage.params)) {
-if (!_.isEmpty(searchStorage.data) && !_.isEmpty(searchStorage.params)) {
+
+        if (!_.isEmpty(searchStorage.data) && !_.isEmpty(searchStorage.params)) {
             vm.model.queryParams = searchStorage.params;
             vm.model.searchIn = vm.model.searchInList[searchService.findValueId(vm.model.queryParams.searchIn, vm.model.searchInList)];
+            vm.model.query = searchStorage.params.query;
             privateApi.setCtrlData(searchStorage.data);
         }
     } else {
         //Do when we have params in $stateParams - means that it is search action
         var queryUrl = queryParams.generateQueryParams(config.paths.simpleSearchPath, vm.model.queryParams);
-        vm.model.searchIn = vm.model.searchInList[searchService.findValueId(vm.model.queryParams.searchIn, vm.model.searchInList)];
-
+        vm.model.query = $stateParams.query;
         promises.getAsyncData('GET', queryUrl)
             .then(function (result) {
+                vm.model.searchIn = vm.model.searchInList[searchService.findValueId(vm.model.queryParams.searchIn, vm.model.searchInList)];
                 var publications = result.data[vm.model.searchIn.value];
                 privateApi.setCtrlData(publications);
-                
+
             })
             .catch(function (err) {
                 console.error('Error - cant get data!' + err);
             });
     };
-    
+
     $scope.modal = function () {
         $state.go('search.advanced', searchStorage.params, {
             // prevent the events onStart and onSuccess from firing
