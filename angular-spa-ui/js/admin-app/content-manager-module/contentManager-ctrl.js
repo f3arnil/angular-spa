@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports = function ($scope, $state, promises, $stateParams, cmService, configService, contentStorage) {
-    console.log($scope);
+module.exports = function ($scope, $state, promises, $stateParams, cmService, configService, contentStorage, rlService) {
+
     $scope.$on('goToPage', function (event, data) {
         data = data * contentStorage.params.limit - contentStorage.params.limit;
         $scope.updateFilter('offset', data);
@@ -14,7 +14,7 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
     $scope.$on('setLimit', function (event, data) {
         $scope.updateFilter('limit', data);
     });
-    
+
     $scope.$on('goToDetails', function (event, data) {
         console.log('Lets go to the details!', data);
     })
@@ -28,7 +28,7 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
     $scope.changeTab = function (place) {
         if (contentStorage.params.searchIn == place)
             return false;
-        
+
         $state.go(
             'content', {
                 searchIn: place
@@ -37,7 +37,7 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
                 inherit: false
             }
         );
-        
+
     };
 
     // to update sortBy, limit and currentPage
@@ -56,20 +56,20 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
         data.perPage = contentStorage.params.limit;
         contentStorage.data = data;
         contentStorage.data.searchIn = contentStorage.params.searchIn;
-        $scope.headerConfig = cmService.setHeaderConfig(data, recordsListHeaderConfig, $stateParams);
+        $scope.headerConfig = rlService.setHeaderConfig(data, recordsListHeaderConfig, $stateParams);
         $scope.itemConfig = recordsListItemConfig;
         $scope.itemsList = data.items;
     };
 
-    var sections = configService.getData('contentManagerConfig', 'sections'),
-        simpleSearchPath = configService.getData('appConfig', 'paths.simpleSearchPath'),
-        recordsListHeaderConfig = configService.getData('recordsListConfig', 'header'),
-        recordsListItemConfig = configService.getData('recordsListConfig', 'itemConfig');
+    var sections = configService.getData('contentManagerConfig', 'sections');
+    var simpleSearchPath = configService.getData('appConfig', 'paths.simpleSearchPath');
+    var recordsListHeaderConfig = configService.getData('recordsListConfig', 'header');
+    var recordsListItemConfig = configService.getData('recordsListConfig', 'itemConfig');
 
     if (_.isEmpty(contentStorage.params) || !_.isEqual(contentStorage.params, $stateParams)) {
         contentStorage.params = $stateParams;
     }
-    
+
 
     $scope.currentSection = contentStorage.params.searchIn;
     $scope.tabs = $scope.isActive(sections);

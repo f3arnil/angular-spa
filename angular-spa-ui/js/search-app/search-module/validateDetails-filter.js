@@ -1,6 +1,7 @@
 "use strict";
 
 module.exports = function (configService) {
+    
     // Check detail - if title accepted in config
     // and value not empty -> true, else -> false
     function isAccepted(detail) {
