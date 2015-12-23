@@ -7,6 +7,7 @@ module.exports = function (search) {
             angular.extend($stateParams, searchConfig.config.defaultSimpleParams);
         }
         $scope.goToDetails = function (data) {
+            console.log(data);
             searchStorage.details = {
                 type: $scope.searchIn.value,
                 data: data

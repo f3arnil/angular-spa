@@ -1,7 +1,6 @@
 "use strict";
 
 module.exports = function (parentModule) {
-
     var recordsListDir = require('./recordsList-dir'),
         recordsListSrv = require('./recordsList-srv'),
         recordsListCtrl = require('./recordsList-ctrl');
