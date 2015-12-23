@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function ($scope, $state, promises, $stateParams, cmService, configService, contentStorage, rlService) {
+module.exports = function ($scope, $state, promises, $stateParams, cmService, configService, contentStorage) {
 
     $scope.$on('goToPage', function (event, data) {
         data = data * contentStorage.params.limit - contentStorage.params.limit;

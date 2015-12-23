@@ -18,6 +18,7 @@ module.exports = function (angular) {
         .config(configCb);
 
     function configCb($stateProvider, $urlRouterProvider) {
+        console.log('recordsListConfig');
         $stateProvider
             .state('content', {
                 url: '/content/:searchIn/?limit&sortBy&offset',
