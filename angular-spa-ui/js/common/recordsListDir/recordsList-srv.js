@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function (configService) {
-    
+
     var defaultHeaderParams = configService.getData('recordsListConfig', 'header.params');
     var resultsCount = 'header.params.resultsCount';
     var sortBy = 'header.params.sortBy';
@@ -123,10 +123,10 @@ module.exports = function (configService) {
                 to: this.setTo(data),
                 count: this.setCount(data)
             };
-            
+
             if (params.count < params.to || params.from >= params.to)
                 return config;
-            
+
             _.extend(config.params, params);
 
             config = this.setVisibility(defaultResultsCount, config.params, config);
@@ -155,7 +155,7 @@ module.exports = function (configService) {
         },
         setSortBy: function (config, value) {
             var sortByValue = value || defaultSortByValue;
-            
+
             if (!_.indexOf(
                     configService.getData(
                         'recordsListConfig',
@@ -219,33 +219,3 @@ module.exports = function (configService) {
         },
     }
 };
-
-
-//app.provider('foo', function() {
-//
-//  var thisIsPrivate = "Private";
-//
-//  return {
-//
-//    setPrivate: function(newVal) {
-//      thisIsPrivate = newVal;
-//    },
-//
-//    $get: function() {
-//      function getPrivate() {
-//        return thisIsPrivate;
-//      }
-//
-//      return {
-//        variable: "This is public",
-//        getPrivate: getPrivate
-//      };
-//    }
-//
-//  };
-//
-//});
-//
-//app.config(function(fooProvider) {
-//  fooProvider.setPrivate('New value from config');
-//});

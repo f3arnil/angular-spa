@@ -1,7 +1,9 @@
 "use strict";
 
 module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, queryParams, searchStorage, searchService, rlService) {
-var vm = this;
+
+    var vm = this;
+
     $scope.$on('goToPage', function (event, data) {
         if (!_.isEmpty(searchStorage.objQuery))
             searchStorage.objQuery.limits.offset = $scope.currentPage * searchStorage.objQuery.limits.limit - searchStorage.objQuery.limits.limit;
@@ -134,10 +136,11 @@ var vm = this;
     var recordsListHeaderConfig = configService.getData('recordsListConfig', 'header');
     var recordsListItemConfig = configService.getData('recordsListConfig', 'itemConfig');
     var defaultSimpleParams = configService.getData('searchConfig', 'defaultSimpleParams');
-    
+
     if (_.isEmpty($stateParams)) {
         angular.extend($stateParams, defaultSimpleParams);
     }
+
     vm.model = {
         queryResult: '',
         showResults: false,
@@ -164,7 +167,7 @@ var vm = this;
         promises.getAsyncData('GET', queryUrl)
             .then(function (result) {
                 vm.model.searchIn = vm.model.searchInList[searchService.findValueId(vm.model.queryParams.searchIn, vm.model.searchInList)];
-            var publications = result.data[vm.model.searchIn.value];
+                var publications = result.data[vm.model.searchIn.value];
                 privateApi.setCtrlData(publications);
 
             })
