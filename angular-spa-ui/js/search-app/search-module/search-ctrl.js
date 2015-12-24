@@ -1,295 +1,210 @@
 "use strict";
 
-module.exports = function (search) {
+module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, queryParams, searchStorage, searchService, rlService) {
 
-    search.controller('searchCtrl', function ($scope, searchConfig, $uibModal, $stateParams, $state, promises, queryParams, searchStorage, searchService) {
-        if (_.isEmpty($stateParams)) {
-            angular.extend($stateParams, searchConfig.config.defaultSimpleParams);
+    var vm = this;
+
+    $scope.$on('goToPage', function (event, data) {
+        if (!_.isEmpty(searchStorage.objQuery))
+            searchStorage.objQuery.limits.offset = $scope.currentPage * searchStorage.objQuery.limits.limit - searchStorage.objQuery.limits.limit;
+
+        vm.model.queryParams.offset = data * vm.model.queryParams.limit - vm.model.queryParams.limit;
+        if (vm.model.queryParams.offset > 0)
+            vm.model.queryParams.offset -= 1;
+
+        privateApi.updateFilter('offset', vm.model.queryParams.offset);
+    });
+
+    $scope.$on('setSortBy', function (event, data) {
+        if (!_.isEmpty(searchStorage.objQuery))
+            searchStorage
+            .objQuery
+            .context[$scope.queryParams.searchIn]
+            .sortingOrder = $scope.sortBy.value;
+
+        privateApi.updateFilter('sortBy', data);
+    });
+
+    $scope.$on('setLimit', function (event, data) {
+        if (!_.isEmpty(searchStorage.objQuery))
+            searchStorage
+            .objQuery
+            .limits
+            .limit = $scope.limit.value;
+
+        vm.model.queryParams.offset = 0;
+        privateApi.updateFilter('limit', data);
+    });
+
+    $scope.$on('goToDetails', function (event, data) {
+        console.log('Lets go to the details!', data);
+    })
+
+    var privateApi = {
+        setDefaultParams: function () {
+            var params = {};
+            params.searchIn = vm.model.searchInList[0].value;
+            params.limit = vm.model.resultsPerPages[0].value;
+            params.sortBy = vm.model.sortParams[0].value;
+            params.offset = '0';
+            params.orderBy = 'title';
+            params.query = '';
+            return params;
+        },
+        setResultsTo: function (currentPage, pubPerPage, resultsCount) {
+            var resultsTo = currentPage * pubPerPage;
+            if (resultsTo > resultsCount) {
+                resultsTo = resultsCount;
+            }
+            return resultsTo;
+        },
+        setCtrlData: function setCtrlData(publications) {
+            searchStorage.params = publications;
+            vm.model.headerConfig = rlService.setHeaderConfig(publications, recordsListHeaderConfig, vm.model.queryParams);
+            vm.model.itemConfig = recordsListItemConfig;
+            vm.model.itemsList = publications.items;
+            searchStorage.data = vm.model;
+            searchStorage.params = vm.model.queryParams;
+
+        },
+        updateFilter: function (param, value) {
+            vm.model.queryParams[param] = value;
+            searchStorage.data = {};
+            $state.go(
+                'search.simpleQuery',
+                vm.model.queryParams, {
+                    inherit: false,
+                    reload: true
+                }
+            );
         }
-        $scope.goToDetails = function (data) {
+    };
+
+    vm.viewApi = {
+        goToDetails: function (data) {
             searchStorage.details = {
-                type: $scope.searchIn.value,
+                type: vm.model.searchIn.value,
                 data: data
             };
 
             $state.go(
                 'search.details', {
                     id: data._id,
-                    type: $scope.searchIn.value,
+                    type: vm.model.searchIn.value,
                     backUrl: location.hash
                 }, {
                     inherit: true,
                     reload: true
-                }
-            );
-        };
-
-        $scope.getCurrentRequestContext = function () {
-            var obj = {
-                conditions: $scope.query,
-                sortingOrder: "ASC",
-                sortingField: "title"
-            };
-
-            return obj;
-        }
-
-        $scope.buildRequest = function (dest) {
-            var obj = {};
-            obj[dest] = $scope.getCurrentRequestContext();
-            
-            return {
-                context: obj
-            }
-        }
-
-        //Change current searchIn
-        $scope.setSearchIn = function (val) {
-            $scope.searchIn = $scope.searchInList[searchService.findValueId(val, $scope.searchInList)];
-            $stateParams.searchIn = val;
-            $scope.queryParams.offset = 0;
-            if (!_.isEmpty(searchStorage.objQuery)) {
-                angular.extend(
-                    searchStorage.objQuery,
-                    $scope.buildRequest($scope.queryParams.searchIn)
-                );
-            }
-
-            if ($scope.hasQuery()) {
+                })
+        },
+        setSearchIn: function (val) {
+            vm.model.searchIn = vm.model.searchInList[searchService.findValueId(val, vm.model.searchInList)];
+            vm.model.queryParams.searchIn = vm.model.searchIn.value;
+            vm.model.queryParams.offset = 0;
+            if (vm.viewApi.hasQuery()) {
                 $state.go(
-                    searchStorage.searchState,
-                    $scope.queryParams, {
-                        reload: true
-                    }
-                );
-            }
-
-        };
-
-        // Function to find smth
-        $scope.find = function () {
-            searchStorage.searchState = 'search.simpleQuery';
-            searchStorage.searchType = 'GET';
-            searchStorage.objQuery = {};
-            if ($scope.hasQuery()) {
-                $scope.queryParams.query = $scope.query;
-                $scope.showResults = false;
-                $state.go(
-                    searchStorage.searchState,
-                    $scope.queryParams, {
+                    'search.simpleQuery',
+                    vm.model.queryParams, {
                         inherit: false,
                         reload: true
                     }
                 );
             }
-
-        };
-
-        //Action when sortBy changed
-        $scope.sortChange = function () {
-            if (!_.isEmpty(searchStorage.objQuery))
-                searchStorage
-                .objQuery
-                .context[$scope.queryParams.searchIn]
-                .sortingOrder = $scope.sortBy.value;
-
-            $scope.queryParams.sortBy = $scope.sortBy.value;
-            $state.go(
-                searchStorage.searchState,
-                $scope.queryParams, {
-                    reload: true
-                }
-            );
-        };
-
-        //Action when limit changed
-        $scope.limitChange = function () {
-            if (!_.isEmpty(searchStorage.objQuery))
-                searchStorage
-                .objQuery
-                .limits
-                .limit = $scope.limit.value;
-
-            $scope.queryParams.limit = $scope.limit.value;
-
-            $state.go(
-                searchStorage.searchState,
-                $scope.queryParams, {
-                    reload: true
-                }
-            );
-        };
-
-        //Pagination change page
-        $scope.goToPage = function () {
-            if (!_.isEmpty(searchStorage.objQuery))
-                searchStorage.objQuery.limits.offset = $scope.currentPage * searchStorage.objQuery.limits.limit - searchStorage.objQuery.limits.limit;
-
-            $scope.queryParams.offset = $scope.currentPage * $scope.limit.value - $scope.limit.value;
-
-            $state.go(
-                searchStorage.searchState,
-                $scope.queryParams, {
-                    inherit: true,
-                    reload: true
-                }
-            );
-        };
-
-        // Check has model "query" data or not - if yes returns true, else false
-        $scope.hasQuery = function () {
-            if ($scope.query || !_.isEmpty(searchStorage.objQuery)) {
+        },
+        find: function () {
+            if (vm.viewApi.hasQuery()) {
+                vm.model.queryParams.query = vm.model.query;
+                vm.model.showResults = false;
+                $state.go(
+                    'search.simpleQuery',
+                    vm.model.queryParams, {
+                        inherit: false,
+                        reload: true
+                    }
+                );
+            }
+        },
+        hasQuery: function () {
+            if (vm.model.query || !_.isEmpty(searchStorage.objQuery)) {
                 return true;
             }
             return false;
-        };
-
-        //Set results data to controllers values
-        $scope.setCtrlData = function (publications) {
-            $scope.sortBy = $scope.sortParams[searchService.findValueId($scope.queryParams.sortBy, $scope.sortParams)];
-            $scope.limit = $scope.resultsPerPages[searchService.findValueId($scope.queryParams.limit, $scope.resultsPerPages)];
-            $scope.query = $scope.queryParams.query;
-            $scope.queryResult = publications.items;
-            $scope.currentPage = publications.page;
-            $scope.resultsFrom = ($scope.currentPage * parseInt($scope.limit.value)) - $scope.limit.value + 1;
-            $scope.resultsCount = publications.count;
-            $scope.resultsTo = $scope.setResultsTo($scope.currentPage, $scope.limit.value, $scope.resultsCount);
-            $scope.pagesCount = Math.ceil($scope.resultsCount / $scope.limit.value);
-            $scope.showResults = true;
-            searchStorage.data = publications;
-            searchStorage.params = $scope.queryParams;
         }
+    };
 
-        //Generate fount results "to" (RESULTS $from - $to )
-        $scope.setResultsTo = function (currentPage, pubPerPage, resultsCount) {
-            var resultsTo = currentPage * pubPerPage;
-            if (resultsTo > resultsCount) {
-                resultsTo = resultsCount;
-            }
-            return resultsTo;
+    var config = configService.getConfig('searchConfig');
+    var recordsListHeaderConfig = configService.getData('recordsListConfig', 'header');
+    var recordsListItemConfig = configService.getData('recordsListConfig', 'itemConfig');
+    var defaultSimpleParams = configService.getData('searchConfig', 'defaultSimpleParams');
+
+    if (_.isEmpty($stateParams)) {
+        angular.extend($stateParams, defaultSimpleParams);
+    }
+
+    vm.model = {
+        queryResult: '',
+        showResults: false,
+        queryParams: $stateParams,
+        sortParams: config.sortParams,
+        resultsPerPages: config.resultsPerPage,
+        searchInList: config.searchIn
+    }
+
+    if (_.isEmpty(vm.model.queryParams) || vm.model.queryParams.query === undefined) {
+        vm.model.queryParams = privateApi.setDefaultParams();
+        vm.model.searchIn = vm.model.searchInList[searchService.findValueId(vm.model.queryParams.searchIn, vm.model.searchInList)];
+
+        if (!_.isEmpty(searchStorage.data) && !_.isEmpty(searchStorage.params)) {
+            vm.model.queryParams = searchStorage.params;
+            vm.model.searchIn = vm.model.searchInList[searchService.findValueId(vm.model.queryParams.searchIn, vm.model.searchInList)];
+            vm.model.query = searchStorage.params.query;
+            privateApi.setCtrlData(searchStorage.data);
         }
+    } else {
+        //Do when we have params in $stateParams - means that it is search action
+        var queryUrl = queryParams.generateQueryParams(config.paths.simpleSearchPath, vm.model.queryParams);
+        vm.model.query = $stateParams.query;
+        promises.getAsyncData('GET', queryUrl)
+            .then(function (result) {
+                vm.model.searchIn = vm.model.searchInList[searchService.findValueId(vm.model.queryParams.searchIn, vm.model.searchInList)];
+                var publications = result.data[vm.model.searchIn.value];
+                privateApi.setCtrlData(publications);
 
-        //If query params is empty set it to default
-        $scope.setDefaultParams = function () {
-            var params = {};
-            params.searchIn = $scope.searchInList[0].value;
-            params.limit = $scope.resultsPerPages[0].value;
-            params.sortBy = $scope.sortParams[0].value;
-            params.offset = 0;
-            params.orderBy = 'title';
-            params.query = '';
-            params.objQuery = {};
-            return params;
-        };
+            })
+            .catch(function (err) {
+                console.error('Error - cant get data!' + err);
+            });
+    };
 
-
-        var config = searchConfig.config;
-        $scope.queryResult = '';
-        $scope.showResults = false;
-        $scope.queryParams = $stateParams;
-        $scope.sortParams = config.sortParams;
-        $scope.resultsPerPages = config.resultsPerPage;
-        $scope.searchInList = config.searchIn;
-        
-        var queryUrl;
-        if (!_.has($scope.queryParams, 'query') && _.isEmpty($scope.queryParams.objQuery)) {
-            $scope.queryParams = $scope.setDefaultParams();
-            $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
-            if (!searchService.isEmptyObject(searchStorage.data) && !searchService.isEmptyObject(searchStorage.params)) {
-                $scope.queryParams = searchStorage.params;
-                $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
-                $scope.setCtrlData(searchStorage.data);
-            }
-        } else {
-            //Do when we have params in $stateParams - means that it is search action
-            if (_.isEmpty(searchStorage.objQuery)) {
-                searchStorage.searchType = 'GET';
-                queryUrl = queryParams
-                    .generateQueryParams(
-                        config.paths.simpleSearchPath,
-                        $scope.queryParams
-                    );
-            } else {
-                queryUrl = config.paths.advancedSearchPath;
-                searchStorage.searchType = 'POST';
-            }
-            $scope.searchIn = $scope.searchInList[searchService.findValueId($scope.queryParams.searchIn, $scope.searchInList)];
-            promises.getAsyncData(searchStorage.searchType, queryUrl, searchStorage.objQuery)
-                .then(function (result) {
-                    var publications = result.data[$scope.searchIn.value];
-                    $scope.setCtrlData(publications);
-                })
-                .catch(function (err) {
-                    console.log('Error - cant get data!' + err);
-                });
-        };
-
-        $scope.modal = function () {
+    $scope.modal = function () {
             $state.go('search.advanced', searchStorage.params, {
                 // prevent the events onStart and onSuccess from firing
                 notify: false,
                 // prevent reload of the current state
-                reload: true,
+                reload: false,
                 // replace the last record when changing the params so you don't hit the back button and get old params
                 location: 'replace',
                 // inherit the current params on the url
                 inherit: true
             });
         }
-    });
-
-    search.controller('searchDetailsCtrl', function ($scope, searchConfig, searchStorage, $stateParams, $state, promises, searchService) {
-
-        var params = {};
-
-        // Convert details data for ng-repeat
-        function convertDetails(details) {
-            var data = [];
-            for (var x in details) {
-                data.push({
-                    title: x,
-                    value: details[x]
-                })
-            }
-            return data;
-        }
-
-        // Return to result action
-        $scope.back = function () {
-            if (!searchService.isEmptyObject(searchStorage.data))
-                history.back();
-            else {
-                //$state.go('search.simple');
-                location.href = $stateParams.backUrl;
-
-            }
-        };
-
-        // Capitalize field name
-        $scope.capitalize = function (data) {
-            return data[0].toUpperCase() + data.slice(1);
-        };
-
-        var config = searchConfig.config;
-        if (!searchService.isEmptyObject(searchStorage.details)) {
-            $scope.title = searchStorage.details.data.title;
-            $scope.detailsData = convertDetails(searchStorage.details.data);
-        } else {
-            var path = $stateParams.type + 'Detail';
-            var queryUrl = config.paths[path] + $stateParams.id;
-            promises.getAsyncData('GET', queryUrl, params)
-                .then(
-                    function (result) {
-                        $scope.title = result.data.title;
-                        $scope.detailsData = convertDetails(result.data);
-                    }
-                )
-                .catch(
-                    function (err) {
-                        console.log('Error ' + err.status);
-                    }
-                )
-        }
-
-    });
+        //
+        //    $scope.getCurrentRequestContext = function () {
+        //            var obj = {
+        //                conditions: $scope.query,
+        //                sortingOrder: "ASC",
+        //                sortingField: "title"
+        //            };
+        //
+        //            return obj;
+        //        }
+        //
+        //        $scope.buildRequest = function (dest) {
+        //            var obj = {};
+        //            obj[dest] = $scope.getCurrentRequestContext();
+        //            
+        //            return {
+        //                context: obj
+        //            }
+        //        }
 };

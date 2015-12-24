@@ -18,12 +18,8 @@ html
         script.
             var GLOBAL_USER_ID = '#{userId}';
 
+        include ../common/index.jade
         include ./search-module/index.jade
-        include ../common/modal/index.html
-
-        include ../common/header/header.jade
-        include ../common/footer/footer.jade
-
         include ./tags-module/tags.jade
 
         script(src=locals.way + '../../build/scripts/vendor.js')

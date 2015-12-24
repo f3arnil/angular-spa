@@ -5,7 +5,6 @@ USER_ANONYMOUS_ID="563b3f1ce8d64c3f52ad008d"
 USER_NORMAL_ID="563b3f77e8d64c3f52ad008e"
 USER_ADMIN_ID="563b4018e8d64c3f52ad008f"
 
-
 ENV_PROMPT="Select running configuration: "
 USER_PROMPT="Select source user: "
 

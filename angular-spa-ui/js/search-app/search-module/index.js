@@ -3,21 +3,29 @@
 module.exports = function (angular) {
 
     require('./advanced-search')(angular);
-        
+
     var search = angular.module('app.search', ['app.search.advanced']);
-    
-    var searchCtrl = require('./search-ctrl')(search);
+
+    var searchCtrl = require('./search-ctrl');
     var searchSrv = require('./search-srv')(search);
-    var searchFilter = require('./search-filter')(search);
-    //var searchDir = require('./search-dir')(search);
-    
-    search.config(configCb);
+    var validateDetailsRowsFilter = require('./validateDetails-filter');
+    var searchDetailsCtrl = require('./searchDetails-ctrl');
+    var searchService = require('./searchService-srv');
+
+    search.config(configCb)
+        .constant('searchConfig', require('./search-config'))
+        .controller('searchCtrl', searchCtrl)
+        .controller('searchDetailsCtrl', searchDetailsCtrl)
+        .service('searchService', searchService)
+        .filter('validateDetailsRows', validateDetailsRowsFilter)
+
+
     function configCb($stateProvider, $urlRouterProvider) {
         $stateProvider
             .state('search', {
                 abstract: true,
                 url: '/search',
-                views:{
+                views: {
                     "module-content": {
                         template: '<div ui-view="content"></div>'
                     }
@@ -26,38 +34,51 @@ module.exports = function (angular) {
             .state('search.simple', {
                 url: '/simple',
                 name: 'simple',
-                views:{
+                views: {
                     "content": {
                         templateUrl: '/search.html',
-                        controller : 'searchCtrl'
+                        controller: 'searchCtrl',
+                        controllerAs: 'search'
                     }
                 }
             })
             .state('search.simpleQuery', {
                 url: '/simple/?query&limit&searchIn&sortBy&offset&orderBy',
                 params: {
-                    searchIn : {squash: true},
-                    limit : {squash: true},
-                    sortBy : {squash: true},
-                    offset : {squash: true },
-                    orderBy : {squash: true}
+                    searchIn: {
+                        squash: true
+                    },
+                    limit: {
+                        squash: true
+                    },
+                    sortBy: {
+                        squash: true
+                    },
+                    offset: {
+                        squash: true
+                    },
+                    orderBy: {
+                        squash: true
+                    }
                 },
-                views:{
+                views: {
                     "content": {
                         templateUrl: '/search.html',
-                        controller : 'searchCtrl'
+                        controller: 'searchCtrl',
+                        controllerAs: 'search'
                     }
                 }
             })
             .state('search.details', {
-                    url: '/details/:type/:id/:backUrl',
-                    views:{
-                        "content": {
-                            templateUrl: '/details.html',
-                            controller : 'searchDetailsCtrl'
-                        }
+                url: '/details/:type/:id/:backUrl',
+                views: {
+                    "content": {
+                        templateUrl: '/details.html',
+                        controller: 'searchDetailsCtrl',
+                        controllerAs: 'details'
                     }
-                });
+                }
+            });
     };
 
 };

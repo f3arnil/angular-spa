@@ -10,4 +10,5 @@ module.exports = function (parentModule) {
         .constant('recordsListConfig', require('./recordsList-config'))
         .directive('recordsList', recordsListDir)
         .service('rlService', recordsListSrv)
+
 };
