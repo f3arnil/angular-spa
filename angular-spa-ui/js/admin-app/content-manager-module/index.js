@@ -4,7 +4,6 @@ module.exports = function (angular) {
 
     var contentManager = angular.module('app.contentManager', []);
 
-
     var contentManagerCtrl = require('./contentManager-ctrl'),
         contentManagerEditCtrl = require('./contentManagerEdit-ctrl'),
         contentStorageSrv = require('./contentStorage-srv'),
@@ -19,6 +18,7 @@ module.exports = function (angular) {
         .config(configCb);
 
     function configCb($stateProvider, $urlRouterProvider) {
+        console.log('recordsListConfig');
         $stateProvider
             .state('content', {
                 url: '/content/:searchIn/?limit&sortBy&offset',

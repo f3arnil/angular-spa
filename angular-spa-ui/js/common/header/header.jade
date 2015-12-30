@@ -16,7 +16,9 @@ script(type="text/ng-template" id="/header.html")
                 .header-elem.link-cart
                     a(ui-sref="cart") Cart
                 .header-elem.link-account
-                    a(href="/") User name
+                    a(ui-sref="account" href="/")
+                        span.icon-account
+                        span User name
 
         .header-bottom
             .wrapper

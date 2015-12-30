@@ -31,9 +31,8 @@ module.exports = function (rlService) {
             }
         },
         link: function (scope, element, attrs) {
-
             scope.$watchCollection('header', function (newValue, oldValue) {
-
+                
                 if (newValue !== undefined) {
                     scope.model = rlService.setModelValues(newValue, scope.model);
                 }

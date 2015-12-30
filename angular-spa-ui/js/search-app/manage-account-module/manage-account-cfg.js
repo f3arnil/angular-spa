@@ -4,16 +4,16 @@ module.exports = function($stateProvider) {
 
     // Configuration API
     $stateProvider
-        .state('tags', {
-            url: '/tags',
+        .state('account', {
+            url: '/account',
             views: {
                 'module-content': {
-                    templateUrl: '/tagModulePageTemplate.html',
-                    controller: 'tagController'
+                    templateUrl: '/accountModulePageTemplate.html',
+                    controller: 'accountController'
                 }
             },
             data: {
-                pageTitle: 'Manage tags'
+                pageTitle: 'Manage account'
             }
         });
 
