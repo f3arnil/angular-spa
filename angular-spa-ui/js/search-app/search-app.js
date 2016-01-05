@@ -32,7 +32,22 @@ accountModule(angular);
 
 searchApp
     .config(configCb)
-    .run();
+    .run(function ($rootScope, bootstrap, commonService) {
+        bootstrap.checkRegistration()
+            .then(function (responce) {
+                commonService.successValidationAction(responce.userData, responce.scope);
+            })
+            .catch(function (error) {
+                $rootScope.inited = false;
+                var errorObj = $rootScope.$new(true);
+                errorObj.err = {
+                    code: error.code,
+                    data: error.data
+                };
+                commonService.userDataCheckError(errorObj);
+            });
+
+    });
 
 angular.bootstrap(document, [searchApp.name]);
 
