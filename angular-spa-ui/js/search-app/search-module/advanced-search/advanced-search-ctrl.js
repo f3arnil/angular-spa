@@ -2,8 +2,13 @@
 
 module.exports = function (advancedSearch) {
 
-    advancedSearch.controller('advancedSearchCtrl', function ($state, searchService, $stateParams, $scope, $uibModalInstance, $controller, searchStorage, advancedSearchConfig) {
+    advancedSearch.controller('advancedSearchCtrl', function ($state, searchService, $stateParams, $scope, $uibModalInstance, $controller, searchStorage, advancedSearchConfig, searchObserver) {
 
+        
+        
+        
+        
+        
         var config = advancedSearchConfig.config;
         var prevId = 1;
         var vm;
@@ -24,23 +29,28 @@ module.exports = function (advancedSearch) {
 
         $scope.find = function () {
             searchStorage.searchState = 'search.advancedQuery';
-
-            angular.extend(
-                searchStorage.objQuery, 
-                $scope.buildRequest($scope.searchIn.value)
-            );
-
-            if ($scope.hasQuery()) {
-                $scope.showResults = false;
-                $uibModalInstance.close();
-                $state.go(
-                    searchStorage.searchState,
-                    $scope.queryParams, {
-                        inherit: false,
-                        reload: true
-                    }
+            searchObserver.currentModule = 'Advanced';
+            
+            $state.go(
+                    searchStorage.searchState
                 );
-            }
+            
+//            angular.extend(
+//                searchStorage.objQuery, 
+//                $scope.buildRequest($scope.searchIn.value)
+//            );
+//
+//            if ($scope.hasQuery()) {
+//                $scope.showResults = false;
+//                $uibModalInstance.close();
+//                $state.go(
+//                    searchStorage.searchState,
+//                    $scope.queryParams, {
+//                        inherit: false,
+//                        reload: true
+//                    }
+//                );
+//            }
         };
 
         // Function close modal window without request.

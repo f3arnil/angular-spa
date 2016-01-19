@@ -3,7 +3,7 @@
 module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, searchStorage, searchService, rlService, searchObserver) {
 
     var vm = this;
-    
+    console.log(searchObserver.currentModule);
     searchObserver.initModule('simple', {
         type: 'simple',
         methods: {
