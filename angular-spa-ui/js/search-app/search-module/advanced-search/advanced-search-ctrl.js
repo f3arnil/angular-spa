@@ -6,11 +6,13 @@ module.exports = function (advancedSearch) {
 
         var config = advancedSearchConfig.config;
         var prevId = 1;
+        var vm;
         searchStorage.objQuery = config.tplQuery;
 
-        $controller('searchCtrl', {
-            $scope: $scope
-        });
+//        $controller('searchCtrl', {
+//            vm: vm
+//        });
+//        console.log(vm);
         $scope.queryParams = $stateParams;
 
         $scope.setTypeData = function (val) {
