@@ -2,21 +2,47 @@
 
 module.exports = function () {
 
+    var currentModule = 'simple';
+    var searchModulesList = [];
+    var searchModulesMethods = [];
+    
+    var getSearchModulesList = function() {
+        return searchModulesList;
+    };
+    
+    var getCurrentModule = function () {
+        return currentModule;
+    };
+
+    var setCurrentModule = function (moduleName) {
+        if (!hasModule(moduleName)) {
+            console.warn('Can\'t find module ' + moduleName + ' in registered modules list!');
+            return false;
+        }
+
+        currentModule = moduleName;
+        return true;
+    };
+    
     var hasModule = function (moduleName) {
         return searchModulesList.some(function (module) {
             return module === moduleName;
         })
     };
 
-    var searchModulesList = [];
-
-    var searchModulesMethods = [];
-
     var initModule = function (moduleName, methodsObject) {
-        searchModulesList.push(moduleName);
-        searchModulesMethods.push(methodsObject);
-    }
-    // return method from searchModulesMethods
+            if (hasModule(moduleName)) {
+                console.warn('Module ' + moduleName + ' is already exist');
+                return;
+            }
+            searchModulesList.push(moduleName);
+            searchModulesMethods.push(methodsObject);
+            setCurrentModule(moduleName);
+
+
+        }
+    
+        // return method from searchModulesMethods
     var getMethod = function (moduleName, methodName) {
         if (!hasModule(moduleName)) {
             console.warn('Can\'t find ' + moduleName + ' in search observer modules list');
@@ -36,13 +62,13 @@ module.exports = function () {
         }
     };
 
-    var currentModule = 'simple';
-
     return {
-        currentModule: currentModule,
+        getCurrentModule: getCurrentModule,
+        setCurrentModule: setCurrentModule,
         getMethod: getMethod,
         initModule: initModule,
-        modulesList: searchModulesList
+        getModulesList: getSearchModulesList,
+        hasModule: hasModule
     }
 
 
