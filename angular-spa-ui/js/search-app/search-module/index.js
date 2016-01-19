@@ -7,10 +7,10 @@ module.exports = function (angular) {
     var search = angular.module('app.search', ['app.search.advanced']);
 
     var searchCtrl = require('./search-ctrl');
-    var searchSrv = require('./search-srv')(search);
     var validateDetailsRowsFilter = require('./validateDetails-filter');
     var searchDetailsCtrl = require('./searchDetails-ctrl');
     var searchService = require('./searchService-srv');
+    var searchObserver = require('./searchObserver-srv');
 
     search
         .config(configCb)
@@ -18,6 +18,7 @@ module.exports = function (angular) {
         .controller('searchCtrl', searchCtrl)
         .controller('searchDetailsCtrl', searchDetailsCtrl)
         .service('searchService', searchService)
+        .service('searchObserver', searchObserver)
         .filter('validateDetailsRows', validateDetailsRowsFilter)
 
 
