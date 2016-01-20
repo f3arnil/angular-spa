@@ -175,6 +175,8 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
         orderBy: '@orderBy'
     });
 
+    delete vm.model.queryParams.limit;
+    console.log(vm.model.queryParams);
     var data = request.get(vm.model.queryParams);
     data.$promise.then(function (result) {
         console.log(result);
