@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, searchStorage, searchService, rlService, searchObserver) {
+module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, searchStorage, searchService, rlService, searchObserver, $resource) {
 
     var vm = this;
 
@@ -164,6 +164,22 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
         resultsPerPages: config.resultsPerPage,
         searchInList: config.searchIn
     }
+
+    // ngResourse query example
+    var request = $resource('/service/search/?query=:query&limit=:limit&searchIn=:searchIn&sortBy=:sortBy&offset=:offset&orderBy=:orderBy', {
+        query: '@query',
+        limit: '@limit',
+        searchIn: '@searchIn',
+        sortBy: '@sortBy',
+        offset: '@offset',
+        orderBy: '@orderBy'
+    });
+
+    var data = request.get(vm.model.queryParams);
+    data.$promise.then(function (result) {
+        console.log(result);
+    });
+    // end of ngResourse query example
 
     if (_.isEmpty(vm.model.queryParams) || vm.model.queryParams.query === undefined) {
         vm.model.queryParams = privateApi.setDefaultParams();
