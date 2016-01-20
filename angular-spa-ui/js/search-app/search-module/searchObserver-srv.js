@@ -5,7 +5,7 @@ module.exports = function () {
     var defaultModule = 'simple'
     var currentModule = defaultModule;
     var searchModulesList = [];
-    var searchModulesMethods = [];
+    var searchModulesMethods = {};
 
     /**
      * [[return list of inited modules]]
@@ -54,8 +54,9 @@ module.exports = function () {
      * @param   {[[string]]} moduleName    [[name of new module]]
      * @param   {[[object]]} methodsObject [[object with module methods. Looks like 
      *                                     { 
-     *                                      type: moduleName (string) - the same as moduleName param,
-     *                                      methods: object with methods
+     *                                      method1: function(),
+     *                                      method2: function(),
+     *                                      ...
      *                                     }
      }]]
      * @returns {boolean}  [[returns true if module was added, and false if not]]
@@ -68,7 +69,7 @@ module.exports = function () {
         searchModulesList.push(moduleName);
         if (methodsObject.type !== moduleName)
             methodsObject.type = moduleName;
-        searchModulesMethods.push(methodsObject);
+        searchModulesMethods[moduleName] = methodsObject;
         setCurrentModule(moduleName);
         return true;
     }
@@ -85,12 +86,9 @@ module.exports = function () {
             return new Function();
         }
         var found = false;
-        for (var i = 0; i < searchModulesMethods.length; i++) {
-            var obj = searchModulesMethods[i];
-            if (obj.type === moduleName && obj.methods.hasOwnProperty(methodName)) {
-                found = true;
-                return obj.methods[methodName];
-            }
+        if (searchModulesMethods[moduleName] && searchModulesMethods[moduleName].hasOwnProperty(methodName)) {
+            found = true;
+            return searchModulesMethods[moduleName][methodName];
         }
         if (!found) {
             console.warn('Cant find method ' + methodName + ' in ' + moduleName);

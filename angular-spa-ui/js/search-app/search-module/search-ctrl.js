@@ -8,11 +8,22 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
 
     if (!searchObserver.hasModule(vm.moduleName))
         searchObserver.initModule(vm.moduleName, {
-            type: 'simple',
-            methods: {
-                updateFilter: function (param, value) {
-                    vm.model.queryParams[param] = value;
-                    searchStorage.data = {};
+            updateFilter: function (param, value) {
+                vm.model.queryParams[param] = value;
+                searchStorage.data = {};
+                $state.go(
+                    'search.simpleQuery',
+                    vm.model.queryParams, {
+                        inherit: false,
+                        reload: true
+                    }
+                );
+            },
+            setSearchIn: function (val) {
+                vm.model.searchIn = vm.model.searchInList[searchService.findValueId(val, vm.model.searchInList)];
+                vm.model.queryParams.searchIn = vm.model.searchIn.value;
+                vm.model.queryParams.offset = 0;
+                if (vm.viewApi.hasQuery()) {
                     $state.go(
                         'search.simpleQuery',
                         vm.model.queryParams, {
@@ -20,20 +31,6 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
                             reload: true
                         }
                     );
-                },
-                setSearchIn: function (val) {
-                    vm.model.searchIn = vm.model.searchInList[searchService.findValueId(val, vm.model.searchInList)];
-                    vm.model.queryParams.searchIn = vm.model.searchIn.value;
-                    vm.model.queryParams.offset = 0;
-                    if (vm.viewApi.hasQuery()) {
-                        $state.go(
-                            'search.simpleQuery',
-                            vm.model.queryParams, {
-                                inherit: false,
-                                reload: true
-                            }
-                        );
-                    }
                 }
             }
         })
@@ -175,11 +172,11 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
         orderBy: '@orderBy'
     });
 
-    delete vm.model.queryParams.limit;
-    console.log(vm.model.queryParams);
+    //delete vm.model.queryParams.limit;
+    //console.log(vm.model.queryParams);
     var data = request.get(vm.model.queryParams);
     data.$promise.then(function (result) {
-        console.log(result);
+        console.log('Result of test query with ngResourse', result);
     });
     // end of ngResourse query example
 
