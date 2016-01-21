@@ -3,26 +3,15 @@
 module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, searchStorage, searchService, rlService, searchObserver) {
 
     var vm = this;
-    console.log(searchObserver.currentModule);
-    searchObserver.initModule('simple', {
-        type: 'simple',
-        methods: {
-            updateFilter: function (param, value) {
-                vm.model.queryParams[param] = value;
-                searchStorage.data = {};
-                $state.go(
-                    'search.simpleQuery',
-                    vm.model.queryParams, {
-                        inherit: false,
-                        reload: true
-                    }
-                );
-            },
-            setSearchIn: function (val) {
-                vm.model.searchIn = vm.model.searchInList[searchService.findValueId(val, vm.model.searchInList)];
-                vm.model.queryParams.searchIn = vm.model.searchIn.value;
-                vm.model.queryParams.offset = 0;
-                if (vm.viewApi.hasQuery()) {
+    vm.moduleName = 'simple';
+
+    if (!searchObserver.hasModule(vm.moduleName))
+        searchObserver.initModule(vm.moduleName, {
+            type: 'simple',
+            methods: {
+                updateFilter: function (param, value) {
+                    vm.model.queryParams[param] = value;
+                    searchStorage.data = {};
                     $state.go(
                         'search.simpleQuery',
                         vm.model.queryParams, {
@@ -30,10 +19,23 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
                             reload: true
                         }
                     );
+                },
+                setSearchIn: function (val) {
+                    vm.model.searchIn = vm.model.searchInList[searchService.findValueId(val, vm.model.searchInList)];
+                    vm.model.queryParams.searchIn = vm.model.searchIn.value;
+                    vm.model.queryParams.offset = 0;
+                    if (vm.viewApi.hasQuery()) {
+                        $state.go(
+                            'search.simpleQuery',
+                            vm.model.queryParams, {
+                                inherit: false,
+                                reload: true
+                            }
+                        );
+                    }
                 }
             }
-        }
-    })
+        })
 
     var privateApi = {
         setDefaultParams: function () {
@@ -62,7 +64,7 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
             searchStorage.params = vm.model.queryParams;
 
         },
-        updateFilter: searchObserver.getMethod('simple', 'updateFilter'),
+        updateFilter: searchObserver.getMethod(searchObserver.getCurrentModule(), 'updateFilter'),
         goToDetails: function (data) {
             searchStorage.details = {
                 type: vm.model.searchIn.value,
@@ -82,11 +84,12 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
     };
 
     vm.viewApi = {
-        setSearchIn: searchObserver.getMethod('simple', 'setSearchIn'),
+        setSearchIn: searchObserver.getMethod(searchObserver.getCurrentModule(), 'setSearchIn'),
         find: function () {
             if (vm.viewApi.hasQuery()) {
                 vm.model.queryParams.query = vm.model.query;
                 vm.model.showResults = false;
+                searchObserver.setCurrentModule = vm.moduleName;
                 $state.go(
                     'search.simpleQuery',
                     vm.model.queryParams, {
@@ -199,25 +202,5 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
             inherit: true
         });
     }
-
-    //
-    //    $scope.getCurrentRequestContext = function () {
-    //            var obj = {
-    //                conditions: $scope.query,
-    //                sortingOrder: "ASC",
-    //                sortingField: "title"
-    //            };
-    //
-    //            return obj;
-    //        }
-    //
-    //        $scope.buildRequest = function (dest) {
-    //            var obj = {};
-    //            obj[dest] = $scope.getCurrentRequestContext();
-    //            
-    //            return {
-    //                context: obj
-    //            }
-    //        }
 
 };
