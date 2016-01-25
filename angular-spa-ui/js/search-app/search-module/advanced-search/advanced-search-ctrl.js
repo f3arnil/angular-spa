@@ -18,7 +18,8 @@ module.exports = function (advancedSearch) {
             queryParams: $stateParams,
             data: '',
             rows: [],
-            query: []
+            query: [],
+            searchInList: config.searchIn
         };
         searchStorage.objQuery = vm.model.config.tplQuery;
 
@@ -73,12 +74,12 @@ module.exports = function (advancedSearch) {
                 );
             },
             addNewRow: function (index) {
-                var rowObj = angular.copy(config.tplRow),
-                    rowObjResult = angular.copy(config.baseQuery);
-                rowObj.id = prevId;
+                var rowObj = angular.copy(vm.model.config.tplRow),
+                    rowObjResult = angular.copy(vm.model.config.baseQuery);
+                rowObj.id = vm.model.prevId;
                 vm.model.rows.push(rowObj);
                 vm.model.query.push(rowObjResult);
-                prevId++;
+                vm.model.prevId++;
             },
             changeAdvanced: function (ids, val, param) {
                 param == 'query' ? vm.model.query[ids][param] = val : vm.model.query[ids][param] = val.value;
@@ -90,6 +91,16 @@ module.exports = function (advancedSearch) {
         };
 
         var privateApi = {
+            setDefaultParams: function () {
+                var params = {};
+                params.searchIn = vm.model.searchInList[0].value;
+                params.limit = vm.model.resultsPerPages[0].value;
+                params.sortBy = vm.model.sortParams[0].value;
+                params.offset = '0';
+                params.orderBy = 'title';
+                params.query = '';
+                return params;
+            },
             getCurrentRequestContext: function () {
                 var obj = {
                     conditions: vm.model.query,

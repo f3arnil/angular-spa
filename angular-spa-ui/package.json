@@ -5,6 +5,7 @@
   "dependencies": {
     "angular": "^1.4.7",
     "angular-bootstrap": "*",
+    "angular-resource": "^1.4.8",
     "angular-ui-bootstrap": "^0.14.3",
     "angular-ui-router": "^0.2.15",
     "angular-webpack-plugin": "*",

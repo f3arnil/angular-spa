@@ -19,7 +19,7 @@ module.exports = function (angular) {
                     "content": {
                         templateUrl: '/search.html',
                         controller: 'searchCtrl',
-                        controllerAs: 'advanced'
+                        controllerAs: 'search'
                     }
                 }
             
@@ -37,7 +37,8 @@ module.exports = function (angular) {
                 views:{
                     "content": {
                         templateUrl: '/search.html',
-                        controller : 'searchCtrl'
+                        controller : 'searchCtrl',
+                        controllerAs: 'search'
                     }
                 }
             });
