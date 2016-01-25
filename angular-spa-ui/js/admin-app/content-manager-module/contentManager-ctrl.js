@@ -69,6 +69,16 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
 
     $scope.$on('goToDetails', function (event, data) {
         console.log('Lets go to the details!', data);
+        contentStorage.params = data;
+        $state.go(
+            'editDetails', {
+                searchIn : 'publication',
+                id : data._id
+            }, {
+                reload: true,
+                inherit: false
+            }
+        );
     })
 
     if (_.isEmpty(contentStorage.params) || !_.isEqual(contentStorage.params, $stateParams)) {

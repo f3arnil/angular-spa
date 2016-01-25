@@ -3,7 +3,6 @@
 module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, searchStorage, searchService, rlService, searchObserver, $resource) {
 
     var vm = this;
-
     vm.moduleName = 'simple';
 
     if (!searchObserver.hasModule(vm.moduleName))
@@ -123,8 +122,8 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
         if (!_.isEmpty(searchStorage.objQuery))
             searchStorage
             .objQuery
-            .context[$scope.queryParams.searchIn]
-            .sortingOrder = $scope.sortBy.value;
+            .context[vm.model.queryParams.searchIn]
+            .sortingOrder = data;
 
         privateApi.updateFilter('sortBy', data);
     });
@@ -134,8 +133,8 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
             searchStorage
             .objQuery
             .limits
-            .limit = $scope.limit.value;
-
+            .limit = data;
+        
         vm.model.queryParams.offset = 0;
         privateApi.updateFilter('limit', data);
     });
@@ -163,21 +162,21 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
     }
 
     // ngResourse query example
-    var request = $resource('/service/search/?query=:query&limit=:limit&searchIn=:searchIn&sortBy=:sortBy&offset=:offset&orderBy=:orderBy', {
-        query: '@query',
-        limit: '@limit',
-        searchIn: '@searchIn',
-        sortBy: '@sortBy',
-        offset: '@offset',
-        orderBy: '@orderBy'
-    });
+    //    var request = $resource('/service/search/?query=:query&limit=:limit&searchIn=:searchIn&sortBy=:sortBy&offset=:offset&orderBy=:orderBy', {
+    //        query: '@query',
+    //        limit: '@limit',
+    //        searchIn: '@searchIn',
+    //        sortBy: '@sortBy',
+    //        offset: '@offset',
+    //        orderBy: '@orderBy'
+    //    });
 
     //delete vm.model.queryParams.limit;
     //console.log(vm.model.queryParams);
-    var data = request.get(vm.model.queryParams);
-    data.$promise.then(function (result) {
-        console.log('Result of test query with ngResourse', result);
-    });
+    //    var data = request.get(vm.model.queryParams);
+    //    data.$promise.then(function (result) {
+    //        console.log('Result of test query with ngResourse', result);
+    //    });
     // end of ngResourse query example
 
     if (_.isEmpty(vm.model.queryParams) || vm.model.queryParams.query === undefined) {
@@ -191,13 +190,24 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
             privateApi.setCtrlData(searchStorage.data);
         }
     } else {
-        //Do when we have params in $stateParams - means that it is search action
-        var queryUrl = searchService.generateQueryParams(config.paths.simpleSearchPath, vm.model.queryParams);
-        vm.model.query = $stateParams.query;
-        promises.getAsyncData('GET', queryUrl)
+
+        if (_.isEmpty(searchStorage.objQuery)) {
+            searchStorage.searchType = 'GET';
+            //Do when we have params in $stateParams - means that it is search action
+            var queryUrl = searchService.generateQueryParams(config.paths.simpleSearchPath, vm.model.queryParams);
+            vm.model.query = $stateParams.query;
+        } else {
+            var queryUrl = config.paths.advancedSearchPath;
+            searchStorage.searchType = 'POST';
+        }
+
+        //        promises.getAsyncData('GET', queryUrl)
+        promises.getAsyncData(searchStorage.searchType, queryUrl, searchStorage.objQuery)
             .then(function (result) {
                 vm.model.searchIn = vm.model.searchInList[searchService.findValueId(vm.model.queryParams.searchIn, vm.model.searchInList)];
+                console.log('vm', vm.model.searchIn);
                 var publications = result.data[vm.model.searchIn.value];
+                console.log('p', publications);
                 privateApi.setCtrlData(publications);
 
             })
@@ -218,25 +228,5 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
             inherit: true
         });
     }
-
-    //
-    //    $scope.getCurrentRequestContext = function () {
-    //            var obj = {
-    //                conditions: $scope.query,
-    //                sortingOrder: "ASC",
-    //                sortingField: "title"
-    //            };
-    //
-    //            return obj;
-    //        }
-    //
-    //        $scope.buildRequest = function (dest) {
-    //            var obj = {};
-    //            obj[dest] = $scope.getCurrentRequestContext();
-    //            
-    //            return {
-    //                context: obj
-    //            }
-    //        }
 
 };

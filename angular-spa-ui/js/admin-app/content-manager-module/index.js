@@ -37,8 +37,16 @@ module.exports = function (angular) {
                 views: {
                     "module-content": {
                         templateUrl: '/admin.html',
-                        controller: 'contentManager-ctrl',
-                        controllerAs: 'contentManager'
+                        controller: 'contentManagerCtrl'
+                    }
+                }
+            })
+            .state('editDetails', {
+                url: '/content/:searchIn/edit/:id',
+                views: {
+                    "module-content": {
+                        templateUrl: '/recordsDetails.html',
+                        controller: 'contentManagerEditCtrl'
                     }
                 }
             });
