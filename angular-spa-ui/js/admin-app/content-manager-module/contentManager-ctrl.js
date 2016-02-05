@@ -32,7 +32,7 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
         recordsListHeaderConfig: configService.getData('recordsListConfig', 'header'),
         recordsListItemConfig: configService.getData('recordsListConfig', 'itemConfig')
     }
-
+    
     var privateApi = {
         updateFilter: function (param, value) {
             contentStorage.params[param] = value;
@@ -72,8 +72,8 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
         contentStorage.params = data;
         $state.go(
             'editDetails', {
-                searchIn : 'publication',
-                id : data._id
+                searchIn: 'publication',
+                id: data._id
             }, {
                 reload: true,
                 inherit: false
@@ -84,7 +84,7 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
     if (_.isEmpty(contentStorage.params) || !_.isEqual(contentStorage.params, $stateParams)) {
         contentStorage.params = $stateParams;
     }
-    
+
     vm.model.currentSection = contentStorage.params.searchIn;
     vm.model.sections = vm.viewApi.isActive(vm.model.sections);
 
@@ -97,6 +97,7 @@ module.exports = function ($scope, $state, promises, $stateParams, cmService, co
             .then(
                 function (responce) {
                     privateApi.setData(responce.data[vm.model.currentSection], vm.model.currentSection);
+                    console.log(vm)
                 }
             )
     }

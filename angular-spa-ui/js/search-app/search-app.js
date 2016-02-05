@@ -43,16 +43,14 @@ function configCb($stateProvider, $urlRouterProvider) {
         .otherwise('search/simple');
 };
 
-function bootstrap($rootScope, bootstrap, commonService) {
+function bootstrap(bootstrap, commonService) {
 
     bootstrap.checkRegistration()
-        .then(function (responce) {
-            commonService.successValidationAction(responce.userData, responce.scope);
+        .then(function (response) {
+            commonService.successValidationAction(response);
         })
         .catch(function (error) {
-            $rootScope.inited = false;
-            var errorObj = $rootScope.$new(true);
-            errorObj.err = {
+            var errorObj = {
                 code: error.code,
                 data: error.data
             };

@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function (appLocalStorage, getTemplate) {
+module.exports = function (appLocalStorage, getTemplate, $rootScope) {
 
     return {
         initUserData: function (data, userData) {
@@ -39,16 +39,16 @@ module.exports = function (appLocalStorage, getTemplate) {
 
             return userData;
         },
-        successValidationAction: function (userData, $scope) {
-
+        successValidationAction: function (userData) {
+            var scope = $rootScope.$new(true);
             appLocalStorage.setItem('userData', userData);
 
             var element = angular.element(document.getElementsByTagName('header'));
-            getTemplate.getByTrustedUrl('/header.html', element, $scope)
+            getTemplate.getByTrustedUrl('/header.html', element, scope)
                 .then(
                     function () {
                         element = angular.element(document.getElementsByTagName('footer'));
-                        return getTemplate.getByTrustedUrl('/footer.html', element, $scope);
+                        return getTemplate.getByTrustedUrl('/footer.html', element, scope);
                     })
                 .catch(
                     function (err) {
@@ -69,8 +69,10 @@ module.exports = function (appLocalStorage, getTemplate) {
             });
         },
         userDataCheckError: function (err) {
+            var errorObj = $rootScope.$new(true);
+            errorObj.err = err;
             var element = angular.element(document.querySelector('#content'));
-            getTemplate.getByTrustedUrl('/error.html', element, err);
+            getTemplate.getByTrustedUrl('/error.html', element, errorObj);
         }
     }
 };

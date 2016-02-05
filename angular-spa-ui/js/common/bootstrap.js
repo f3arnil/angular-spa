@@ -5,103 +5,151 @@ module.exports = function ($rootScope, promises, configService, appLocalStorage,
     var config = configService.getConfig('appConfig');
     var paths = config.paths;
     var userData = appLocalStorage.getItem('userData') || {};
+    var isUserValid = false;
 
-    userData.userId = GLOBAL_USER_ID;
-    paths.userPath += GLOBAL_USER_ID;
+    var hasUserData = function () {
+        return (_.has(userData, 'userId') && _.has(userData, 'userToken'));
+    }
+
+    var parseUserData = function (data) {
+        var deferred = $q.defer();
+        if (data.status === 'error') {
+            var errObject = {
+                code: data.error.name,
+                data: data.error.message
+            };
+            deferred.reject(errObject);
+        } else {
+            userData = commonService.initUserData(data, userData);
+            paths.rolePath += userData.userId;
+            paths.tokenPath += userData.userId;
+            deferred.resolve();
+        }
+        return deferred.promise;
+    };
+
+    var hasLogged = function () {
+        var deferred = $q.defer();
+
+        validateUser()
+            .then(function () {
+                isUserValid = true;
+                deferred.resolve();
+            }, function () {
+                isUserValid = false;
+                return notLogged()
+
+            })
+            .then(function () {
+                    deferred.resolve();
+                },
+                function (error) {
+                    deferred.reject(error);
+                })
+
+        return deferred.promise;
+    }
+
+    var notLogged = function () {
+        var deferred = $q.defer();
+        userData = {};
+        config = configService.getConfig('appConfig');
+        paths = config.paths;
+        paths.userPath += GLOBAL_USER_ID;
+        promises.getAsyncData('GET', paths.userPath)
+            .then(parseUserData)
+            .then(function () {
+                deferred.resolve();
+            }, function (error) {
+                deferred.reject(error);
+            })
+
+        return deferred.promise;
+    }
+
+    var isLoggedIn = function () {
+        var deferred = $q.defer();
+        if (hasUserData()) {
+            paths.validatePath += userData.userId + '/' + userData.userToken;
+            deferred.resolve();
+        } else {
+            deferred.reject();
+        }
+
+        return deferred.promise;
+    }
+
+    var getUserData = function () {
+        var deferred = $q.defer();
+        isLoggedIn()
+            .then(hasLogged, notLogged)
+            .then(function () {
+                deferred.resolve()
+            })
+            .catch(function (err) {
+                deferred.reject(err);
+            })
+
+        return deferred.promise;
+    }
+    
+    var getRoleAndToken = function () {
+        if (isUserValid) return;
+
+        var deferred = $q.defer();
+
+        promises.getAll('GET', [paths.rolePath, paths.tokenPath])
+            .then(function (response) {
+                userData = commonService.getToken(response, userData, paths.tokenPath);
+                userData = commonService.getPermissions(response, userData);
+                paths.validatePath += userData.userId + '/' + userData.userToken;
+                deferred.resolve();
+            })
+            .catch(function (error) {
+                deferred.reject(error)
+            })
+        return deferred.promise;
+    }
+    
+    var validateUser = function () {
+        var deferred = $q.defer();
+
+        promises.getAsyncData('GET', paths.validatePath)
+            .then(function (data) {
+                if (data.status === 'ok' && data.data.result) {
+                    deferred.resolve();
+                } else {
+                    var errorObj = {
+                        code: 'Validation Error',
+                        data: 'Validation of user data failed!'
+                    };
+                    deferred.reject(errorObj);
+                }
+            })
+            .catch(function (error) {
+                deferred.reject();
+            })
+
+        return deferred.promise;
+    }
+    
+    var checkRegistration = function () {
+        var deferred = $q.defer();
+        getUserData()
+            .then(getRoleAndToken)
+            .then(validateUser)
+            .then(function () {
+                deferred.resolve(userData)
+            })
+            .catch(function (error) {
+                deferred.reject(error)
+            });
+
+        return deferred.promise;
+    }
 
     return {
-        checkAllSteps: function () {
-            var deferred = $q.defer();
-            userData = {};
-            config = configService.getConfig('appConfig');
-            paths = config.paths;
-            paths.userPath += GLOBAL_USER_ID;
-
-            promises.getAsyncData('GET', paths.userPath)
-                .then(
-                    function (data) {
-                        if (data.status === 'error') {
-                            var errObject = {
-                                code: data.error.name,
-                                data: data.error.message
-                            };
-                            return $q.reject(errObject);
-                        }
-                        userData = commonService.initUserData(data, userData);
-                        paths.rolePath += userData.userId;
-                        paths.tokenPath += userData.userId;
-                        return promises.getAll('GET', [paths.rolePath, paths.tokenPath])
-                    })
-                .then(
-                    function (data) {
-                        userData = commonService.getToken(data, userData, paths.tokenPath);
-                        userData = commonService.getPermissions(data, userData);
-                        paths.validatePath += userData.userId + '/' + userData.userToken;
-                        return promises.getAsyncData('GET', paths.validatePath);
-                    })
-                .then(
-                    function (data) {
-                        if (data.status === 'ok' && data.data.result) {
-                            var scope = $rootScope.$new(true);
-                            deferred.resolve({
-                                userData: userData,
-                                scope: scope
-                            });
-                        } else {
-                            var errorObj = {
-                                code: 'Validation Error',
-                                data: 'Validation of user data failed!'
-                            };
-
-                            return $q.reject(errorObj);
-                        }
-                    })
-                .catch(
-                    function (error) {
-                        deferred.reject(error);
-                    });
-
-            return deferred.promise;
-        },
-        checkRegistration: function () {
-            var deferred = $q.defer();
-            var that = this;
-
-            if (_.has(userData, 'userId') && _.has(userData, 'userToken')) {
-                paths.validatePath += userData.userId + '1/' + userData.userToken;
-                promises.getAsyncData('GET', paths.validatePath)
-                    .then(function (responce) {
-                        if (responce.status === 'ok' && responce.data.result && commonService.checkLocalStorageUserData(userData)) {
-                            var scope = $rootScope.$new(true);
-                            deferred.resolve({
-                                userData: userData,
-                                scope: scope
-                            });
-                        } else {
-                            that.checkAllSteps()
-                                .then(function (responce) {
-                                    deferred.resolve(responce);
-                                })
-                                .catch(function (error) {
-                                    deferred.reject(error);
-                                })
-                        }
-                    })
-                    .catch(function (error) {
-                        deferred.reject(error);
-                    })
-            } else {
-                that.checkAllSteps()
-                    .then(function (responce) {
-                        deferred.resolve(responce);
-                    })
-                    .catch(function (error) {
-                        deferred.reject(error);
-                    });
-
-            }
-            return deferred.promise;
-        }
+        checkRegistration: checkRegistration
     }
 
 };

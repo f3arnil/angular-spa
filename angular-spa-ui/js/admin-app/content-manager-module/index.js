@@ -7,14 +7,14 @@ module.exports = function (angular) {
     var contentManagerCtrl = require('./contentManager-ctrl');
     var contentStorageSrv = require('./contentStorage-srv');
     var contentManagerSrv = require('./contentManager-srv');
-    var contentManagerConfig =require('./contentManager-config');
+    var contentManagerConfig = require('./contentManager-config');
 
     contentManager
         .config(configCb)
         .constant('contentManagerConfig', contentManagerConfig)
-        .controller('contentManager-ctrl', contentManagerCtrl)
         .service('contentStorage', contentStorageSrv)
-        .service('cmService', contentManagerSrv);
+        .service('cmService', contentManagerSrv)
+        .controller('contentManagerCtrl', contentManagerCtrl);
 
     function configCb($stateProvider, $urlRouterProvider) {
         $stateProvider
@@ -37,7 +37,8 @@ module.exports = function (angular) {
                 views: {
                     "module-content": {
                         templateUrl: '/admin.html',
-                        controller: 'contentManagerCtrl'
+                        controller: 'contentManagerCtrl',
+                        controllerAs:'contentManager'
                     }
                 }
             })

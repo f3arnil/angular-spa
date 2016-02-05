@@ -18,7 +18,6 @@ module.exports = function ($scope, rlService) {
             $scope.$emit('goToDetails', data);
         }
     }
-
+    
     vm.model = rlService.setDefaultModel();
-
 };

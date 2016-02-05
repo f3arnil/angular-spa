@@ -4,7 +4,7 @@ module.exports = function (rlService) {
     return {
         restrict: "E",
         scope: {
-            items: '=itemslist',
+            items: '=itemsList',
             header: '=headerSettings',
             itemsConfig: '=itemsSettings',
         },

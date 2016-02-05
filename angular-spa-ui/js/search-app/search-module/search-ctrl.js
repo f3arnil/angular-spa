@@ -3,6 +3,7 @@
 module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, searchStorage, searchService, rlService, searchObserver, $resource) {
 
     var vm = this;
+
     vm.moduleName = 'simple';
 
     if (!searchObserver.hasModule(vm.moduleName))
@@ -134,7 +135,7 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
             .objQuery
             .limits
             .limit = data;
-        
+
         vm.model.queryParams.offset = 0;
         privateApi.updateFilter('limit', data);
     });
@@ -207,7 +208,6 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
                 vm.model.searchIn = vm.model.searchInList[searchService.findValueId(vm.model.queryParams.searchIn, vm.model.searchInList)];
                 var publications = result.data[vm.model.searchIn.value];
                 privateApi.setCtrlData(publications);
-
             })
             .catch(function (err) {
                 console.error('Error - cant get data!' + err);

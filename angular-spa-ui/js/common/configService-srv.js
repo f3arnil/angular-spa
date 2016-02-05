@@ -3,9 +3,10 @@ module.exports = function ($injector) {
     return {
         getData: function (configName, keysPath) {
 
-            var config = this.getConfig(configName),
-                keysPathArray = keysPath.split('.'),
-                lastKeyIndex = keysPathArray.length - 1;
+            var config = this.getConfig(configName);
+            var keysPathArray = keysPath.split('.');
+            var lastKeyIndex = keysPathArray.length - 1;
+            
             if (!keysPathArray.length && !_.isEmpty(config)) {
                 return false;
             }

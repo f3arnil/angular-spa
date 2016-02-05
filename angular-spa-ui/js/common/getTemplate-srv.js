@@ -1,4 +1,4 @@
-module.exports = function ($sce, $compile, $templateRequest, $q) {
+module.exports = function ($sce, $compile, $templateRequest, $q, $rootScope) {
 
     return {
         getByTrustedUrl: function (url, element, scope) {
