@@ -22,12 +22,13 @@ module.exports = function () {
     var generateQueryParams = function (path, stateParams) {
         var url = path;
 
-        for (var x in stateParams) {
-            url += x + '=' + stateParams[x];
-            if (stateParams[x] != stateParams[Object.keys(stateParams)[Object.keys(stateParams).length - 1]]) {
+        _.each(stateParams, function(param, index){
+            url += index + '=' + param;
+            if (param != _.last(stateParams)) {
                 url += '&';
             }
-        };
+        })
+
         return url;
     }
 

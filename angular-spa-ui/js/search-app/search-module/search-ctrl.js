@@ -162,24 +162,6 @@ module.exports = function ($scope, configService, $uibModal, $stateParams, $stat
         searchInList: config.searchIn
     }
 
-    // ngResourse query example
-    //    var request = $resource('/service/search/?query=:query&limit=:limit&searchIn=:searchIn&sortBy=:sortBy&offset=:offset&orderBy=:orderBy', {
-    //        query: '@query',
-    //        limit: '@limit',
-    //        searchIn: '@searchIn',
-    //        sortBy: '@sortBy',
-    //        offset: '@offset',
-    //        orderBy: '@orderBy'
-    //    });
-
-    //delete vm.model.queryParams.limit;
-    //console.log(vm.model.queryParams);
-    //    var data = request.get(vm.model.queryParams);
-    //    data.$promise.then(function (result) {
-    //        console.log('Result of test query with ngResourse', result);
-    //    });
-    // end of ngResourse query example
-
     if (_.isEmpty(vm.model.queryParams) || vm.model.queryParams.query === undefined) {
         vm.model.queryParams = privateApi.setDefaultParams();
         vm.model.searchIn = vm.model.searchInList[searchService.findValueId(vm.model.queryParams.searchIn, vm.model.searchInList)];

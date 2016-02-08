@@ -28,7 +28,7 @@ module.exports = function ($rootScope, promises, configService, appLocalStorage,
         return deferred.promise;
     };
 
-    var hasLogged = function () {
+    var hasLoggedAction = function () {
         var deferred = $q.defer();
 
         validateUser()
@@ -37,7 +37,7 @@ module.exports = function ($rootScope, promises, configService, appLocalStorage,
                 deferred.resolve();
             }, function () {
                 isUserValid = false;
-                return notLogged()
+                return notLoggedAction()
 
             })
             .then(function () {
@@ -50,7 +50,7 @@ module.exports = function ($rootScope, promises, configService, appLocalStorage,
         return deferred.promise;
     }
 
-    var notLogged = function () {
+    var notLoggedAction = function () {
         var deferred = $q.defer();
         userData = {};
         config = configService.getConfig('appConfig');
@@ -82,7 +82,7 @@ module.exports = function ($rootScope, promises, configService, appLocalStorage,
     var getUserData = function () {
         var deferred = $q.defer();
         isLoggedIn()
-            .then(hasLogged, notLogged)
+            .then(hasLoggedAction, notLoggedAction)
             .then(function () {
                 deferred.resolve()
             })
@@ -101,7 +101,7 @@ module.exports = function ($rootScope, promises, configService, appLocalStorage,
         promises.getAll('GET', [paths.rolePath, paths.tokenPath])
             .then(function (response) {
                 userData = commonService.getToken(response, userData, paths.tokenPath);
-                userData = commonService.getPermissions(response, userData);
+                userData = commonService.getUserPermissions(response, userData);
                 paths.validatePath += userData.userId + '/' + userData.userToken;
                 deferred.resolve();
             })

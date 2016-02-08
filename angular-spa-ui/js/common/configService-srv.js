@@ -12,21 +12,19 @@ module.exports = function ($injector) {
             }
 
             var obj = config;
-
-            for (var index in keysPathArray) {
-                var data = keysPathArray[index];
-                if (!_.has(obj, data)) {
+            _.each(keysPathArray, function(key, index,array){
+                if (!_.has(obj, key)) {
                     console.warn('Element \'' + keysPath + '\' not found in ' + configName);
                     obj = false;
 
                     return false;
                 }
-                obj = obj[data];
+                obj = obj[key];
 
                 if (index == lastKeyIndex) {
                     return angular.copy(obj);
                 }
-            }
+            })
 
             return angular.copy(obj);
         },

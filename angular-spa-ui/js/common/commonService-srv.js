@@ -16,7 +16,7 @@ module.exports = function (appLocalStorage, getTemplate, $rootScope) {
                 }
             });
 
-            if (userTokenResponce.length === 1) {
+            if (userTokenResponce.length == 1) {
                 userData['userToken'] = userTokenResponce[0].data.token
             } else {
                 console.warn('Found too match userToken objects in responce');
@@ -24,14 +24,15 @@ module.exports = function (appLocalStorage, getTemplate, $rootScope) {
 
             return userData;
         },
-        getPermissions: function (data, userData) {
+        getUserPermissions: function (data, userData) {
+            
             var permissionsObj = data.filter(function (obj) {
                 if (obj.operation === 'get user permissions') {
                     return obj;
                 }
             });
 
-            if (permissionsObj.length === 1) {
+            if (permissionsObj.length == 1) {
                 userData['userPermissions'] = permissionsObj[0].data;
             } else {
                 console.warn('Found too match permissions objects in responce')

@@ -7,7 +7,7 @@ module.exports = function($scope, $state, accountService, appLocalStorage/*, pro
      */
     var vm = this;
 
-    var priveteAPI = {
+    var privateAPI = {
 
         /**
          * Function parse the user data of array
@@ -19,7 +19,7 @@ module.exports = function($scope, $state, accountService, appLocalStorage/*, pro
             var arrUserData = trimUserData.split(' ');
             var processedArrUserData = _.without(arrUserData, '');
 
-            if (processedArrUserData.length === 2) {
+            if (processedArrUserData.length == 2) {
                 vm.model.userNameParam.firstName = processedArrUserData[0].trim(); 
                 vm.model.userNameParam.lastName = (_.without(processedArrUserData, processedArrUserData[0])).join(' ').trim();
             } else {
@@ -37,10 +37,10 @@ module.exports = function($scope, $state, accountService, appLocalStorage/*, pro
             accountService.getUserById(userId)
                 .then(
                     function(userData) {
-                        priveteAPI.updateUserData(userData.data);
+                        privateAPI.updateUserData(userData.data);
                     },
                     function(errorMessage) {
-                        priveteAPI.errorMessage(errorMessage);
+                        privateAPI.errorMessage(errorMessage);
                     }
                 );
         },
@@ -61,10 +61,10 @@ module.exports = function($scope, $state, accountService, appLocalStorage/*, pro
             accountService.updateUserName(userId, userName)
                 .then(
                     function(result) {
-                        priveteAPI.updateUserData(result.data.name);
+                        privateAPI.updateUserData(result.data.name);
                     },
                     function(errorMessage) {
-                        priveteAPI.errorMessage(errorMessage);
+                        privateAPI.errorMessage(errorMessage);
                     }
                 );
         },
@@ -81,7 +81,7 @@ module.exports = function($scope, $state, accountService, appLocalStorage/*, pro
                         appLocalStorage.setItem('userData', userData);
                     },
                     function(errorMessage) {
-                        priveteAPI.errorMessage(errorMessage);
+                        privateAPI.errorMessage(errorMessage);
                     }
                 );
         },
@@ -129,7 +129,7 @@ module.exports = function($scope, $state, accountService, appLocalStorage/*, pro
          * The function to change the user Name
          */
         editUserName: function() {
-            priveteAPI.getUserNameParam(vm.model.userData.userName);
+            privateAPI.getUserNameParam(vm.model.userData.userName);
             return vm.model.isVisibilityFormUserName = !vm.model.isVisibilityFormUserName;
         },
 
@@ -152,10 +152,10 @@ module.exports = function($scope, $state, accountService, appLocalStorage/*, pro
 
             if (!isEmptyUserFirstName || !isEmptyUserLastName) {
                 vm.model.userData.userName = _.values(vm.model.userNameParam).join(' ');
-                priveteAPI.updateUserName(vm.model.userData.userId, vm.model.userData.userName);
+                privateAPI.updateUserName(vm.model.userData.userId, vm.model.userData.userName);
                 vm.viewAPI.btnCancelUserName();
             } else {
-                priveteAPI.errorMessage('is not allowed');
+                privateAPI.errorMessage('is not allowed');
             }
         },
 
@@ -185,10 +185,10 @@ module.exports = function($scope, $state, accountService, appLocalStorage/*, pro
             var isEmptyInptUserEmail = _.isEmpty(vm.model.inptUserEmail.value.trim());
             var isEqualEmail = (vm.model.inptUserEmail.value === vm.model.userData.userEmail);
             if (!isEmptyInptUserEmail && !isEqualEmail) {
-                priveteAPI.updateUserEmail(vm.model.userData.userId, vm.model.inptUserEmail.value);
+                privateAPI.updateUserEmail(vm.model.userData.userId, vm.model.inptUserEmail.value);
                 vm.model.userData.userEmail = vm.model.inptUserEmail.value;
             } else {
-                priveteAPI.errorMessage('Is not allowed');
+                privateAPI.errorMessage('Is not allowed');
             }
             vm.viewAPI.btnCancelUserEmail();
         },
@@ -198,7 +198,7 @@ module.exports = function($scope, $state, accountService, appLocalStorage/*, pro
          * The function to reset the password
          */
         resetPassword: function() {
-            priveteAPI.errorMessage('is not allowed');
+            privateAPI.errorMessage('is not allowed');
         }
 
     };
