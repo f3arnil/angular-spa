@@ -3,6 +3,7 @@
 module.exports = function (app) {
 
     // Page preload actions realized in mainCtrl
+    var decorate = require('./decorator');
     var bootstrap = require('./bootstrap');
     var promisesSrv = require('./promises-srv');
     var getTemplateSrv = require('./getTemplate-srv');
@@ -10,13 +11,13 @@ module.exports = function (app) {
     var appStorageSrv = require('./appStorage-srv');
     var commonServiceSrv = require('./commonService-srv');
 
-
     require('./recordsListDir')(app);
     require('./recordsEditDir')(app);
 
     var appLocalStorage = require('./localStorage-srv');
 
     app
+        .config(decorate)
         .service('appLocalStorage', appLocalStorage)
         .service('promises', promisesSrv)
         .service('getTemplate', getTemplateSrv)

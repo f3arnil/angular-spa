@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function ($rootScope, promises, configService, appLocalStorage, commonService, getTemplate, $q) {
+module.exports = function ($rootScope, promises, configService, appLocalStorage, commonService, getTemplate, $q, $http) {
 
     var config = configService.getConfig('appConfig');
     var paths = config.paths;
@@ -134,6 +134,7 @@ module.exports = function ($rootScope, promises, configService, appLocalStorage,
     }
     
     var checkRegistration = function () {
+        $http.sayHello('Lets have some fun!!');
         var deferred = $q.defer();
         getUserData()
             .then(getRoleAndToken)
