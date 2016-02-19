@@ -19,12 +19,16 @@ script(type="text/ng-template" id="/header.html")
                     a(ui-sref="account" href="/")
                         span.icon-account
                         span User name
-
+                .header-elem.link-lang
+                    div(ng-controller="headerCtrl as header")
+                        div(class="btn-group" role="group"  )
+                            button(type="button" class="btn btn-default" ng-click="header.viewApi.setLang('en')" ng-class="{active : header.model.currentLang=='en'}" ng-model="header.model.currentLang") EN
+                            button(type="button" class="btn btn-default" ng-click="header.viewApi.setLang('ru')" ng-class="{active : header.model.currentLang==='ru'}" ng-model="header.model.currentLang") RU
         .header-bottom
             .wrapper
                 .container-fluid
                     .row.col-md-12
-                        a.tags(ui-sref="tags" href="/") 
+                        a.tags(ui-sref="tags" href="/")
                             span.icon-tags
                             span Manage Your Tags
 

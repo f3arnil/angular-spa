@@ -14,6 +14,7 @@ module.exports = function (angular) {
 
     search
         .config(configCb)
+        .config(translates)
         .constant('searchConfig', require('./search-config'))
         .controller('searchCtrl', searchCtrl)
         .controller('searchDetailsCtrl', searchDetailsCtrl)
@@ -82,5 +83,12 @@ module.exports = function (angular) {
                 }
             });
     };
+
+    function translates($translateProvider) {
+        $translateProvider.translations('en', require('./translates/en_lang'));
+        $translateProvider.translations('ru', require('./translates/ru_lang'));
+        $translateProvider.useSanitizeValueStrategy('escapeParameters');
+        $translateProvider.preferredLanguage('ru');
+    }
 
 };

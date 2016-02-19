@@ -13,11 +13,13 @@ var searchModule = require('./search-module');
 var tagsModule = require('./tags-module');
 var accountModule = require('./manage-account-module');
 var ngResource = require('angular-resource');
+var angularTranslate = require('angular-translate');
 
 var searchApp = angular.module('app', [
     uiRouter,
     ngResource,
     uiBs,
+    angularTranslate,
     'app.search',
     'app.cart',
     'app.tags',

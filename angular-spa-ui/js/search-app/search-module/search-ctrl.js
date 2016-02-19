@@ -1,7 +1,7 @@
 "use strict";
 
-module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, searchStorage, searchService, rlService, searchObserver, $resource) {
-
+module.exports = function ($scope, configService, $uibModal, $stateParams, $state, promises, searchStorage, searchService, rlService, searchObserver) {
+    
     var vm = this;
 
     vm.moduleName = 'simple';

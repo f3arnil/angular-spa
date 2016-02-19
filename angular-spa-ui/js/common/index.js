@@ -13,6 +13,7 @@ module.exports = function (app) {
 
     require('./recordsListDir')(app);
     require('./recordsEditDir')(app);
+    require('./header')(app);
 
     var appLocalStorage = require('./localStorage-srv');
 

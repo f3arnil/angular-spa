@@ -2,10 +2,10 @@
     <div class="search-panel">
         <div class="wrapper">
             <div class="colLeftPanel">
-                <label>SEARCH:</label>
+                <label>{{'SEARCH' | translate}}:</label>
                 <div ng-model="search.model.searchIn">
                     <a ng-repeat="searchplace in search.model.searchInList" ng-click="search.viewApi.setSearchIn(searchplace.value)" ng-model="search.model.searchIn.value" ng-class="{active : searchplace.value==search.model.searchIn.value }">
-                        {{searchplace.title}}
+                        {{searchplace.value | translate}}
                     </a>
                 </div>
             </div>
@@ -17,7 +17,7 @@
                     </a>
                 </div>
                 <div class="advancedSearch">
-                    <button type="button" class="btn btn-primary" ng-click="modal()">Advanced</button>
+                    <button type="button" class="btn btn-primary" ng-click="modal()">{{'ADVANCED' | translate}}</button>
                 </div>
             </div>
         </div>
